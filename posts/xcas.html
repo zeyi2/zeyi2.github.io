@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <!-- 2024-09-21 Sat 13:10 -->
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Xcas积分能力测试
+  </title>
+  <meta content="Org Mode" name="generator"/>
+  <link href="../static/css/default.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body>
+  <div class="status" id="preamble">
+   <a>
+    <p align="right">
+     "oh i like it."
+    </p>
+   </a>
+  </div>
+  <div class="content" id="content">
+   <h1 class="title">
+    Xcas积分能力测试
+   </h1>
+   <p>
+    最近有人向我推荐了 Xcas 这个软件，它是 HP Prime 计算器使用的计算机代数系统的一个开源实现，对其进行了一些微小的测试。
+   </p>
+   <div class="outline-2" id="outline-container-orgef1fec7">
+    <h2 id="orgef1fec7">
+     测试环境
+    </h2>
+    <div class="outline-text-2" id="text-orgef1fec7">
+     <p>
+      在 6.10.5-zen1-1-zen 内核下测试，Xcas 版本 1.9.0，FriCAS 版本 1.3.11 (Built with SBCL 2.4.5)
+     </p>
+    </div>
+   </div>
+   <div class="outline-2" id="outline-container-orgac7f431">
+    <h2 id="orgac7f431">
+     具体测试
+    </h2>
+    <div class="outline-text-2" id="text-orgac7f431">
+    </div>
+    <div class="outline-3" id="outline-container-org78430ce">
+     <h3 id="org78430ce">
+      01
+     </h3>
+     <div class="outline-text-3" id="text-org78430ce">
+      <p>
+       先来个比较基础的：
+      </p>
+      <pre class="example">
+integrate((tan(x)^3+(x+1)*tan(x)^2+tan(x)+x+2)*exp(tan(x)), x)
+</pre>
+      <p>
+       FriCAS 能给出正确结果：
+      </p>
+      <pre class="example">
+(1) -&gt; integrate((tan(x)^3+(x+1)*tan(x)^2+tan(x)+x+2)*exp(tan(x)), x)
+
+                      tan(x)
+   (1)  (tan(x) + x)%e
+                                         Type: Union(Expression(Integer),...)
+
+</pre>
+      <p>
+       Xcas 积分能力比较弱，给出了非常复杂的答案：
+      </p>
+      <pre class="example">
+x*exp(tan(x))-15*tan(x)**3*exp(tan(x))+15*tan(x)**5*exp(tan(x))-tan(x)**7*exp(tan(x))...(Omitted)
+</pre>
+      <p>
+       这是 Risch 算法中最简单的 pure transcendental case 中的 tangent case。
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-orgb5cdd49">
+     <h3 id="orgb5cdd49">
+      02
+     </h3>
+     <div class="outline-text-3" id="text-orgb5cdd49">
+      <pre class="example">
+integrate((x^2+2*x+1)/((x+1)^6+1),x)
+</pre>
+      <p>
+       FriCAS 和 Xcas 都可以给出正确的计算结果：
+      </p>
+      <pre class="example">
+Xcas:
+  atan(3*(x**3/3+x**2+x)+1)/3
+
+FriCAS:
+(2) -&gt; integrate((x^2+2*x+1)/((x+1)^6+1),x)
+
+              3      2
+        atan(x  + 3 x  + 3 x + 1)
+   (2)  -------------------------
+                    3
+                                         Type: Union(Expression(Integer),...)
+</pre>
+      <p>
+       Axiom Book §1.12 Integration 中是这么说的：一般的分步积分法算不出来这个积分，需要使用 factorization-free 算法。
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-org423e196">
+     <h3 id="org423e196">
+      03
+     </h3>
+     <div class="outline-text-3" id="text-org423e196">
+      <p>
+       接下来是一个比较困难的积分
+      </p>
+      <pre class="example">
+integrate(x^-3 * (a * x + b)^(-1/3), x)
+</pre>
+      <p>
+       FriCAS 能给出正确结果：
+      </p>
+      <pre class="example">
+(3) -&gt; integrate(x^-3 * (a * x + b)^(-1/3), x)
+
+   (3)
+            2 2 +-+    3+-+3+-------+2   3+-+2 3+-------+
+       - 2 a x \|3 log(\|b \|a x + b   + \|b   \|a x + b  + b)
+     + 
+          2 2 +-+    3+-+2 3+-------+
+       4 a x \|3 log(\|b   \|a x + b  - b)
+     + 
+                      +-+3+-+2 3+-------+     +-+
+           2 2     2 \|3 \|b   \|a x + b  + b\|3
+       12 a x atan(------------------------------)
+                                 3 b
+     + 
+                      +-+3+-+3+-------+2
+       (12 a x - 9 b)\|3 \|b \|a x + b
+  /
+         2 2 +-+3+-+
+     18 b x \|3 \|b
+                                         Type: Union(Expression(Integer),...)
+
+</pre>
+      <p>
+       Xcas 会给出一个未化简的结果：
+      </p>
+      <pre class="example">
+3*((4*a**3*((a*x+b)**(1/3))**2*(a*x+b)-7*a**3*b*((a*x+b)**(1/3))**2)/(18*b**2*(a*x)**2)-a**3*1/(b**2*b**(1/3))*ln((b**(1/3))**2+((a*x+b)**(1/3))**2+b**(1/3)*(a*x+b)**(1/3))/27+2*a**3*1/(b**2*b**(1/3))*atan(2*(b**(1/3)/2+(a*x+b)**(1/3))/(sqrt(3)*b**(1/3)))/(9*sqrt(3))+2*1/27*a**3*1/(b**2*b**(1/3))*ln(abs(-b**(1/3)+(a*x+b)**(1/3))))/a
+</pre>
+      <p>
+       Axiom Book §1.12 Integration 中提到：使用试探法和查表法的程序会失败。AXIOM 使用一个决定性过程算法 (decision procedure，如果解存在，则给出解，否则说明解不存在)，这就是 Risch algorithm，它将积分问题变换成代数问题进行求解。
+      </p>
+      <p>
+       以及只有 Axiom 会直接给出正确结果，Maxima 会问你 a 是正是负，回答负会得到带虚数的奇怪结果，回答正会得到似乎正确的结果。WolframAlpha 得到包含 Hypergeometric2F1 函数的结果，而 Hypergeometric2F1 函数是个极复杂的级数。
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-orgb767e41">
+     <h3 id="orgb767e41">
+      04
+     </h3>
+     <div class="outline-text-3" id="text-orgb767e41">
+      <pre class="example">
+integrate(log(1+sqrt(a*x+b))/x,x)
+</pre>
+      <p>
+       这是一个不可能有初等函数表示的不定积分。
+      </p>
+      <p>
+       FriCAS 会直接返回原表达式：
+      </p>
+      <pre class="example">
+(4) -&gt; integrate(log(1+sqrt(a*x+b))/x,x)
+
+           x      +--------+
+         ++  log(\|b + %A a  + 1)
+   (4)   |   -------------------- d%A
+        ++            %A
+                                         Type: Union(Expression(Integer),...)
+
+</pre>
+      <p>
+       Xcas 会进行一些计算：
+      </p>
+      <pre class="example">
+integrate(2*a*1/a*sqrt(a*x+b)*ln(sqrt(a*x+b)+1)*1/(a*x+b-b)*1/2*a*(sqrt(a*x+b))**-1,x)
+</pre>
+      <p>
+       Mathematica 给出了带无穷级数的解：
+      </p>
+      <pre class="example">
+                                1 + Sqrt[b + a x]            1 + Sqrt[b + a x]                  1 + Sqrt[b + a x]                1 + Sqrt[b + a x]
+Log[1 + Sqrt[b + a x]] (Log[1 + -----------------] + Log[1 - -----------------]) + PolyLog[2, -(-----------------)] + PolyLog[2, -----------------]
+                                  -1 + Sqrt[b]                  1 + Sqrt[b]                       -1 + Sqrt[b]                      1 + Sqrt[b]
+</pre>
+      <p>
+       Axiom Book §1.12 Integration 这么评价：如果一个积分可以被
+       <b>
+        证明不存在
+       </b>
+       初等函数表示，Axiom 会原样打印 (Axiom 能证明该积分不存在初等函数表示)
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-org3b130b5">
+     <h3 id="org3b130b5">
+      05
+     </h3>
+     <div class="outline-text-3" id="text-org3b130b5">
+      <pre class="example">
+integrate(diff(x*sin(x**asin(x)),x),x)
+</pre>
+      <pre class="example">
+(5) -&gt; integrate(D(x*sin(x^asin x),x),x)
+
+                     (asin(x) - 1)log(x)
+                 x %e
+         2 x tan(-----------------------)
+                            2
+   (5)  ---------------------------------
+                (asin(x) - 1)log(x) 2
+            x %e
+        tan(-----------------------)  + 1
+                       2
+                                         Type: Union(Expression(Integer),...)
+</pre>
+      <p>
+       FriCAS 能成功计算出来 (虽然不是最简结果，但可能是最正确的，因为奇点啊之类的问题) 但没正确化简；Xcas 算到爆内存了也没算出来。
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-org20552e2">
+     <h3 id="org20552e2">
+      05.5
+     </h3>
+     <div class="outline-text-3" id="text-org20552e2">
+      <pre class="example">
+D(integrate(1/(x^3 + 2) ,x),x)
+</pre>
+      <p>
+       FriCAS：
+      </p>
+      <pre class="example">
+(6) -&gt; D(integrate(1/(x^3 + 2) ,x),x)
+
+           1
+   (6)  ------
+         3
+        x  + 2
+                                                    Type: Expression(Integer)
+</pre>
+      <p>
+       Xcas/Sympy：
+      </p>
+      <pre class="example">
+                                       1/3
+          1                     2 x - 2                       1
+--------------------- - --------------------------- + -----------------
+           1/3 2           5/3   2    1/3      2/3       2/3       1/3
+   (2 x - 2   )         3 2    (x  - 2    x + 2   )   3 2    (x + 2   )
+3 (------------- + 1)
+         2/3
+      3 2
+
+</pre>
+      <p>
+       Axiom 能化到 1/(x
+       <sup>
+        3
+       </sup>
+       + 2) ，Sympy 还是和以前一样没长进…
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-orge3f363e">
+     <h3 id="orge3f363e">
+      06
+     </h3>
+     <div class="outline-text-3" id="text-orge3f363e">
+      <p>
+       src/input/rich*.input.pamphlet 里有 167 个 Axiom "implementation incomplete"的积分。
+      </p>
+      <p>
+       FriCAS 似乎做了一些 implementation，但没有 merge 到 Axiom 中。此外，这些不完整的部分大多和三角函数有关，在三角函数的积分上 Axiom 可能稍差一点。
+      </p>
+      <p>
+       继续对 Risch 算法进行测试：
+      </p>
+      <pre class="example">
+integrate(x/sqrt(x^4 + 10*x^2 - 96*x - 71),x)
+</pre>
+      <pre class="example">
+(7) -&gt; integrate(x/sqrt(x^4 + 10*x^2 - 96*x - 71),x)
+
+   (7)
+     log
+                                                     +----------------------+
+            6       4       3       2                | 4       2
+          (x  + 15 x  - 80 x  + 27 x  - 528 x + 781)\|x  + 10 x  - 96 x - 71
+        + 
+           8       6        5       4         3         2
+          x  + 20 x  - 128 x  + 54 x  - 1408 x  + 3124 x  + 10001
+  /
+     8
+                                         Type: Union(Expression(Integer),...)
+
+</pre>
+      <p>
+       Xcas 直接返回了原表达式，至此我确定 Xcas 可能并没有 Risch 算法的相关实现，这也导致了其计算能力偏弱。
+      </p>
+     </div>
+    </div>
+    <div class="outline-3" id="outline-container-orgebc230a">
+     <h3 id="orgebc230a">
+      后记：八卦一下为什么 Axiom/FriCAS 的符号积分能力这么强
+     </h3>
+     <div class="outline-text-3" id="text-orgebc230a">
+      <p>
+       (以下内容主要来源于 Manuel Bronstein 所著的 Symbolic Integration I: Transcendental Functions 一书中，B.F. Caviness 所写的序和作者写的前言)
+      </p>
+      <p>
+       对于有限项的积分问题，Ritt 在 20 世纪 40 年代取得理论上的突破，这些思想被他的 3 个 PhD：Risch, Singer, Bronstein（此书的作者）进一步发展。
+      </p>
+      <p>
+       在实现这些算法的程序方面，（80 年代）没有一个系统实现完整的 Risch 算法，最主要的原因是，Risch 发表的内容还存在一些不完整的方面。以 Manuel Bronstein 的 PhD 论文（Integration of Elementary Functions, UCB, 1987）为开端，他开始完善 Risch 算法中缺失的部分。于此同时，他在当时 Axiom 的研发地——IBM Watson 研究中心——工作，实现了几乎完整的初等函数的积分算法（这就是现在 Axiom 中 Risch 积分算法的来源），而且这是所有 Risch 算法的实现中最完善的一个。
+      </p>
+      <p>
+       在 Bronstein 自己写的前言中提到，Risch 提出了一系列文章，但并不是所有的都发表了，这些松散的成果一般称作 Risch 算法。作者本人对 Risch 算法的扩展也有贡献，比如对非初等函数积分的处理等。
+      </p>
+      <p>
+       在 Axiom 中， grep 'Manuel Bronstein' src/algebra/* ，可以发现，他是 206 个 Package/Domain/Category 的作者，在 1987-1995 年间进行活跃的开发，除了 Risch 算法之外对 Axiom 作出重要的贡献。遗憾的是他写的 Risch 算法的核心部分几乎没有注释，而且也留下了四种情况（ grep 'implementation incomplete' intalg.spad.pamphlet ）没有实现完全，除了他之外，这些代码几乎没有被改动过，还是 20 年前的样子，但仍然是最完善的 Risch 算法。
+      </p>
+      <p>
+       <a href="https://zeyi2.github.io">
+        [Return to the main page]​
+       </a>
+      </p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="status" id="postamble">
+   <footer>
+    <p align="center">
+     <a href="https://emacs.org/" rel="editor">
+      GNU Emacs
+     </a>
+     is used to build this website.
+    </p>
+    <p align="center">
+     ©2024 Mitchell
+    </p>
+    <p align="center">
+     <a href="http://creativecommons.org/licenses/by/3.0/cn/" rel="license">
+      <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/cn/88x31.png" style="border-width:0"/>
+     </a>
+     <br/>
+     This work is licensed under a
+     <a href="http://creativecommons.org/licenses/by/3.0/cn/" rel="license">
+      Creative Commons
+            Attribution 3.0 CN License
+     </a>
+    </p>
+    <p align="center">
+     <a href="https://jigsaw.w3.org/css-validator/check/referer">
+      <img alt="Valid CSS!" src="https://jigsaw.w3.org/css-validator/images/vcss" style="border:0;width:88px;height:31px"/>
+     </a>
+     <a href="https://www.mathjax.org">
+      <img alt="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" style="border:0;width:107px;height:31px" title="Powered by MathJax"/>
+     </a>
+     <br/>
+     <a href="https://icp.gov.moe/?keyword=20240262" target="_blank">
+      萌ICP备20240262号
+     </a>
+    </p>
+   </footer>
+  </div>
+ </body>
+</html>

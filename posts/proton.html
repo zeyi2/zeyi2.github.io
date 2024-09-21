@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <!-- 2024-09-21 Sat 13:10 -->
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   ProtonMail 的安全问题
+  </title>
+  <meta content="Org Mode" name="generator"/>
+  <link href="../static/css/default.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body>
+  <div class="status" id="preamble">
+   <a>
+    <p align="right">
+     "oh i like it."
+    </p>
+   </a>
+  </div>
+  <div class="content" id="content">
+   <h1 class="title">
+    ProtonMail 的安全问题
+   </h1>
+   <p>
+    在寝室里摆烂的时候突发奇想测了一下 ProtonMail。
+   </p>
+   <p>
+    ProtonMail 注册时会同时生成 PGP 密钥，并使用 WKD 标准公布公钥。
+   </p>
+   <p>
+    但是这个公钥包含了注册的精确时间（精确到秒），Oops.
+   </p>
+   <div class="outline-2" id="outline-container-org6058282">
+    <h2 id="org6058282">
+     How to fetch?
+    </h2>
+    <div class="outline-text-2" id="text-org6058282">
+     <pre class="example">
+ &gt; gpg-wks-client --check -v test@proton.me
+
+gpg-wks-client: public key for 'test@proton.me' found via WKD
+gpg-wks-client: fingerprint: 73B90952D08B4BB227A8F82BF11DA9F865766CD5
+gpg-wks-client:     user-id: test@proton.me &lt;test@proton.me&gt;
+gpg-wks-client:     created: ....(防止泄漏时区信息，已省略，请自行在命令行测试)
+gpg-wks-client:   addr-spec: test@proton.me
+</pre>
+    </div>
+   </div>
+   <div class="outline-2" id="outline-container-org4f33fe6">
+    <h2 id="org4f33fe6">
+     亡羊补牢
+    </h2>
+    <div class="outline-text-2" id="text-org4f33fe6">
+     <p>
+      使用 libfaketime 来重新生成一个密钥，再手动导入到 ProtonMail.
+     </p>
+     <pre class="example">
+$ faketime -f '1999-01-01 00:00:0' gpg --full-generate-key
+</pre>
+     <p>
+      <a href="https://zeyi2.github.io">
+       [Return to the main page]​
+      </a>
+     </p>
+    </div>
+   </div>
+  </div>
+  <div class="status" id="postamble">
+   <footer>
+    <p align="center">
+     <a href="https://emacs.org/" rel="editor">
+      GNU Emacs
+     </a>
+     is used to build this website.
+    </p>
+    <p align="center">
+     ©2024 Mitchell
+    </p>
+    <p align="center">
+     <a href="http://creativecommons.org/licenses/by/3.0/cn/" rel="license">
+      <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/cn/88x31.png" style="border-width:0"/>
+     </a>
+     <br/>
+     This work is licensed under a
+     <a href="http://creativecommons.org/licenses/by/3.0/cn/" rel="license">
+      Creative Commons
+            Attribution 3.0 CN License
+     </a>
+    </p>
+    <p align="center">
+     <a href="https://jigsaw.w3.org/css-validator/check/referer">
+      <img alt="Valid CSS!" src="https://jigsaw.w3.org/css-validator/images/vcss" style="border:0;width:88px;height:31px"/>
+     </a>
+     <a href="https://www.mathjax.org">
+      <img alt="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" style="border:0;width:107px;height:31px" title="Powered by MathJax"/>
+     </a>
+     <br/>
+     <a href="https://icp.gov.moe/?keyword=20240262" target="_blank">
+      萌ICP备20240262号
+     </a>
+    </p>
+   </footer>
+  </div>
+ </body>
+</html>
