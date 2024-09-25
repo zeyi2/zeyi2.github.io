@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
  <head>
-  <!-- 2024-09-21 Sat 13:10 -->
+  <!-- 2024-09-25 Wed 23:00 -->
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
@@ -33,11 +33,11 @@
    <p>
     但是这个公钥包含了注册的精确时间（精确到秒），Oops.
    </p>
-   <div class="outline-2" id="outline-container-org6058282">
-    <h2 id="org6058282">
+   <div class="outline-2" id="outline-container-orgc66deca">
+    <h2 id="orgc66deca">
      How to fetch?
     </h2>
-    <div class="outline-text-2" id="text-org6058282">
+    <div class="outline-text-2" id="text-orgc66deca">
      <pre class="example">
  &gt; gpg-wks-client --check -v test@proton.me
 
@@ -49,11 +49,11 @@ gpg-wks-client:   addr-spec: test@proton.me
 </pre>
     </div>
    </div>
-   <div class="outline-2" id="outline-container-org4f33fe6">
-    <h2 id="org4f33fe6">
+   <div class="outline-2" id="outline-container-org5795acc">
+    <h2 id="org5795acc">
      亡羊补牢
     </h2>
-    <div class="outline-text-2" id="text-org4f33fe6">
+    <div class="outline-text-2" id="text-org5795acc">
      <p>
       使用 libfaketime 来重新生成一个密钥，再手动导入到 ProtonMail.
      </p>
@@ -70,6 +70,10 @@ $ faketime -f '1999-01-01 00:00:0' gpg --full-generate-key
   </div>
   <div class="status" id="postamble">
    <footer>
+    <p align="center">
+     <iframe frameborder="0" height="240" scrolling="no" src="https://snowflake.torproject.org/embed.html" width="320">
+     </iframe>
+    </p>
     <p align="center">
      <a href="https://emacs.org/" rel="editor">
       GNU Emacs

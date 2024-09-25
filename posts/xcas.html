@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
  <head>
-  <!-- 2024-09-21 Sat 13:10 -->
+  <!-- 2024-09-25 Wed 23:00 -->
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
@@ -27,27 +27,27 @@
    <p>
     最近有人向我推荐了 Xcas 这个软件，它是 HP Prime 计算器使用的计算机代数系统的一个开源实现，对其进行了一些微小的测试。
    </p>
-   <div class="outline-2" id="outline-container-orgef1fec7">
-    <h2 id="orgef1fec7">
+   <div class="outline-2" id="outline-container-orgcb16d18">
+    <h2 id="orgcb16d18">
      测试环境
     </h2>
-    <div class="outline-text-2" id="text-orgef1fec7">
+    <div class="outline-text-2" id="text-orgcb16d18">
      <p>
       在 6.10.5-zen1-1-zen 内核下测试，Xcas 版本 1.9.0，FriCAS 版本 1.3.11 (Built with SBCL 2.4.5)
      </p>
     </div>
    </div>
-   <div class="outline-2" id="outline-container-orgac7f431">
-    <h2 id="orgac7f431">
+   <div class="outline-2" id="outline-container-org65a79ce">
+    <h2 id="org65a79ce">
      具体测试
     </h2>
-    <div class="outline-text-2" id="text-orgac7f431">
+    <div class="outline-text-2" id="text-org65a79ce">
     </div>
-    <div class="outline-3" id="outline-container-org78430ce">
-     <h3 id="org78430ce">
+    <div class="outline-3" id="outline-container-org31f3e88">
+     <h3 id="org31f3e88">
       01
      </h3>
-     <div class="outline-text-3" id="text-org78430ce">
+     <div class="outline-text-3" id="text-org31f3e88">
       <p>
        先来个比较基础的：
       </p>
@@ -76,11 +76,11 @@ x*exp(tan(x))-15*tan(x)**3*exp(tan(x))+15*tan(x)**5*exp(tan(x))-tan(x)**7*exp(ta
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-orgb5cdd49">
-     <h3 id="orgb5cdd49">
+    <div class="outline-3" id="outline-container-orga753e75">
+     <h3 id="orga753e75">
       02
      </h3>
-     <div class="outline-text-3" id="text-orgb5cdd49">
+     <div class="outline-text-3" id="text-orga753e75">
       <pre class="example">
 integrate((x^2+2*x+1)/((x+1)^6+1),x)
 </pre>
@@ -105,11 +105,11 @@ FriCAS:
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-org423e196">
-     <h3 id="org423e196">
+    <div class="outline-3" id="outline-container-org33af2fe">
+     <h3 id="org33af2fe">
       03
      </h3>
-     <div class="outline-text-3" id="text-org423e196">
+     <div class="outline-text-3" id="text-org33af2fe">
       <p>
        接下来是一个比较困难的积分
       </p>
@@ -156,11 +156,11 @@ integrate(x^-3 * (a * x + b)^(-1/3), x)
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-orgb767e41">
-     <h3 id="orgb767e41">
+    <div class="outline-3" id="outline-container-orgb568397">
+     <h3 id="orgb568397">
       04
      </h3>
-     <div class="outline-text-3" id="text-orgb767e41">
+     <div class="outline-text-3" id="text-orgb568397">
       <pre class="example">
 integrate(log(1+sqrt(a*x+b))/x,x)
 </pre>
@@ -203,11 +203,11 @@ Log[1 + Sqrt[b + a x]] (Log[1 + -----------------] + Log[1 - -----------------])
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-org3b130b5">
-     <h3 id="org3b130b5">
+    <div class="outline-3" id="outline-container-orgf762b12">
+     <h3 id="orgf762b12">
       05
      </h3>
-     <div class="outline-text-3" id="text-org3b130b5">
+     <div class="outline-text-3" id="text-orgf762b12">
       <pre class="example">
 integrate(diff(x*sin(x**asin(x)),x),x)
 </pre>
@@ -230,11 +230,11 @@ integrate(diff(x*sin(x**asin(x)),x),x)
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-org20552e2">
-     <h3 id="org20552e2">
+    <div class="outline-3" id="outline-container-org77119dc">
+     <h3 id="org77119dc">
       05.5
      </h3>
-     <div class="outline-text-3" id="text-org20552e2">
+     <div class="outline-text-3" id="text-org77119dc">
       <pre class="example">
 D(integrate(1/(x^3 + 2) ,x),x)
 </pre>
@@ -273,11 +273,11 @@ D(integrate(1/(x^3 + 2) ,x),x)
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-orge3f363e">
-     <h3 id="orge3f363e">
+    <div class="outline-3" id="outline-container-org71032f5">
+     <h3 id="org71032f5">
       06
      </h3>
-     <div class="outline-text-3" id="text-orge3f363e">
+     <div class="outline-text-3" id="text-org71032f5">
       <p>
        src/input/rich*.input.pamphlet 里有 167 个 Axiom "implementation incomplete"的积分。
       </p>
@@ -311,11 +311,11 @@ integrate(x/sqrt(x^4 + 10*x^2 - 96*x - 71),x)
       </p>
      </div>
     </div>
-    <div class="outline-3" id="outline-container-orgebc230a">
-     <h3 id="orgebc230a">
+    <div class="outline-3" id="outline-container-org6974a9e">
+     <h3 id="org6974a9e">
       后记：八卦一下为什么 Axiom/FriCAS 的符号积分能力这么强
      </h3>
-     <div class="outline-text-3" id="text-orgebc230a">
+     <div class="outline-text-3" id="text-org6974a9e">
       <p>
        (以下内容主要来源于 Manuel Bronstein 所著的 Symbolic Integration I: Transcendental Functions 一书中，B.F. Caviness 所写的序和作者写的前言)
       </p>
@@ -342,6 +342,10 @@ integrate(x/sqrt(x^4 + 10*x^2 - 96*x - 71),x)
   </div>
   <div class="status" id="postamble">
    <footer>
+    <p align="center">
+     <iframe frameborder="0" height="240" scrolling="no" src="https://snowflake.torproject.org/embed.html" width="320">
+     </iframe>
+    </p>
     <p align="center">
      <a href="https://emacs.org/" rel="editor">
       GNU Emacs
