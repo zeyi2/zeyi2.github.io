@@ -1,0 +1,740 @@
+Content-type: text/html; charset=UTF-8
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of getopt</TITLE>
+</HEAD><BODY>
+<H1>getopt</H1>
+Section: C Library Functions (3)<BR>Updated: 2023-02-05<BR><A HREF="#index">Index</A>
+<A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getopt, getopt_long, getopt_long_only,
+optarg, optind, opterr, optopt - Parse command-line options
+<A NAME="lbAC">&nbsp;</A>
+<H2>LIBRARY</H2>
+
+Standard C library
+(<I>libc</I>, <I>-lc</I>)
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int getopt(int </B><I>argc</I><B>, char *const </B><I>argv</I><B>[],</B>
+<B>           const char *</B><I>optstring</I><B>);</B>
+
+<B>extern char *</B><I>optarg</I><B>;</B>
+<B>extern int </B><I>optind</I><B>, </B><I>opterr</I><B>, </B><I>optopt</I><B>;</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/getopt.h">getopt.h</A>&gt;</B>
+
+<B>int getopt_long(int </B><I>argc</I><B>, char *const </B><I>argv</I><B>[],</B>
+<B>           const char *</B><I>optstring</I><B>,</B>
+<B>           const struct option *</B><I>longopts</I><B>, int *</B><I>longindex</I><B>);</B>
+<B>int getopt_long_only(int </B><I>argc</I><B>, char *const </B><I>argv</I><B>[],</B>
+<B>           const char *</B><I>optstring</I><B>,</B>
+<B>           const struct option *</B><I>longopts</I><B>, int *</B><I>longindex</I><B>);</B>
+</PRE>
+
+<P>
+
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="/cgi-bin/man/man2html?7+feature_test_macros">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>getopt</B>():
+
+<PRE>
+    _POSIX_C_SOURCE &gt;= 2 || _XOPEN_SOURCE
+</PRE>
+
+<P>
+
+<B>getopt_long</B>(),
+
+<B>getopt_long_only</B>():
+
+<PRE>
+    _GNU_SOURCE
+</PRE>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>getopt</B>()
+
+function parses the command-line arguments.
+Its arguments
+<I>argc</I>
+
+and
+<I>argv</I>
+
+are the argument count and array as passed to the
+<I>main</I>()
+
+function on program invocation.
+An element of <I>argv</I> that starts with '-'
+(and is not exactly &quot;-&quot; or &quot;--&quot;)
+is an option element.
+The characters of this element
+(aside from the initial '-') are option characters.
+If
+<B>getopt</B>()
+
+is called repeatedly, it returns successively each of the option characters
+from each of the option elements.
+<P>
+
+The variable
+<I>optind</I>
+
+is the index of the next element to be processed in
+<I>argv</I>.
+
+The system initializes this value to 1.
+The caller can reset it to 1 to restart scanning of the same
+<I>argv</I>,
+
+or when scanning a new argument vector.
+<P>
+
+If
+<B>getopt</B>()
+
+finds another option character, it returns that
+character, updating the external variable <I>optind</I> and a static
+variable <I>nextchar</I> so that the next call to
+<B>getopt</B>()
+
+can
+resume the scan with the following option character or
+<I>argv</I>-element.
+<P>
+
+If there are no more option characters,
+<B>getopt</B>()
+
+returns -1.
+Then <I>optind</I> is the index in <I>argv</I> of the first
+<I>argv</I>-element that is not an option.
+<P>
+
+<I>optstring</I>
+
+is a string containing the legitimate option characters.
+A legitimate option character is any visible one byte
+<B><A HREF="/cgi-bin/man/man2html?7+ascii">ascii</A></B>(7)
+
+character (for which
+<B><A HREF="/cgi-bin/man/man2html?3+isgraph">isgraph</A></B>(3)
+
+would return nonzero) that is not '-', ':', or ';'.
+If such a
+character is followed by a colon, the option requires an argument, so
+<B>getopt</B>()
+
+places a pointer to the following text in the same
+<I>argv</I>-element, or the text of the following <I>argv</I>-element, in
+<I>optarg</I>.
+
+Two colons mean an option takes
+an optional arg; if there is text in the current <I>argv</I>-element
+(i.e., in the same word as the option name itself, for example, &quot;-oarg&quot;),
+then it is returned in <I>optarg</I>, otherwise <I>optarg</I> is set to zero.
+This is a GNU extension.
+If
+<I>optstring</I>
+
+contains
+<B>W</B>
+
+followed by a semicolon, then
+<B>-W foo</B>
+
+is treated as the long option
+<B>--foo</B>.
+
+(The
+<B>-W</B>
+
+option is reserved by POSIX.2 for implementation extensions.)
+This behavior is a GNU extension, not available with libraries before
+glibc 2.
+<P>
+
+By default,
+<B>getopt</B>()
+
+permutes the contents of <I>argv</I> as it
+scans, so that eventually all the nonoptions are at the end.
+Two other scanning modes are also implemented.
+If the first character of
+<I>optstring</I> is '+' or the environment variable
+<B>POSIXLY_CORRECT</B>
+
+is set, then option processing stops as soon as a nonoption argument is
+encountered.
+If '+' is not the first character of
+<I>optstring</I>,
+
+it is treated as a normal option.
+If
+<B>POSIXLY_CORRECT</B>
+
+behaviour is required in this case
+<I>optstring</I>
+
+will contain two '+' symbols.
+If the first character of <I>optstring</I> is '-', then
+each nonoption <I>argv</I>-element is handled as if it were the argument of
+an option with character code 1.
+(This is used by programs that were
+written to expect options and other <I>argv</I>-elements in any order
+and that care about the ordering of the two.)
+The special argument &quot;--&quot; forces an end of option-scanning regardless
+of the scanning mode.
+<P>
+
+While processing the option list,
+<B>getopt</B>()
+
+can detect two kinds of errors:
+(1) an option character that was not specified in
+<I>optstring</I>
+
+and (2) a missing option argument
+(i.e., an option at the end of the command line without an expected argument).
+Such errors are handled and reported as follows:
+<DL COMPACT>
+<DT>&bull;<DD>
+By default,
+<B>getopt</B>()
+
+prints an error message on standard error,
+places the erroneous option character in
+<I>optopt</I>,
+
+and returns '?' as the function result.
+<DT>&bull;<DD>
+If the caller has set the global variable
+<I>opterr</I>
+
+to zero, then
+<B>getopt</B>()
+
+does not print an error message.
+The caller can determine that there was an error by testing whether
+the function return value is '?'.
+(By default,
+<I>opterr</I>
+
+has a nonzero value.)
+<DT>&bull;<DD>
+If the first character
+(following any optional '+' or '-' described above)
+of <I>optstring</I>
+is a colon (':'), then
+<B>getopt</B>()
+
+likewise does not print an error message.
+In addition, it returns ':' instead of '?' to
+indicate a missing option argument.
+This allows the caller to distinguish the two different types of errors.
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H3>getopt_long() and getopt_long_only()</H3>
+
+The
+<B>getopt_long</B>()
+
+function works like
+<B>getopt</B>()
+
+except that it also accepts long options, started with two dashes.
+(If the program accepts only long options, then
+<I>optstring</I>
+
+should be specified as an empty string (&quot;&quot;), not NULL.)
+Long option names may be abbreviated if the abbreviation is
+unique or is an exact match for some defined option.
+A long option
+may take a parameter, of the form
+<B>--arg=param</B>
+
+or
+<B>--arg param</B>.
+
+<P>
+
+<I>longopts</I>
+
+is a pointer to the first element of an array of
+<I>struct option</I>
+
+declared in
+<I>&lt;<A HREF="file:///usr/include/getopt.h">getopt.h</A>&gt;</I>
+
+as
+<P>
+
+
+
+struct option {
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;char&nbsp;*name;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has_arg;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*flag;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;val;
+};
+
+
+<P>
+
+The meanings of the different fields are:
+<DL COMPACT>
+<DT><I>name</I>
+
+<DD>
+is the name of the long option.
+<DT><I>has_arg</I>
+
+<DD>
+is:
+<B>no_argument</B> (or 0) if the option does not take an argument;
+<B>required_argument</B> (or 1) if the option requires an argument; or
+<B>optional_argument</B> (or 2) if the option takes an optional argument.
+<DT><I>flag</I>
+
+<DD>
+specifies how results are returned for a long option.
+If <I>flag</I>
+is NULL, then
+<B>getopt_long</B>()
+
+returns <I>val</I>.
+(For example, the calling program may set <I>val</I> to the equivalent short
+option character.)
+Otherwise,
+<B>getopt_long</B>()
+
+returns 0, and
+<I>flag</I> points to a variable which is set to <I>val</I> if the
+option is found, but left unchanged if the option is not found.
+<DT><I>val</I><DD>
+is the value to return, or to load into the variable pointed
+to by <I>flag</I>.
+</DL>
+<P>
+
+The last element of the array has to be filled with zeros.
+<P>
+
+If <I>longindex</I> is not NULL, it
+points to a variable which is set to the index of the long option relative to
+<I>longopts</I>.
+
+<P>
+
+<B>getopt_long_only</B>()
+
+is like
+<B>getopt_long</B>(),
+
+but '-' as well
+as &quot;--&quot; can indicate a long option.
+If an option that starts with '-'
+(not &quot;--&quot;) doesn't match a long option, but does match a short option,
+it is parsed as a short option instead.
+<A NAME="lbAG">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If an option was successfully found, then
+<B>getopt</B>()
+
+returns the option character.
+If all command-line options have been parsed, then
+<B>getopt</B>()
+
+returns -1.
+If
+<B>getopt</B>()
+
+encounters an option character that was not in
+<I>optstring</I>,
+
+then '?' is returned.
+If
+<B>getopt</B>()
+
+encounters an option with a missing argument,
+then the return value depends on the first character in
+<I>optstring</I>:
+
+if it is ':', then ':' is returned; otherwise '?' is returned.
+<P>
+
+<B>getopt_long</B>()
+
+and
+<B>getopt_long_only</B>()
+
+also return the option
+character when a short option is recognized.
+For a long option, they
+return <I>val</I> if <I>flag</I> is NULL, and 0 otherwise.
+Error and -1 returns are the same as for
+<B>getopt</B>(),
+
+plus '?' for an
+ambiguous match or an extraneous parameter.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ENVIRONMENT</H2>
+
+<DL COMPACT>
+<DT><B>POSIXLY_CORRECT</B>
+
+<DD>
+If this is set, then option processing stops as soon as a nonoption
+argument is encountered.
+<DT><B>_&lt;PID&gt;_GNU_nonoption_argv_flags_</B>
+
+<DD>
+This variable was used by
+<B><A HREF="/cgi-bin/man/man2html?1+bash">bash</A></B>(1)
+
+2.0 to communicate to glibc which arguments are the results of
+wildcard expansion and so should not be considered as options.
+This behavior was removed in
+<B><A HREF="/cgi-bin/man/man2html?1+bash">bash</A></B>(1)
+
+2.01, but the support remains in glibc.
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+For an explanation of the terms used in this section, see
+<B><A HREF="/cgi-bin/man/man2html?7+attributes">attributes</A></B>(7).
+
+
+
+<TABLE BORDER>
+<TR VALIGN=top><TD><B>Interface</B></TD><TD><B>Attribute</B></TD><TD><B>Value</B><BR></TD></TR>
+<TR VALIGN=top><TD>
+<B>getopt</B>(),
+
+<B>getopt_long</B>(),
+
+<B>getopt_long_only</B>()
+
+</TD><TD>Thread safety</TD><TD>
+MT-Unsafe race:getopt env
+<BR></TD></TR>
+</TABLE>
+
+
+
+<P>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>STANDARDS</H2>
+
+<DL COMPACT>
+<DT><B>getopt</B>():
+
+<DD>
+POSIX.1-2001, POSIX.1-2008, and POSIX.2,
+provided the environment variable
+<B>POSIXLY_CORRECT</B>
+
+is set.
+Otherwise, the elements of <I>argv</I> aren't really
+<I>const</I>,
+
+because these functions permute them.
+Nevertheless,
+<I>const</I>
+
+is used in the prototype to be compatible with other systems.
+<DT><DD>
+The use of '+' and '-' in
+<I>optstring</I>
+
+is a GNU extension.
+<DT><DD>
+On some older implementations,
+<B>getopt</B>()
+
+was declared in
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>.
+
+SUSv1 permitted the declaration to appear in either
+<I>&lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</I>
+
+or
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>.
+
+POSIX.1-1996 marked the use of
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>
+
+for this purpose as LEGACY.
+POSIX.1-2001 does not require the declaration to appear in
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>.
+
+<DT><B>getopt_long</B>() and <B>getopt_long_only</B>():
+
+<DD>
+These functions are GNU extensions.
+</DL>
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+A program that scans multiple argument vectors,
+or rescans the same vector more than once,
+and wants to make use of GNU extensions such as '+'
+and '-' at the start of
+<I>optstring</I>,
+
+or changes the value of
+<B>POSIXLY_CORRECT</B>
+
+between scans,
+must reinitialize
+<B>getopt</B>()
+
+by resetting
+<I>optind</I>
+
+to 0, rather than the traditional value of 1.
+(Resetting to 0 forces the invocation of an internal initialization
+routine that rechecks
+<B>POSIXLY_CORRECT</B>
+
+and checks for GNU extensions in
+<I>optstring</I>.)
+
+<P>
+
+Command-line arguments are parsed in strict order
+meaning that an option requiring an argument will consume the next argument,
+regardless of whether that argument is the correctly specified option argument
+or simply the next option
+(in the scenario the user mis-specifies the command line).
+For example, if
+<I>optstring</I>
+
+is specified as &quot;1n:&quot;
+and the user specifies the command line arguments incorrectly as
+<I>prog&nbsp;-n&nbsp;-1</I>,
+
+the
+<I>-n</I>
+
+option will be given the
+<B>optarg</B>
+
+value &quot;-1&quot;, and the
+<I>-1</I>
+
+option will be considered to have not been specified.
+<A NAME="lbAL">&nbsp;</A>
+<H2>EXAMPLES</H2>
+
+<A NAME="lbAM">&nbsp;</A>
+<H3>getopt()</H3>
+
+The following trivial example program uses
+<B>getopt</B>()
+
+to handle two program options:
+<I>-n</I>,
+
+with no associated value; and
+<I>-t val</I>,
+
+which expects an associated value.
+<P>
+
+
+
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+<P>
+int
+main(int argc, char *argv[])
+{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;flags,&nbsp;opt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nsecs,&nbsp;tfnd;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nsecs&nbsp;=&nbsp;0;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;tfnd&nbsp;=&nbsp;0;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;flags&nbsp;=&nbsp;0;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;((opt&nbsp;=&nbsp;getopt(argc,&nbsp;argv,&nbsp;&quot;nt:&quot;))&nbsp;!=&nbsp;-1)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;(opt)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'n':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flags&nbsp;=&nbsp;1;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'t':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nsecs&nbsp;=&nbsp;atoi(optarg);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tfnd&nbsp;=&nbsp;1;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;/*&nbsp;'?'&nbsp;*/
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&nbsp;&quot;Usage:&nbsp;%s&nbsp;[-t&nbsp;nsecs]&nbsp;[-n]&nbsp;name\n&quot;,
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;argv[0]);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_FAILURE);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;}
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;flags=%d;&nbsp;tfnd=%d;&nbsp;nsecs=%d;&nbsp;optind=%d\n&quot;,
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flags,&nbsp;tfnd,&nbsp;nsecs,&nbsp;optind);
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(optind&nbsp;&gt;=&nbsp;argc)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&nbsp;&quot;Expected&nbsp;argument&nbsp;after&nbsp;options\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_FAILURE);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;}
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;name&nbsp;argument&nbsp;=&nbsp;%s\n&quot;,&nbsp;argv[optind]);
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;Other&nbsp;code&nbsp;omitted&nbsp;*/
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_SUCCESS);
+}
+
+
+<A NAME="lbAN">&nbsp;</A>
+<H3>getopt_long()</H3>
+
+The following example program illustrates the use of
+<B>getopt_long</B>()
+
+with most of its features.
+<P>
+
+
+
+#include &lt;<A HREF="file:///usr/include/getopt.h">getopt.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;     /* for printf */
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;    /* for exit */
+<P>
+int
+main(int argc, char *argv[])
+{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;c;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;digit_optind&nbsp;=&nbsp;0;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;(1)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;this_option_optind&nbsp;=&nbsp;optind&nbsp;?&nbsp;optind&nbsp;:&nbsp;1;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;option_index&nbsp;=&nbsp;0;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;struct&nbsp;option&nbsp;long_options[]&nbsp;=&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;add&quot;,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;required_argument,&nbsp;0,&nbsp;&nbsp;0&nbsp;},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;append&quot;,&nbsp;&nbsp;no_argument,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;0&nbsp;},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;delete&quot;,&nbsp;&nbsp;required_argument,&nbsp;0,&nbsp;&nbsp;0&nbsp;},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;verbose&quot;,&nbsp;no_argument,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;0&nbsp;},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;create&quot;,&nbsp;&nbsp;required_argument,&nbsp;0,&nbsp;'c'},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&quot;file&quot;,&nbsp;&nbsp;&nbsp;&nbsp;required_argument,&nbsp;0,&nbsp;&nbsp;0&nbsp;},
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;0&nbsp;}
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;=&nbsp;getopt_long(argc,&nbsp;argv,&nbsp;&quot;abc:d:012&quot;,
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long_options,&nbsp;&amp;option_index);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(c&nbsp;==&nbsp;-1)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;(c)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;0:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;%s&quot;,&nbsp;long_options[option_index].name);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(optarg)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;&nbsp;with&nbsp;arg&nbsp;%s&quot;,&nbsp;optarg);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'0':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'1':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'2':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(digit_optind&nbsp;!=&nbsp;0&nbsp;&amp;&amp;&nbsp;digit_optind&nbsp;!=&nbsp;this_option_optind)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;digits&nbsp;occur&nbsp;in&nbsp;two&nbsp;different&nbsp;argv-elements.\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit_optind&nbsp;=&nbsp;this_option_optind;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;%c\n&quot;,&nbsp;c);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'a':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;a\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'b':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;b\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'c':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;c&nbsp;with&nbsp;value&nbsp;'%s'\n&quot;,&nbsp;optarg);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'d':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;option&nbsp;d&nbsp;with&nbsp;value&nbsp;'%s'\n&quot;,&nbsp;optarg);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'?':
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;??&nbsp;getopt&nbsp;returned&nbsp;character&nbsp;code&nbsp;0%o&nbsp;??\n&quot;,&nbsp;c);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;}
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(optind&nbsp;&lt;&nbsp;argc)&nbsp;{
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;non-option&nbsp;ARGV-elements:&nbsp;&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;(optind&nbsp;&lt;&nbsp;argc)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%s&nbsp;&quot;,&nbsp;argv[optind++]);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\n&quot;);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;}
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_SUCCESS);
+}
+
+
+<A NAME="lbAO">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="/cgi-bin/man/man2html?1+getopt">getopt</A></B>(1),
+
+<B><A HREF="/cgi-bin/man/man2html?3+getsubopt">getsubopt</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">LIBRARY</A><DD>
+<DT><A HREF="#lbAD">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAE">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAF">getopt_long() and getopt_long_only()</A><DD>
+</DL>
+<DT><A HREF="#lbAG">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAH">ENVIRONMENT</A><DD>
+<DT><A HREF="#lbAI">ATTRIBUTES</A><DD>
+<DT><A HREF="#lbAJ">STANDARDS</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">EXAMPLES</A><DD>
+<DL>
+<DT><A HREF="#lbAM">getopt()</A><DD>
+<DT><A HREF="#lbAN">getopt_long()</A><DD>
+</DL>
+<DT><A HREF="#lbAO">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 12:05:55 GMT, December 01, 2024
+</BODY>
+</HTML>
