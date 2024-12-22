@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-18 Wed 16:26 -->
+<!-- 2024-12-22 Sun 21:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mitchell's Homepage</title>
@@ -14,53 +14,89 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Mitchell&rsquo;s Homepage</h1>
+<hr />
 <div class="org-center">
 <p>
-<i>I shall be telling this with a sigh</i>
-</p>
-
-<p>
-<i>Somewhere ages and ages hence:</i>
-</p>
-
-<p>
-<i>Two roads diverged in a wood, and I-</i>
-</p>
-
-<p>
-<i>I took the one less travelled by,</i>
-</p>
-
-<p>
-<i>And that has made all the difference.</i>
+<b><b>警钟长鸣</b></b>
 </p>
 </div>
+<header>
+  <script>
+    function calDiff(target) {
+	const targetDate = new Date(target);
+	const currentDate = new Date();
+	const diffTime = targetDate - currentDate;
 
-<div id="outline-container-orgc13b0c8" class="outline-2">
-<h2 id="orgc13b0c8">Articles</h2>
-<div class="outline-text-2" id="text-orgc13b0c8">
+	if (isNaN(diffTime)) {
+	    return "NaN";
+	}
+
+	const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+	const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+	const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+
+	if (diffTime >= 0) {
+	    return `${diffDays} 天 ${diffHours} 小时 ${diffMinutes} 分钟 ${diffSeconds} 秒`;
+	} else {
+	    return `__`;
+	}
+    }
+
+    function updateAll() {
+	const times = [
+	    { label: "英语考试", date: "2025-01-08T15:30" },
+	    { label: "数分考试", date: "2025-01-15T10:30" },
+	    { label: "线代考试", date: "2025-01-14T10:30" },
+	    { label: "思政考试", date: "2025-01-10T13:00" },
+	    { label: "史纲考试", date: "2025-01-10T18:00" },
+	];
+
+	const container = document.getElementById("timeDifferences");
+	container.innerHTML = "";
+
+	times.forEach((time) => {
+	    const result = calDiff(time.date);
+	    const div = document.createElement("div");
+	    div.style.textAlign = "center";
+	    div.style.margin = "10px 0";
+	    div.textContent = `距离${time.label}还有: ${result}`;
+	    container.appendChild(div);
+	});
+    }
+    
+    setInterval(updateAll, 1000);
+  </script>
+  <body>
+    <div id="timeDifferences"></div>
+  </body>
+</header>
+<hr />
+<div id="outline-container-org45019e1" class="outline-2">
+<h2 id="org45019e1">Articles</h2>
+<div class="outline-text-2" id="text-org45019e1">
 </div>
-<div id="outline-container-org895853b" class="outline-5">
-<h5 id="org895853b"><a href="nemu-src.html">阅读 NEMU 的源码</a> (更新中)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="c_lang">c_lang</span></span></h5>
+<div id="outline-container-orgc675e17" class="outline-5">
+<h5 id="orgc675e17"><a href="nemu-src.html">阅读 NEMU 的源码</a> (更新中)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="c_lang">c_lang</span></span></h5>
 </div>
-<div id="outline-container-orgd10db19" class="outline-5">
-<h5 id="orgd10db19"><a href="boyuan-project-01.html">博远课题笔记之——命令行参数解析</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
+<div id="outline-container-orga2eb5ae" class="outline-5">
+<h5 id="orga2eb5ae"><a href="boyuan-project-01.html">博远课题笔记之——命令行参数解析</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
 </div>
-<div id="outline-container-orge472b5f" class="outline-5">
-<h5 id="orge472b5f"><a href="boyuan-pre.html">技术分享02 命令行操作</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
+<div id="outline-container-orgc2e1d65" class="outline-5">
+<h5 id="orgc2e1d65"><a href="boyuan-pre.html">技术分享02 命令行操作</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
 </div>
 </div>
 
-<div id="outline-container-orgc1d835c" class="outline-2">
-<h2 id="orgc1d835c">Friends</h2>
-<div class="outline-text-2" id="text-orgc1d835c">
+<div id="outline-container-org9c9f668" class="outline-2">
+<h2 id="org9c9f668">Friends</h2>
+<div class="outline-text-2" id="text-org9c9f668">
 </div>
-<div id="outline-container-org81c8be7" class="outline-4">
-<h4 id="org81c8be7"><a href="https://blog-vx1c.vercel.app">[可能世界]​</a></h4>
+<div id="outline-container-orgd1fc38c" class="outline-4">
+<h4 id="orgd1fc38c"><a href="https://blog-vx1c.vercel.app">[可能世界]​</a></h4>
 </div>
-<div id="outline-container-orgf61dc0b" class="outline-4">
-<h4 id="orgf61dc0b"><a href="https://mydg-leodu.netlify.app/">[无人区]​</a></h4>
-<div class="outline-text-4" id="text-orgf61dc0b">
+<div id="outline-container-org0ec764a" class="outline-4">
+<h4 id="org0ec764a"><a href="https://mydg-leodu.netlify.app/">[无人区]​</a></h4>
+<div class="outline-text-4" id="text-org0ec764a">
 <ul class="org-ul">
 <li>互换友链请发邮件</li>
 </ul>
@@ -68,9 +104,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgd2063e7" class="outline-2">
-<h2 id="orgd2063e7">About</h2>
-<div class="outline-text-2" id="text-orgd2063e7">
+<div id="outline-container-orgbbba57f" class="outline-2">
+<h2 id="orgbbba57f">About</h2>
+<div class="outline-text-2" id="text-orgbbba57f">
 <div class="org-center">
 <p>
 Sometimes I translate stuff, sometimes I do some programming, often I do both.
@@ -85,7 +121,7 @@ Sometimes I translate stuff, sometimes I do some programming, often I do both.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mitchell</p>
-<p class="date">Created: 2024-12-18 Wed 16:26</p>
+<p class="date">Created: 2024-12-22 Sun 21:30</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>
