@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-03 Tue 22:51 -->
+<!-- 2024-12-22 Sun 21:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>技术分享02 命令行操作</title>
@@ -18,90 +18,90 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org8d997cc">1. 什么是命令行</a>
+<li><a href="#org6d94c41">1. 什么是命令行</a>
 <ul>
-<li><a href="#orgb61433e">1.1. GUI? CLI? 这都什么玩意</a></li>
-<li><a href="#org683940d">1.2. GUI VS CLI</a></li>
+<li><a href="#orge6e89c2">1.1. GUI? CLI? 这都什么玩意</a></li>
+<li><a href="#orga6ebf8a">1.2. GUI VS CLI</a></li>
 </ul>
 </li>
-<li><a href="#orgf67cd67">2. 为什么需要使用命令行</a>
+<li><a href="#org40cf4b3">2. 为什么需要使用命令行</a>
 <ul>
-<li><a href="#org9d5cba6">2.1. 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
-<li><a href="#org858e813">2.2. 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#orgb2fdc15">2.1. 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#orgf1a764c">2.2. 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org6bdd0bf">3. Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
+<li><a href="#org7eca569">3. Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
 <ul>
-<li><a href="#org18679ec">3.1. 文本编辑</a>
+<li><a href="#org66c49fe">3.1. 文本编辑</a>
 <ul>
-<li><a href="#org0186505">3.1.1. 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
+<li><a href="#orgdfc0188">3.1.1. 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgf2ad3f2">3.2. 文件管理</a></li>
-<li><a href="#org1b10e74">3.3. 进程管理</a></li>
-<li><a href="#orgf684a89">3.4. 输入输出 (小工具们互相组合的核心)</a>
+<li><a href="#orgb8ed426">3.2. 文件管理</a></li>
+<li><a href="#org8f8c64b">3.3. 进程管理</a></li>
+<li><a href="#org8e2d32a">3.4. 输入输出 (小工具们互相组合的核心)</a>
 <ul>
-<li><a href="#org3fffc56">3.4.1. 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</a>
+<li><a href="#orgb2c89fe">3.4.1. 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</a>
 <ul>
-<li><a href="#org67f0e4d">3.4.1.1. 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#orgdd7c1b0">3.4.1.1. 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org87cd0c4">3.4.2. <code>xargs</code>: 将标准输入转变为命令的参数</a>
+<li><a href="#org6be0c6c">3.4.2. <code>xargs</code>: 将标准输入转变为命令的参数</a>
 <ul>
-<li><a href="#org325f39f">3.4.2.1. 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#org0ff2093">3.5. 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</a>
-<ul>
-<li><a href="#orgb285c59">3.5.1. 通配符</a></li>
-<li><a href="#org461b98d">3.5.2. 正则表达式</a></li>
+<li><a href="#org51d36ab">3.4.2.1. 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgab344e8">4. Read The (Friendly|Fruitful) Manual</a></li>
-<li><a href="#orgcf5155c">5. 自动化的力量</a>
+<li><a href="#orgb7e45fa">3.5. 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</a>
 <ul>
-<li><a href="#org2163cc6">5.1. 这就是我们热血沸腾的组合技</a>
-<ul>
-<li><a href="#org4435c88">5.1.1. CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
-<li><a href="#orgde9bacf">5.1.2. 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
-</ul>
-</li>
-<li><a href="#orgdea6ae7">5.2. 脚本: 摆脱重复的工作</a>
-<ul>
-<li><a href="#orgb1eec08">5.2.1. Windows 批处理文件 / Powershell</a></li>
-<li><a href="#orgfbba01a">5.2.2. Unix Bash/Zsh/Fish</a></li>
+<li><a href="#orge863c17">3.5.1. 通配符</a></li>
+<li><a href="#orgfd262e0">3.5.2. 正则表达式</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org069ca10">6. 打开黑盒子</a>
+<li><a href="#orga1c9a56">4. Read The (Friendly|Fruitful) Manual</a></li>
+<li><a href="#orga23b04a">5. 自动化的力量</a>
 <ul>
-<li><a href="#orgb8e304c">6.1. 命令行工具的本质是什么?</a></li>
-<li><a href="#orga1473a3">6.2. <code>strace</code> : 一个重要的踪迹工具</a></li>
-<li><a href="#org0c3c8e7">6.3. <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
+<li><a href="#orge8e41fd">5.1. 这就是我们热血沸腾的组合技</a>
 <ul>
-<li><a href="#orga481df1">6.3.1. <code>ls</code> 如何运行?</a></li>
-<li><a href="#orgf0fdc13">6.3.2. <code>ls</code> 是如何被找到的?</a></li>
+<li><a href="#orgbad04f0">5.1.1. CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#org75051a7">5.1.2. 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org28df16f">5.2. 脚本: 摆脱重复的工作</a>
+<ul>
+<li><a href="#orge241d57">5.2.1. Windows 批处理文件 / Powershell</a></li>
+<li><a href="#org805e7c5">5.2.2. Unix Bash/Zsh/Fish</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgca41d2a">7. So&#x2026; What is command line?</a></li>
-<li><a href="#orgf89c77f">8. 与时俱进: 更先进的工具们</a></li>
-<li><a href="#orgde8f361">9. Acknowledgement</a></li>
+<li><a href="#orgb7d70f7">6. 打开黑盒子</a>
+<ul>
+<li><a href="#orge061314">6.1. 命令行工具的本质是什么?</a></li>
+<li><a href="#org7d8ae28">6.2. <code>strace</code> : 一个重要的踪迹工具</a></li>
+<li><a href="#orgf13d2ee">6.3. <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
+<ul>
+<li><a href="#orgc191074">6.3.1. <code>ls</code> 如何运行?</a></li>
+<li><a href="#org17eebe2">6.3.2. <code>ls</code> 是如何被找到的?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org9de134e">7. So&#x2026; What is command line?</a></li>
+<li><a href="#org5d5646c">8. 与时俱进: 更先进的工具们</a></li>
+<li><a href="#orga2d0800">9. Acknowledgement</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org8d997cc" class="outline-2">
-<h2 id="org8d997cc"><span class="section-number-2">1.</span> 什么是命令行</h2>
+<div id="outline-container-org6d94c41" class="outline-2">
+<h2 id="org6d94c41"><span class="section-number-2">1.</span> 什么是命令行</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgb61433e" class="outline-3">
-<h3 id="orgb61433e"><span class="section-number-3">1.1.</span> GUI? CLI? 这都什么玩意</h3>
+<div id="outline-container-orge6e89c2" class="outline-3">
+<h3 id="orge6e89c2"><span class="section-number-3">1.1.</span> GUI? CLI? 这都什么玩意</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li><b><b>GUI</b></b>: 用鼠标双击会跳窗口的软件</li>
@@ -109,7 +109,7 @@
 </ul>
 <div class="org-center">
 
-<div id="org7041dcd" class="figure">
+<div id="orgc5c82c4" class="figure">
 <p><img src="files/icon.png" alt="icon.png" />
 </p>
 </div>
@@ -124,8 +124,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org683940d" class="outline-3">
-<h3 id="org683940d"><span class="section-number-3">1.2.</span> GUI VS CLI</h3>
+<div id="outline-container-orga6ebf8a" class="outline-3">
+<h3 id="orga6ebf8a"><span class="section-number-3">1.2.</span> GUI VS CLI</h3>
 <div class="outline-text-3" id="text-1-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -179,8 +179,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf67cd67" class="outline-2">
-<h2 id="orgf67cd67"><span class="section-number-2">2.</span> 为什么需要使用命令行</h2>
+<div id="outline-container-org40cf4b3" class="outline-2">
+<h2 id="org40cf4b3"><span class="section-number-2">2.</span> 为什么需要使用命令行</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <b><b>因为我们用计算机的目的不同: 程序员要写程序</b></b>
@@ -192,8 +192,8 @@
 比如 <code>apt install gcc</code> 一行就能安装完整的C语言编译工具
 </p>
 </div>
-<div id="outline-container-org9d5cba6" class="outline-3">
-<h3 id="org9d5cba6"><span class="section-number-3">2.1.</span> 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
+<div id="outline-container-orgb2fdc15" class="outline-3">
+<h3 id="orgb2fdc15"><span class="section-number-3">2.1.</span> 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li>命令行的解决方案</li>
@@ -225,8 +225,8 @@
 </p>
 </div>
 </div>
-<div id="outline-container-org858e813" class="outline-3">
-<h3 id="org858e813"><span class="section-number-3">2.2.</span> 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
+<div id="outline-container-orgf1a764c" class="outline-3">
+<h3 id="orgf1a764c"><span class="section-number-3">2.2.</span> 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>GUI 怎么实现?</li>
@@ -257,15 +257,15 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6bdd0bf" class="outline-2">
-<h2 id="org6bdd0bf"><span class="section-number-2">3.</span> Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h2>
+<div id="outline-container-org7eca569" class="outline-2">
+<h2 id="org7eca569"><span class="section-number-2">3.</span> Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <b><b>注: 你需要一个Unix Shell才能进行实操，如果你没有，可以先搜索 WSL (之后会有讲解)</b></b>
 </p>
 </div>
-<div id="outline-container-org18679ec" class="outline-3">
-<h3 id="org18679ec"><span class="section-number-3">3.1.</span> 文本编辑</h3>
+<div id="outline-container-org66c49fe" class="outline-3">
+<h3 id="org66c49fe"><span class="section-number-3">3.1.</span> 文本编辑</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>Vim / Emacs</li>
@@ -356,8 +356,8 @@ Unix "一切皆文件"的概念结合 Vim 强大的编辑能力可以做一些�
 让我们实操一下 :)
 </p>
 </div>
-<div id="outline-container-org0186505" class="outline-4">
-<h4 id="org0186505"><span class="section-number-4">3.1.1.</span> 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h4>
+<div id="outline-container-orgdfc0188" class="outline-4">
+<h4 id="orgdfc0188"><span class="section-number-4">3.1.1.</span> 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h4>
 <div class="outline-text-4" id="text-3-1-1">
 <p>
 对于可执行文件 <code>hello</code> ，我们可以直接修改文件来改变它的输出
@@ -426,7 +426,7 @@ vimdiff hello.txt hello1.txt
 </p>
 
 
-<div id="orgcd0c381" class="figure">
+<div id="org77e0121" class="figure">
 <p><img src="files/QB.jpg" alt="QB.jpg" />
 </p>
 </div>
@@ -456,8 +456,8 @@ vimdiff hello.txt hello1.txt
 </div>
 </div>
 </div>
-<div id="outline-container-orgf2ad3f2" class="outline-3">
-<h3 id="orgf2ad3f2"><span class="section-number-3">3.2.</span> 文件管理</h3>
+<div id="outline-container-orgb8ed426" class="outline-3">
+<h3 id="orgb8ed426"><span class="section-number-3">3.2.</span> 文件管理</h3>
 <div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
 <pre class="src src-sh">ls, rm, mkdir, mv, pwd, cat...
@@ -528,8 +528,8 @@ vimdiff hello.txt hello1.txt
 </table>
 </div>
 </div>
-<div id="outline-container-org1b10e74" class="outline-3">
-<h3 id="org1b10e74"><span class="section-number-3">3.3.</span> 进程管理</h3>
+<div id="outline-container-org8f8c64b" class="outline-3">
+<h3 id="org8f8c64b"><span class="section-number-3">3.3.</span> 进程管理</h3>
 <div class="outline-text-3" id="text-3-3">
 <div class="org-src-container">
 <pre class="src src-sh">Ctrl-Z+bg, jobs, fg, kill -9 &lt;pid&gt;, ps aux, htop, top
@@ -537,16 +537,16 @@ vimdiff hello.txt hello1.txt
 </div>
 </div>
 </div>
-<div id="outline-container-orgf684a89" class="outline-3">
-<h3 id="orgf684a89"><span class="section-number-3">3.4.</span> 输入输出 (小工具们互相组合的核心)</h3>
+<div id="outline-container-org8e2d32a" class="outline-3">
+<h3 id="org8e2d32a"><span class="section-number-3">3.4.</span> 输入输出 (小工具们互相组合的核心)</h3>
 <div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
 <pre class="src src-sh">&#31649;&#36947;, xargs
 </pre>
 </div>
 </div>
-<div id="outline-container-org3fffc56" class="outline-4">
-<h4 id="org3fffc56"><span class="section-number-4">3.4.1.</span> 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</h4>
+<div id="outline-container-orgb2c89fe" class="outline-4">
+<h4 id="orgb2c89fe"><span class="section-number-4">3.4.1.</span> 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</h4>
 <div class="outline-text-4" id="text-3-4-1">
 <div class="org-src-container">
 <pre class="src src-Bash">+-------+  stdout   +------+  stdin   +-------+
@@ -555,8 +555,8 @@ vimdiff hello.txt hello1.txt
 </pre>
 </div>
 </div>
-<div id="outline-container-org67f0e4d" class="outline-5">
-<h5 id="org67f0e4d"><span class="section-number-5">3.4.1.1.</span> 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h5>
+<div id="outline-container-orgdd7c1b0" class="outline-5">
+<h5 id="orgdd7c1b0"><span class="section-number-5">3.4.1.1.</span> 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h5>
 <div class="outline-text-5" id="text-3-4-1-1">
 <div class="org-src-container">
 <pre class="src src-sh">ls /bin | wc -l
@@ -565,8 +565,8 @@ vimdiff hello.txt hello1.txt
 </div>
 </div>
 </div>
-<div id="outline-container-org87cd0c4" class="outline-4">
-<h4 id="org87cd0c4"><span class="section-number-4">3.4.2.</span> <code>xargs</code>: 将标准输入转变为命令的参数</h4>
+<div id="outline-container-org6be0c6c" class="outline-4">
+<h4 id="org6be0c6c"><span class="section-number-4">3.4.2.</span> <code>xargs</code>: 将标准输入转变为命令的参数</h4>
 <div class="outline-text-4" id="text-3-4-2">
 <div class="org-src-container">
 <pre class="src src-sh"><span class="org-builtin">echo</span> <span class="org-string">"a.c b.c c.c"</span> | xargs rm
@@ -575,8 +575,8 @@ rm <span class="org-string">"a.c b.c c.c"</span>
 </pre>
 </div>
 </div>
-<div id="outline-container-org325f39f" class="outline-5">
-<h5 id="org325f39f"><span class="section-number-5">3.4.2.1.</span> 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h5>
+<div id="outline-container-org51d36ab" class="outline-5">
+<h5 id="org51d36ab"><span class="section-number-5">3.4.2.1.</span> 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h5>
 <div class="outline-text-5" id="text-3-4-2-1">
 <p>
 Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮件去电邮列表里询问大佬
@@ -594,12 +594,12 @@ Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮
 </div>
 </div>
 </div>
-<div id="outline-container-org0ff2093" class="outline-3">
-<h3 id="org0ff2093"><span class="section-number-3">3.5.</span> 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</h3>
+<div id="outline-container-orgb7e45fa" class="outline-3">
+<h3 id="orgb7e45fa"><span class="section-number-3">3.5.</span> 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</h3>
 <div class="outline-text-3" id="text-3-5">
 </div>
-<div id="outline-container-orgb285c59" class="outline-4">
-<h4 id="orgb285c59"><span class="section-number-4">3.5.1.</span> 通配符</h4>
+<div id="outline-container-orge863c17" class="outline-4">
+<h4 id="orge863c17"><span class="section-number-4">3.5.1.</span> 通配符</h4>
 <div class="outline-text-4" id="text-3-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -651,8 +651,8 @@ Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮
 </table>
 </div>
 </div>
-<div id="outline-container-org461b98d" class="outline-4">
-<h4 id="org461b98d"><span class="section-number-4">3.5.2.</span> 正则表达式</h4>
+<div id="outline-container-orgfd262e0" class="outline-4">
+<h4 id="orgfd262e0"><span class="section-number-4">3.5.2.</span> 正则表达式</h4>
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 由于 <code>POSIX</code> / <code>Python</code> &amp; <code>Perl</code> / <code>grep</code> &amp; <code>egrep</code> 使用的规范不一样，故这里先略过
@@ -674,8 +674,8 @@ Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮
 </div>
 </div>
 </div>
-<div id="outline-container-orgab344e8" class="outline-2">
-<h2 id="orgab344e8"><span class="section-number-2">4.</span> Read The (Friendly|Fruitful) Manual</h2>
+<div id="outline-container-orga1c9a56" class="outline-2">
+<h2 id="orga1c9a56"><span class="section-number-2">4.</span> Read The (Friendly|Fruitful) Manual</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 <b><b>最重要的 Linux 命令:</b></b> <b><b><code>man</code></b></b>
@@ -706,12 +706,12 @@ Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮
 <hr />
 </div>
 </div>
-<div id="outline-container-orgcf5155c" class="outline-2">
-<h2 id="orgcf5155c"><span class="section-number-2">5.</span> 自动化的力量</h2>
+<div id="outline-container-orga23b04a" class="outline-2">
+<h2 id="orga23b04a"><span class="section-number-2">5.</span> 自动化的力量</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org2163cc6" class="outline-3">
-<h3 id="org2163cc6"><span class="section-number-3">5.1.</span> 这就是我们热血沸腾的组合技</h3>
+<div id="outline-container-orge8e41fd" class="outline-3">
+<h3 id="orge8e41fd"><span class="section-number-3">5.1.</span> 这就是我们热血沸腾的组合技</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 前面提到了: 我们通过小工具之间的组合来解决复杂问题，并给出了一个看上去很复杂的例子 <del>(其实并不)</del>
@@ -740,8 +740,8 @@ uniq ;; 对上面的结果进行去重
 </p>
 <hr />
 </div>
-<div id="outline-container-org4435c88" class="outline-4">
-<h4 id="org4435c88"><span class="section-number-4">5.1.1.</span> CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div id="outline-container-orgbad04f0" class="outline-4">
+<h4 id="orgbad04f0"><span class="section-number-4">5.1.1.</span> CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
 <div class="outline-text-4" id="text-5-1-1">
 <div class="org-src-container">
 <pre class="src src-sh">watch -n 1 <span class="org-string">"cat /proc/cpuinfo | grep MHz | awk '{print \$1 NR \$3 \$4 \$2}'"</span>
@@ -749,8 +749,8 @@ uniq ;; 对上面的结果进行去重
 </div>
 </div>
 </div>
-<div id="outline-container-orgde9bacf" class="outline-4">
-<h4 id="orgde9bacf"><span class="section-number-4">5.1.2.</span> 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div id="outline-container-org75051a7" class="outline-4">
+<h4 id="org75051a7"><span class="section-number-4">5.1.2.</span> 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
 <div class="outline-text-4" id="text-5-1-2">
 <div class="org-src-container">
 <pre class="src src-sh">head -c 32 &lt; /dev/urandom | base64 | tr -dc <span class="org-string">'[:alnum:]'</span> | head -c 16
@@ -759,8 +759,8 @@ uniq ;; 对上面的结果进行去重
 </div>
 </div>
 </div>
-<div id="outline-container-orgdea6ae7" class="outline-3">
-<h3 id="orgdea6ae7"><span class="section-number-3">5.2.</span> 脚本: 摆脱重复的工作</h3>
+<div id="outline-container-org28df16f" class="outline-3">
+<h3 id="org28df16f"><span class="section-number-3">5.2.</span> 脚本: 摆脱重复的工作</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 把命令写到一个文件里面
@@ -771,8 +771,8 @@ uniq ;; 对上面的结果进行去重
 <li><b><b>效率提升</b></b></li>
 </ul>
 </div>
-<div id="outline-container-orgb1eec08" class="outline-4">
-<h4 id="orgb1eec08"><span class="section-number-4">5.2.1.</span> Windows 批处理文件 / Powershell</h4>
+<div id="outline-container-orge241d57" class="outline-4">
+<h4 id="orge241d57"><span class="section-number-4">5.2.1.</span> Windows 批处理文件 / Powershell</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <p>
 微软有一份非常详细的入门指南
@@ -783,8 +783,8 @@ uniq ;; 对上面的结果进行去重
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfbba01a" class="outline-4">
-<h4 id="orgfbba01a"><span class="section-number-4">5.2.2.</span> Unix Bash/Zsh/Fish</h4>
+<div id="outline-container-org805e7c5" class="outline-4">
+<h4 id="org805e7c5"><span class="section-number-4">5.2.2.</span> Unix Bash/Zsh/Fish</h4>
 <div class="outline-text-4" id="text-5-2-2">
 <p>
 <b>*注: 有关 Bash 语法，可参见 <code>man bash</code> *</b>
@@ -881,12 +881,12 @@ hello world
 </div>
 </div>
 </div>
-<div id="outline-container-org069ca10" class="outline-2">
-<h2 id="org069ca10"><span class="section-number-2">6.</span> 打开黑盒子</h2>
+<div id="outline-container-orgb7d70f7" class="outline-2">
+<h2 id="orgb7d70f7"><span class="section-number-2">6.</span> 打开黑盒子</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-orgb8e304c" class="outline-3">
-<h3 id="orgb8e304c"><span class="section-number-3">6.1.</span> 命令行工具的本质是什么?</h3>
+<div id="outline-container-orge061314" class="outline-3">
+<h3 id="orge061314"><span class="section-number-3">6.1.</span> 命令行工具的本质是什么?</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 统计一下工具的类型分布:
@@ -927,8 +927,8 @@ hello world
 </p>
 </div>
 </div>
-<div id="outline-container-orga1473a3" class="outline-3">
-<h3 id="orga1473a3"><span class="section-number-3">6.2.</span> <code>strace</code> : 一个重要的踪迹工具</h3>
+<div id="outline-container-org7d8ae28" class="outline-3">
+<h3 id="org7d8ae28"><span class="section-number-3">6.2.</span> <code>strace</code> : 一个重要的踪迹工具</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 了解程序的方式有两个:
@@ -943,12 +943,12 @@ hello world
 </p>
 </div>
 </div>
-<div id="outline-container-org0c3c8e7" class="outline-3">
-<h3 id="org0c3c8e7"><span class="section-number-3">6.3.</span> <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h3>
+<div id="outline-container-orgf13d2ee" class="outline-3">
+<h3 id="orgf13d2ee"><span class="section-number-3">6.3.</span> <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h3>
 <div class="outline-text-3" id="text-6-3">
 </div>
-<div id="outline-container-orga481df1" class="outline-4">
-<h4 id="orga481df1"><span class="section-number-4">6.3.1.</span> <code>ls</code> 如何运行?</h4>
+<div id="outline-container-orgc191074" class="outline-4">
+<h4 id="orgc191074"><span class="section-number-4">6.3.1.</span> <code>ls</code> 如何运行?</h4>
 <div class="outline-text-4" id="text-6-3-1">
 <div class="org-src-container">
 <pre class="src src-sh">strace ls
@@ -1004,8 +1004,8 @@ write(1, "a.c  a.h  a.txt ..., 62a.c  a.h  a.txt  b.c  b.h  b.txt  c.c  c.txt  d
 <hr />
 </div>
 </div>
-<div id="outline-container-orgf0fdc13" class="outline-4">
-<h4 id="orgf0fdc13"><span class="section-number-4">6.3.2.</span> <code>ls</code> 是如何被找到的?</h4>
+<div id="outline-container-org17eebe2" class="outline-4">
+<h4 id="org17eebe2"><span class="section-number-4">6.3.2.</span> <code>ls</code> 是如何被找到的?</h4>
 <div class="outline-text-4" id="text-6-3-2">
 <div class="org-src-container">
 <pre class="src src-sh">strace -f bash -c <span class="org-string">"ls"</span>
@@ -1061,8 +1061,8 @@ $ whereis cd
 </div>
 </div>
 
-<div id="outline-container-orgca41d2a" class="outline-2">
-<h2 id="orgca41d2a"><span class="section-number-2">7.</span> So&#x2026; What is command line?</h2>
+<div id="outline-container-org9de134e" class="outline-2">
+<h2 id="org9de134e"><span class="section-number-2">7.</span> So&#x2026; What is command line?</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 说了这么多，我们平时用的命令行到底是什么？
@@ -1096,15 +1096,15 @@ $ whereis cd
 </div>
 </div>
 
-<div id="outline-container-orgf89c77f" class="outline-2">
-<h2 id="orgf89c77f"><span class="section-number-2">8.</span> 与时俱进: 更先进的工具们</h2>
+<div id="outline-container-org5d5646c" class="outline-2">
+<h2 id="org5d5646c"><span class="section-number-2">8.</span> 与时俱进: 更先进的工具们</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li><code>the-fuck</code>: 智能纠错</li>
 </ul>
 <div class="org-center">
 
-<div id="org2c339c4" class="figure">
+<div id="orgcb78f51" class="figure">
 <p><img src="files/thefuck.gif" alt="thefuck.gif" />
 </p>
 </div>
@@ -1114,7 +1114,7 @@ $ whereis cd
 </ul>
 <div class="org-center">
 
-<div id="orge107560" class="figure">
+<div id="org8a4bd87" class="figure">
 <p><img src="files/hackshell.png" alt="hackshell.png" />
 </p>
 </div>
@@ -1125,8 +1125,8 @@ $ whereis cd
 </ul>
 </div>
 </div>
-<div id="outline-container-orgde8f361" class="outline-2">
-<h2 id="orgde8f361"><span class="section-number-2">9.</span> Acknowledgement</h2>
+<div id="outline-container-orga2d0800" class="outline-2">
+<h2 id="orga2d0800"><span class="section-number-2">9.</span> Acknowledgement</h2>
 <div class="outline-text-2" id="text-9">
 <ul class="org-ul">
 <li>本文极大程度地引用与参考了 "一生一芯" 计划与南京大学 jyy 老师操作系统课的内容</li>
@@ -1143,7 +1143,7 @@ $ whereis cd
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: mitchell <a href="mailto:mitchell@sdf.org">&lt;mitchell@sdf.org</a>&gt;</p>
-<p class="date">Created: 2024-12-03 Tue 22:51</p>
+<p class="date">Created: 2024-12-22 Sun 21:24</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>

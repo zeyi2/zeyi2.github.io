@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-01 Sun 20:15 -->
+<!-- 2024-12-22 Sun 21:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>博远课题笔记之——命令行参数解析</title>
@@ -18,33 +18,33 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5a0f863">1. DISCLAIMER</a></li>
-<li><a href="#org22d7c1c">2. Introduction</a></li>
-<li><a href="#org6c24667">3. What the hell is <b><b>Option</b></b> ?</a></li>
-<li><a href="#orgf4a6891">4. So, how to use it?</a>
+<li><a href="#orgdbf45b1">1. DISCLAIMER</a></li>
+<li><a href="#org596172a">2. Introduction</a></li>
+<li><a href="#org669ce12">3. What the hell is <b><b>Option</b></b> ?</a></li>
+<li><a href="#org8a1f02e">4. So, how to use it?</a>
 <ul>
-<li><a href="#org2ab1222">4.1. Using <code>getopt(...)</code> to parse options</a>
+<li><a href="#orga05d377">4.1. Using <code>getopt(...)</code> to parse options</a>
 <ul>
-<li><a href="#orgde4c684">4.1.1. Options, but with parameters</a></li>
+<li><a href="#orgfcb3c50">4.1.1. Options, but with parameters</a></li>
 </ul>
 </li>
-<li><a href="#org5d6c2ec">4.2. Using <code>getopt_long(...)</code></a></li>
+<li><a href="#orgee9b6ec">4.2. Using <code>getopt_long(...)</code></a></li>
 </ul>
 </li>
-<li><a href="#org8b4d926">5. The Rabbit Hole ?</a></li>
+<li><a href="#org0cad8b8">5. The Rabbit Hole ?</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org5a0f863" class="outline-2">
-<h2 id="org5a0f863"><span class="section-number-2">1.</span> DISCLAIMER</h2>
+<div id="outline-container-orgdbf45b1" class="outline-2">
+<h2 id="orgdbf45b1"><span class="section-number-2">1.</span> DISCLAIMER</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 免责声明: 本文内容仅为我的 <b><b>个人理解</b></b>, <b><b>不保证完全正确</b></b>, 需要更精确的信息来源请自己 <b><b>RTFM</b></b>
 </p>
 </div>
 </div>
-<div id="outline-container-org22d7c1c" class="outline-2">
-<h2 id="org22d7c1c"><span class="section-number-2">2.</span> Introduction</h2>
+<div id="outline-container-org596172a" class="outline-2">
+<h2 id="org596172a"><span class="section-number-2">2.</span> Introduction</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 事情的起因是, <code>fake-terminal</code> 这个项目需要有解析用户输入命令的功能, 例如对于用户输入 <code>ls -alR &lt;dir&gt;</code> , 我们的交互式界面需要能把它解析成这样:
@@ -71,8 +71,8 @@
 </div>
 </div>
 
-<div id="outline-container-org6c24667" class="outline-2">
-<h2 id="org6c24667"><span class="section-number-2">3.</span> What the hell is <b><b>Option</b></b> ?</h2>
+<div id="outline-container-org669ce12" class="outline-2">
+<h2 id="org669ce12"><span class="section-number-2">3.</span> What the hell is <b><b>Option</b></b> ?</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 顾名思义, <code>getopt</code> 代表 <code>get options</code> 的意思, 所谓的 <code>option</code> 就是指令中 <code>-</code> 或 <code>--</code> (这种形式被称为 <code>long-option</code>) 后面接的字符串, 每一个参数代表一个不同的功能, 比如:
@@ -106,8 +106,8 @@
 </div>
 </div>
 
-<div id="outline-container-orgf4a6891" class="outline-2">
-<h2 id="orgf4a6891"><span class="section-number-2">4.</span> So, how to use it?</h2>
+<div id="outline-container-org8a1f02e" class="outline-2">
+<h2 id="org8a1f02e"><span class="section-number-2">4.</span> So, how to use it?</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 遇事不决读 <a href="man/getopt.html">[Manual]​</a>&#x2026;
@@ -181,8 +181,8 @@ man 3 getopt
 </p>
 </div>
 
-<div id="outline-container-org2ab1222" class="outline-3">
-<h3 id="org2ab1222"><span class="section-number-3">4.1.</span> Using <code>getopt(...)</code> to parse options</h3>
+<div id="outline-container-orga05d377" class="outline-3">
+<h3 id="orga05d377"><span class="section-number-3">4.1.</span> Using <code>getopt(...)</code> to parse options</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
@@ -293,8 +293,8 @@ man 3 getopt
 </p>
 </div>
 
-<div id="outline-container-orgde4c684" class="outline-4">
-<h4 id="orgde4c684"><span class="section-number-4">4.1.1.</span> Options, but with parameters</h4>
+<div id="outline-container-orgfcb3c50" class="outline-4">
+<h4 id="orgfcb3c50"><span class="section-number-4">4.1.1.</span> Options, but with parameters</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <p>
 先前的定义中, 我们提到过 <code>option</code> 可以接收参数, 那么我们该怎么让 <code>optget(...)</code> 来处理参数呢?
@@ -323,8 +323,8 @@ man 3 getopt
 </div>
 </div>
 
-<div id="outline-container-org5d6c2ec" class="outline-3">
-<h3 id="org5d6c2ec"><span class="section-number-3">4.2.</span> Using <code>getopt_long(...)</code></h3>
+<div id="outline-container-orgee9b6ec" class="outline-3">
+<h3 id="orgee9b6ec"><span class="section-number-3">4.2.</span> Using <code>getopt_long(...)</code></h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt_long</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
@@ -435,8 +435,8 @@ index of the <span class="org-type">long</span> <span class="org-type">option</s
 </div>
 </div>
 
-<div id="outline-container-org8b4d926" class="outline-2">
-<h2 id="org8b4d926"><span class="section-number-2">5.</span> The Rabbit Hole ?</h2>
+<div id="outline-container-org0cad8b8" class="outline-2">
+<h2 id="org0cad8b8"><span class="section-number-2">5.</span> The Rabbit Hole ?</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 目前, 我们已经可以成功让命令行程序解析程序的 <code>options</code> 了, 但是, <code>getopt</code> 可能并非很多情况下的最优解
@@ -458,7 +458,7 @@ index of the <span class="org-type">long</span> <span class="org-type">option</s
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mitchell</p>
-<p class="date">Created: 2024-12-01 Sun 20:15</p>
+<p class="date">Created: 2024-12-22 Sun 21:24</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>

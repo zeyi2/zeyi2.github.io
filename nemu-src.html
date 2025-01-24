@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-18 Wed 16:28 -->
+<!-- 2024-12-22 Sun 21:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>阅读 NEMU 的源码 (更新中)</title>
@@ -17,30 +17,30 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7a91973">1. 用到的工具链</a></li>
-<li><a href="#org07aae9e">2. The Build System</a>
+<li><a href="#org5b90b00">1. 用到的工具链</a></li>
+<li><a href="#orgb3e48a3">2. The Build System</a>
 <ul>
-<li><a href="#org7fdc518">2.1. What does the manual say?</a></li>
-<li><a href="#org7dd2054">2.2. Read The Logs</a>
+<li><a href="#org88ba828">2.1. What does the manual say?</a></li>
+<li><a href="#org647a193">2.2. Read The Logs</a>
 <ul>
-<li><a href="#orgd66ba80">2.2.1. Emacs，启动！</a></li>
+<li><a href="#org829cbe0">2.2.1. Emacs，启动！</a></li>
 </ul>
 </li>
-<li><a href="#org7a2bcc5">2.3. Dig Deeper into the Make System</a></li>
-<li><a href="#org452bc65">2.4. Actually Reading The Makefile</a>
+<li><a href="#orgc1107b1">2.3. Dig Deeper into the Make System</a></li>
+<li><a href="#orgefc4c7c">2.4. Actually Reading The Makefile</a>
 <ul>
-<li><a href="#orgf0fdef8">2.4.1. The Filelist</a></li>
-<li><a href="#org0ebbe6c">2.4.2. 死去的配置系统还在追我</a></li>
-<li><a href="#orgb3248ae">2.4.3. 编译和链接</a></li>
+<li><a href="#org52a47bf">2.4.1. The Filelist</a></li>
+<li><a href="#org64e0008">2.4.2. 死去的配置系统还在追我</a></li>
+<li><a href="#org6108d25">2.4.3. 编译和链接</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgaa3bbe2">3. 从主函数开始</a>
+<li><a href="#org54e0713">3. 从主函数开始</a>
 <ul>
-<li><a href="#org2146518">3.1. 主函数里有什么？</a>
+<li><a href="#org47404a4">3.1. 主函数里有什么？</a>
 <ul>
-<li><a href="#org134d11d">3.1.1. init_monitor()</a></li>
+<li><a href="#org884d796">3.1.1. init_monitor()</a></li>
 </ul>
 </li>
 </ul>
@@ -48,8 +48,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org7a91973" class="outline-2">
-<h2 id="org7a91973"><span class="section-number-2">1.</span> 用到的工具链</h2>
+<div id="outline-container-org5b90b00" class="outline-2">
+<h2 id="org5b90b00"><span class="section-number-2">1.</span> 用到的工具链</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li><code>GDB</code>: 我使用 <code>GDB</code> 来寻找结构体、函数在项目中的位置，它对于分析较大项目的源码非常有用。</li>
@@ -60,8 +60,8 @@
 </div>
 </div>
 
-<div id="outline-container-org07aae9e" class="outline-2">
-<h2 id="org07aae9e"><span class="section-number-2">2.</span> The Build System</h2>
+<div id="outline-container-orgb3e48a3" class="outline-2">
+<h2 id="orgb3e48a3"><span class="section-number-2">2.</span> The Build System</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <a href="boyuan-pre.html">之前</a>提到过，了解程序的行为主要有两种方法：
@@ -97,8 +97,8 @@
 </div>
 </div>
 
-<div id="outline-container-org7fdc518" class="outline-3">
-<h3 id="org7fdc518"><span class="section-number-3">2.1.</span> What does the manual say?</h3>
+<div id="outline-container-org88ba828" class="outline-3">
+<h3 id="org88ba828"><span class="section-number-3">2.1.</span> What does the manual say?</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 通过 <code>man make</code> 阅读 <code>make</code> 工具的手册页，发现了两个实用的选项:
@@ -118,8 +118,8 @@
 </div>
 </div>
 
-<div id="outline-container-org7dd2054" class="outline-3">
-<h3 id="org7dd2054"><span class="section-number-3">2.2.</span> Read The Logs</h3>
+<div id="outline-container-org647a193" class="outline-3">
+<h3 id="org647a193"><span class="section-number-3">2.2.</span> Read The Logs</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 执行 <code>make -nB &gt; log.txt</code> 后，它确实显示出了 <code>make</code> 执行的所有命令，但很可惜我看不懂一点。
@@ -142,8 +142,8 @@ clang -O2 -MMD -Wall -Werror -I .../nemu/include -I .../nemu/src/isa/riscv32/inc
 </p>
 </div>
 
-<div id="outline-container-orgd66ba80" class="outline-4">
-<h4 id="orgd66ba80"><span class="section-number-4">2.2.1.</span> Emacs，启动！</h4>
+<div id="outline-container-org829cbe0" class="outline-4">
+<h4 id="org829cbe0"><span class="section-number-4">2.2.1.</span> Emacs，启动！</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 由于我用 <code>Emacs</code> ，所以直接用了 <code>Emacs</code> 内嵌功能解决这个问题：
@@ -203,8 +203,8 @@ clang++ -o  $<span class="org-variable-name">NEMU_HOME</span>/build/riscv32-nemu
 </div>
 </div>
 
-<div id="outline-container-org7a2bcc5" class="outline-3">
-<h3 id="org7a2bcc5"><span class="section-number-3">2.3.</span> Dig Deeper into the Make System</h3>
+<div id="outline-container-orgc1107b1" class="outline-3">
+<h3 id="orgc1107b1"><span class="section-number-3">2.3.</span> Dig Deeper into the Make System</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuconfig</code> 来进行配置。
@@ -232,8 +232,8 @@ NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuco
 </div>
 </div>
 
-<div id="outline-container-org452bc65" class="outline-3">
-<h3 id="org452bc65"><span class="section-number-3">2.4.</span> Actually Reading The Makefile</h3>
+<div id="outline-container-orgefc4c7c" class="outline-3">
+<h3 id="orgefc4c7c"><span class="section-number-3">2.4.</span> Actually Reading The Makefile</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 直到这时，我发现 <code>Makefile</code> 中会引用一大堆现在还不知道哪来的头文件，而如果不把这些东西弄清楚，之后读源码会非常困难。
@@ -244,8 +244,8 @@ NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuco
 </p>
 </div>
 
-<div id="outline-container-orgf0fdef8" class="outline-4">
-<h4 id="orgf0fdef8"><span class="section-number-4">2.4.1.</span> The Filelist</h4>
+<div id="outline-container-org52a47bf" class="outline-4">
+<h4 id="org52a47bf"><span class="section-number-4">2.4.1.</span> The Filelist</h4>
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 首先引起我注意的，就是 <code>FILELIST_MK</code> ，相关代码如下:
@@ -295,8 +295,8 @@ NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuco
 </div>
 </div>
 
-<div id="outline-container-org0ebbe6c" class="outline-4">
-<h4 id="org0ebbe6c"><span class="section-number-4">2.4.2.</span> 死去的配置系统还在追我</h4>
+<div id="outline-container-org64e0008" class="outline-4">
+<h4 id="org64e0008"><span class="section-number-4">2.4.2.</span> 死去的配置系统还在追我</h4>
 <div class="outline-text-4" id="text-2-4-2">
 <p>
 之前提到了 Kconfig 会生成 <code>auto.conf</code> ，而 <code>Makefile</code> 中也确实调用了它：
@@ -355,8 +355,8 @@ NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuco
 </div>
 </div>
 
-<div id="outline-container-orgb3248ae" class="outline-4">
-<h4 id="orgb3248ae"><span class="section-number-4">2.4.3.</span> 编译和链接</h4>
+<div id="outline-container-org6108d25" class="outline-4">
+<h4 id="org6108d25"><span class="section-number-4">2.4.3.</span> 编译和链接</h4>
 <div class="outline-text-4" id="text-2-4-3">
 <p>
 其实目前这个阶段下，我唯一关注的只有头文件的位置，所以只需要关注很小一部分的 <code>Makefile</code> 就好。
@@ -399,8 +399,8 @@ NEMU 构建时的头文件在以下这几个地方：
 </div>
 </div>
 
-<div id="outline-container-orgaa3bbe2" class="outline-2">
-<h2 id="orgaa3bbe2"><span class="section-number-2">3.</span> 从主函数开始</h2>
+<div id="outline-container-org54e0713" class="outline-2">
+<h2 id="org54e0713"><span class="section-number-2">3.</span> 从主函数开始</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 看代码，肯定要从主函数开始看，但是对于大项目，不知道主函数具体在哪个文件里。
@@ -440,8 +440,8 @@ src/nemu-main.c:24:int main(int argc, char *argv[]) {
 </p>
 </div>
 
-<div id="outline-container-org2146518" class="outline-3">
-<h3 id="org2146518"><span class="section-number-3">3.1.</span> 主函数里有什么？</h3>
+<div id="outline-container-org47404a4" class="outline-3">
+<h3 id="org47404a4"><span class="section-number-3">3.1.</span> 主函数里有什么？</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">main</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-variable-name">argv</span>[]) {
@@ -476,8 +476,8 @@ src/nemu-main.c:24:int main(int argc, char *argv[]) {
 </p>
 </div>
 
-<div id="outline-container-org134d11d" class="outline-4">
-<h4 id="org134d11d"><span class="section-number-4">3.1.1.</span> init_monitor()</h4>
+<div id="outline-container-org884d796" class="outline-4">
+<h4 id="org884d796"><span class="section-number-4">3.1.1.</span> init_monitor()</h4>
 <div class="outline-text-4" id="text-3-1-1">
 <p>
 通过 <code>GNU Global</code> 的 TAG 跳转，发现 <code>init_monitor</code> 位于 <code>/src/monitor/monitor.c</code> 中定义：
@@ -696,7 +696,7 @@ NEMU 默认情况下提供了 32 个监视点结构，定义在 <code>NR_WP</cod
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2024-12-18 Wed 16:28</p>
+<p class="date">Created: 2024-12-22 Sun 21:23</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>
