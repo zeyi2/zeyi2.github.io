@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-22 Sun 21:24 -->
+<!-- 2025-03-12 Wed 13:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>博远课题笔记之——命令行参数解析</title>
@@ -18,33 +18,33 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgdbf45b1">1. DISCLAIMER</a></li>
-<li><a href="#org596172a">2. Introduction</a></li>
-<li><a href="#org669ce12">3. What the hell is <b><b>Option</b></b> ?</a></li>
-<li><a href="#org8a1f02e">4. So, how to use it?</a>
+<li><a href="#org1180574">1. DISCLAIMER</a></li>
+<li><a href="#org8835822">2. Introduction</a></li>
+<li><a href="#orgcfe57bd">3. What the hell is <b><b>Option</b></b> ?</a></li>
+<li><a href="#org860efe9">4. So, how to use it?</a>
 <ul>
-<li><a href="#orga05d377">4.1. Using <code>getopt(...)</code> to parse options</a>
+<li><a href="#org934e326">4.1. Using <code>getopt(...)</code> to parse options</a>
 <ul>
-<li><a href="#orgfcb3c50">4.1.1. Options, but with parameters</a></li>
+<li><a href="#org518a8f2">4.1.1. Options, but with parameters</a></li>
 </ul>
 </li>
-<li><a href="#orgee9b6ec">4.2. Using <code>getopt_long(...)</code></a></li>
+<li><a href="#org5cc6274">4.2. Using <code>getopt_long(...)</code></a></li>
 </ul>
 </li>
-<li><a href="#org0cad8b8">5. The Rabbit Hole ?</a></li>
+<li><a href="#orgb0134c6">5. The Rabbit Hole ?</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdbf45b1" class="outline-2">
-<h2 id="orgdbf45b1"><span class="section-number-2">1.</span> DISCLAIMER</h2>
+<div id="outline-container-org1180574" class="outline-2">
+<h2 id="org1180574"><span class="section-number-2">1.</span> DISCLAIMER</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 免责声明: 本文内容仅为我的 <b><b>个人理解</b></b>, <b><b>不保证完全正确</b></b>, 需要更精确的信息来源请自己 <b><b>RTFM</b></b>
 </p>
 </div>
 </div>
-<div id="outline-container-org596172a" class="outline-2">
-<h2 id="org596172a"><span class="section-number-2">2.</span> Introduction</h2>
+<div id="outline-container-org8835822" class="outline-2">
+<h2 id="org8835822"><span class="section-number-2">2.</span> Introduction</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 事情的起因是, <code>fake-terminal</code> 这个项目需要有解析用户输入命令的功能, 例如对于用户输入 <code>ls -alR &lt;dir&gt;</code> , 我们的交互式界面需要能把它解析成这样:
@@ -70,9 +70,8 @@
 </p>
 </div>
 </div>
-
-<div id="outline-container-org669ce12" class="outline-2">
-<h2 id="org669ce12"><span class="section-number-2">3.</span> What the hell is <b><b>Option</b></b> ?</h2>
+<div id="outline-container-orgcfe57bd" class="outline-2">
+<h2 id="orgcfe57bd"><span class="section-number-2">3.</span> What the hell is <b><b>Option</b></b> ?</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 顾名思义, <code>getopt</code> 代表 <code>get options</code> 的意思, 所谓的 <code>option</code> 就是指令中 <code>-</code> 或 <code>--</code> (这种形式被称为 <code>long-option</code>) 后面接的字符串, 每一个参数代表一个不同的功能, 比如:
@@ -105,9 +104,8 @@
 </p>
 </div>
 </div>
-
-<div id="outline-container-org8a1f02e" class="outline-2">
-<h2 id="org8a1f02e"><span class="section-number-2">4.</span> So, how to use it?</h2>
+<div id="outline-container-org860efe9" class="outline-2">
+<h2 id="org860efe9"><span class="section-number-2">4.</span> So, how to use it?</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 遇事不决读 <a href="man/getopt.html">[Manual]​</a>&#x2026;
@@ -126,7 +124,7 @@ man 3 getopt
 <pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;unistd.h&gt;</span>
 
 <span class="org-type">int</span> <span class="org-function-name">getopt</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
-           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
 
 <span class="org-keyword">extern</span> <span class="org-type">char</span> *<span class="org-variable-name">optarg</span>;
 <span class="org-keyword">extern</span> <span class="org-type">int</span> <span class="org-variable-name">optind</span>, <span class="org-variable-name">opterr</span>, <span class="org-variable-name">optopt</span>;
@@ -134,11 +132,11 @@ man 3 getopt
 <span class="org-preprocessor">#include</span> <span class="org-string">&lt;getopt.h&gt;</span>
 
 <span class="org-type">int</span> <span class="org-function-name">getopt_long</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
-           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
-           <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+            <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
 <span class="org-type">int</span> <span class="org-function-name">getopt_long_only</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
-           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
-           <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+            <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
 </pre>
 </div>
 
@@ -180,13 +178,12 @@ man 3 getopt
 不难得出, <code>getopt_long()</code> 在这三者中泛用性最强, 但在学习它的使用之前, 我们先从比较简单的 <code>getopt(...)</code> 入手
 </p>
 </div>
-
-<div id="outline-container-orga05d377" class="outline-3">
-<h3 id="orga05d377"><span class="section-number-3">4.1.</span> Using <code>getopt(...)</code> to parse options</h3>
+<div id="outline-container-org934e326" class="outline-3">
+<h3 id="org934e326"><span class="section-number-3">4.1.</span> Using <code>getopt(...)</code> to parse options</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
-           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
 </pre>
 </div>
 
@@ -223,12 +220,12 @@ man 3 getopt
 
     <span class="org-keyword">while</span> (1)
     {
-        <span class="org-type">int</span> <span class="org-variable-name">opt</span> = getopt(argc, argv, <span class="org-string">"abc"</span>); <span class="org-comment-delimiter">// </span><span class="org-comment">-a -b -c are accepted</span>
-        <span class="org-keyword">if</span> (opt == -1)
-        {
-            <span class="org-keyword">break</span>; <span class="org-comment-delimiter">// </span><span class="org-comment">done parsing</span>
-        }
-        printf(<span class="org-string">"%c\n"</span>, (<span class="org-type">char</span>)opt); <span class="org-comment-delimiter">// </span><span class="org-comment">print the parsed option, one by one</span>
+          <span class="org-type">int</span> <span class="org-variable-name">opt</span> = getopt(argc, argv, <span class="org-string">"abc"</span>); <span class="org-comment-delimiter">// </span><span class="org-comment">-a -b -c are accepted</span>
+          <span class="org-keyword">if</span> (opt == -1)
+          {
+              <span class="org-keyword">break</span>; <span class="org-comment-delimiter">// </span><span class="org-comment">done parsing</span>
+          }
+          printf(<span class="org-string">"%c\n"</span>, (<span class="org-type">char</span>)opt); <span class="org-comment-delimiter">// </span><span class="org-comment">print the parsed option, one by one</span>
     }
 
     ... <span class="org-comment-delimiter">//</span><span class="org-comment">DO SOMETHING</span>
@@ -292,9 +289,8 @@ man 3 getopt
 所以只需要访问 <code>optopt</code> 就行了
 </p>
 </div>
-
-<div id="outline-container-orgfcb3c50" class="outline-4">
-<h4 id="orgfcb3c50"><span class="section-number-4">4.1.1.</span> Options, but with parameters</h4>
+<div id="outline-container-org518a8f2" class="outline-4">
+<h4 id="org518a8f2"><span class="section-number-4">4.1.1.</span> Options, but with parameters</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <p>
 先前的定义中, 我们提到过 <code>option</code> 可以接收参数, 那么我们该怎么让 <code>optget(...)</code> 来处理参数呢?
@@ -322,14 +318,13 @@ man 3 getopt
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgee9b6ec" class="outline-3">
-<h3 id="orgee9b6ec"><span class="section-number-3">4.2.</span> Using <code>getopt_long(...)</code></h3>
+<div id="outline-container-org5cc6274" class="outline-3">
+<h3 id="org5cc6274"><span class="section-number-3">4.2.</span> Using <code>getopt_long(...)</code></h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt_long</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
-           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
-           <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+              <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+              <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
 </pre>
 </div>
 
@@ -356,39 +351,39 @@ man 3 getopt
 
 <div class="org-src-container">
 <pre class="src src-C">longopts is a pointer to the first element of an array of <span class="org-keyword">struct</span> <span class="org-type">option</span>
-<span class="org-type">declared</span> <span class="org-variable-name">in</span> &lt;getopt.h&gt; as
+<span class="org-variable-name">declared</span> in &lt;getopt.h&gt; as
 
     <span class="org-keyword">struct</span> option {
-        <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">name</span>;
-        <span class="org-type">int</span>         <span class="org-variable-name">has_arg</span>;
-        <span class="org-type">int</span>        *<span class="org-variable-name">flag</span>;
-        <span class="org-type">int</span>         <span class="org-variable-name">val</span>;
+           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">name</span>;
+           <span class="org-type">int</span>         <span class="org-variable-name">has_arg</span>;
+           <span class="org-type">int</span>        *<span class="org-variable-name">flag</span>;
+           <span class="org-type">int</span>         <span class="org-variable-name">val</span>;
     };
 
-The meanings of the different <span class="org-type">fields</span> <span class="org-function-name">are</span>:
+The meanings of the different fields <span class="org-type">are</span>:
 
 name   is the name of the <span class="org-type">long</span> option.
 
 has_arg
-       is:  no_argument (or 0) <span class="org-keyword">if</span> the option does not take an argument;
-       <span class="org-function-name">required_argument</span> (or 1) <span class="org-keyword">if</span> the option requires an argument;  <span class="org-type">or</span>
-       <span class="org-function-name">optional_argument</span>  (or  2) <span class="org-keyword">if</span> the option takes an optional argu&#8208;
-       ment.
+          is:  no_argument (or 0) <span class="org-keyword">if</span> the option does not take an argument;
+          <span class="org-function-name">required_argument</span> (or 1) <span class="org-keyword">if</span> the option requires an argument;  <span class="org-type">or</span>
+          <span class="org-function-name">optional_argument</span>  (or  2) <span class="org-keyword">if</span> the option takes an optional argu&#8208;
+          ment.
 
 flag   specifies how results are returned <span class="org-keyword">for</span> a <span class="org-type">long</span> option.   If  flag
-       is  <span class="org-constant">NULL</span>,  then  <span class="org-type">getopt_long</span>()  <span class="org-type">returns</span>  <span class="org-function-name">val</span>.  (<span class="org-type">For</span> <span class="org-variable-name">example</span>, the
-       calling program may set val to the equivalent <span class="org-type">short</span> <span class="org-type">option</span> <span class="org-type">char</span>&#8208;
-       acter.)   Otherwise, getopt_long() returns 0, and flag points to
-       a variable which is set <span class="org-type">to</span> <span class="org-variable-name">val</span> <span class="org-keyword">if</span> the option is found, but  <span class="org-type">left</span>
-       <span class="org-variable-name">unchanged</span> <span class="org-keyword">if</span> the option is not found.
+          is  <span class="org-constant">NULL</span>,  <span class="org-variable-name">then</span>  getopt_long()  returns  val.  (<span class="org-type">For</span> <span class="org-variable-name">example</span>, the
+          calling program may set val to the equivalent <span class="org-type">short</span> option <span class="org-type">char</span>&#8208;
+          acter.)   Otherwise, <span class="org-function-name">getopt_long</span>() returns 0, <span class="org-variable-name">and</span> flag points to
+          a variable which is set to val <span class="org-keyword">if</span> the option is found, <span class="org-variable-name">but</span>  left
+          unchanged <span class="org-keyword">if</span> the option is not found.
 
-val    is  the value to <span class="org-keyword">return</span>, <span class="org-type">or</span> <span class="org-type">to</span> load into the variable pointed <span class="org-type">to</span>
-       <span class="org-type">by</span> <span class="org-variable-name">flag</span>.
+val    is  the value to <span class="org-keyword">return</span>, <span class="org-variable-name">or</span> to load into the variable pointed to
+          by flag.
 
 The last element of the array has to be filled with zeros.
 
-If longindex is not <span class="org-constant">NULL</span>, it points <span class="org-type">to</span> a variable which is set  <span class="org-type">to</span>  the
-index of the <span class="org-type">long</span> <span class="org-type">option</span> relative <span class="org-type">to</span> <span class="org-variable-name">longopts</span>.
+If longindex is not <span class="org-constant">NULL</span>, <span class="org-variable-name">it</span> points to a variable which is set  to  the
+index of the <span class="org-type">long</span> option relative to longopts.
 </pre>
 </div>
 
@@ -434,9 +429,8 @@ index of the <span class="org-type">long</span> <span class="org-type">option</s
 </div>
 </div>
 </div>
-
-<div id="outline-container-org0cad8b8" class="outline-2">
-<h2 id="org0cad8b8"><span class="section-number-2">5.</span> The Rabbit Hole ?</h2>
+<div id="outline-container-orgb0134c6" class="outline-2">
+<h2 id="orgb0134c6"><span class="section-number-2">5.</span> The Rabbit Hole ?</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 目前, 我们已经可以成功让命令行程序解析程序的 <code>options</code> 了, 但是, <code>getopt</code> 可能并非很多情况下的最优解
@@ -458,7 +452,7 @@ index of the <span class="org-type">long</span> <span class="org-type">option</s
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mitchell</p>
-<p class="date">Created: 2024-12-22 Sun 21:24</p>
+<p class="date">Created: 2025-03-12 Wed 13:08</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>

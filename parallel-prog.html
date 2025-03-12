@@ -3,34 +3,45 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-24 Fri 13:18 -->
+<!-- 2025-03-12 Wed 13:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenMP 笔记 Pt.I</title>
 <meta name="author" content="mitchell" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="static/css/default.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
@@ -39,79 +50,79 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org2496024">1. Concurrency VS Parallelism</a>
+<li><a href="#org3cfe308">1. Concurrency VS Parallelism</a>
 <ul>
-<li><a href="#orgb14be04">1.1. 定义</a></li>
-<li><a href="#org49b6f18">1.2. 图例</a></li>
+<li><a href="#org1790aeb">1.1. 定义</a></li>
+<li><a href="#org72aee09">1.2. 图例</a></li>
 </ul>
 </li>
-<li><a href="#org79cb770">2. OpenMP: 一个开发多线程程序的 API</a>
+<li><a href="#org764745f">2. OpenMP: 一个开发多线程程序的 API</a>
 <ul>
-<li><a href="#org6852345">2.1. 基本信息</a></li>
-<li><a href="#orgaaffb1d">2.2. 使用 OpenMP</a>
+<li><a href="#orgb232c13">2.1. 基本信息</a></li>
+<li><a href="#orge9a5278">2.2. 使用 OpenMP</a>
 <ul>
-<li><a href="#orgffe000e">2.2.1. 第一个并发程序: <code>Hello World</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
-<li><a href="#org3d3d02a">2.2.2. 线程的互动方式</a>
+<li><a href="#orgd799b4c">2.2.1. 第一个并发程序: <code>Hello World</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#orgb9557eb">2.2.2. 线程的互动方式</a>
 <ul>
-<li><a href="#orgd3a905f">2.2.2.1. 共享内存计算机</a></li>
-<li><a href="#org7da0fbe">2.2.2.2. 单线程与多线程</a></li>
+<li><a href="#org5e85f6b">2.2.2.1. 共享内存计算机</a></li>
+<li><a href="#orgc077548">2.2.2.2. 单线程与多线程</a></li>
 </ul>
 </li>
-<li><a href="#orgf5316b1">2.2.3. OpenMP 的系统概述</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#org1c8e07c">3. OpenMP 的功能探索</a>
-<ul>
-<li><a href="#org373fbfe">3.1. 创建线程</a>
-<ul>
-<li><a href="#org46f154e">3.1.1. Fork-join 并行计算模型</a></li>
-<li><a href="#orgdf45492">3.1.2. 在 OpenMP 中创建线程</a></li>
-<li><a href="#org076a2db">3.1.3. 线程执行</a></li>
-<li><a href="#org42fca5e">3.1.4. 编译器在干什么?</a></li>
-<li><a href="#org60d8282">3.1.5. 用 OpenMP 来优化定积分计算&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a>
-<ul>
-<li><a href="#orgf232fa9">3.1.5.1. 什么是 <code>SPMD</code> ?</a></li>
-</ul>
-</li>
-<li><a href="#orgc20baa6">3.1.6. 虚假共享: 对定积分程序再次优化</a>
-<ul>
-<li><a href="#orgd9666bd">3.1.6.1. 那怎么办? 填充数组!</a></li>
+<li><a href="#org7e86201">2.2.3. OpenMP 的系统概述</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org40ab607">3.2. 同步机制</a>
+<li><a href="#org912d49f">3. OpenMP 的功能探索</a>
 <ul>
-<li><a href="#orge38ef89">3.2.1. 两种最常见的同步方式</a></li>
-<li><a href="#orgcccf132">3.2.2. 其他的同步方式/一些例子</a>
+<li><a href="#org6ef455a">3.1. 创建线程</a>
 <ul>
-<li><a href="#orge20afc8">3.2.2.1. 高阶同步</a></li>
-<li><a href="#org90587f3">3.2.2.2. 底层同步</a></li>
-<li><a href="#org0eabbd4">3.2.2.3. Barrier</a></li>
-<li><a href="#org600b4e7">3.2.2.4. Critical (Mutual Exclusion)</a></li>
-<li><a href="#org0e01610">3.2.2.5. Atomic (Mutual Exclusion)</a></li>
+<li><a href="#org1a8cd2a">3.1.1. Fork-join 并行计算模型</a></li>
+<li><a href="#org33bec97">3.1.2. 在 OpenMP 中创建线程</a></li>
+<li><a href="#org8b96b73">3.1.3. 线程执行</a></li>
+<li><a href="#org34953ef">3.1.4. 编译器在干什么?</a></li>
+<li><a href="#orgd945b40">3.1.5. 用 OpenMP 来优化定积分计算&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a>
+<ul>
+<li><a href="#orga608739">3.1.5.1. 什么是 <code>SPMD</code> ?</a></li>
 </ul>
 </li>
-<li><a href="#orgef97f4a">3.2.3. 利用同步机制优化定积分程序</a>
+<li><a href="#org75dc8b9">3.1.6. 虚假共享: 对定积分程序再次优化</a>
 <ul>
-<li><a href="#orgfb3e65b">3.2.3.1. Critical</a></li>
-<li><a href="#org0276752">3.2.3.2. Atomic</a></li>
+<li><a href="#org0bcd24c">3.1.6.1. 那怎么办? 填充数组!</a></li>
 </ul>
 </li>
-<li><a href="#org45a30c3">3.2.4. SMPD vs. Worksharing</a></li>
-<li><a href="#orgfd6235e">3.2.5. Worksharing constructs</a>
-<ul>
-<li><a href="#orgca01907">3.2.5.1. 有什么用?</a></li>
-<li><a href="#org5211857">3.2.5.2. 调度子句</a></li>
 </ul>
 </li>
-<li><a href="#org3e53349">3.2.6. Working with Loops</a>
+<li><a href="#org225bd4e">3.2. 同步机制</a>
 <ul>
-<li><a href="#orgf603fbe">3.2.6.1. 方法论</a></li>
-<li><a href="#org7e86fbb">3.2.6.2. 特殊情况之: 嵌套循环</a></li>
-<li><a href="#orgca2c399">3.2.6.3. 特殊情况之: 规约</a></li>
+<li><a href="#org3981ecf">3.2.1. 两种最常见的同步方式</a></li>
+<li><a href="#org6dc1b57">3.2.2. 其他的同步方式/一些例子</a>
+<ul>
+<li><a href="#org0693c04">3.2.2.1. 高阶同步</a></li>
+<li><a href="#orgac21573">3.2.2.2. 底层同步</a></li>
+<li><a href="#orga110543">3.2.2.3. Barrier</a></li>
+<li><a href="#org06ec83c">3.2.2.4. Critical (Mutual Exclusion)</a></li>
+<li><a href="#orge81e8b6">3.2.2.5. Atomic (Mutual Exclusion)</a></li>
+</ul>
+</li>
+<li><a href="#orgf33f9db">3.2.3. 利用同步机制优化定积分程序</a>
+<ul>
+<li><a href="#orgfe11077">3.2.3.1. Critical</a></li>
+<li><a href="#org36e4324">3.2.3.2. Atomic</a></li>
+</ul>
+</li>
+<li><a href="#org7dab7b2">3.2.4. SMPD vs. Worksharing</a></li>
+<li><a href="#orga5dd4e0">3.2.5. Worksharing constructs</a>
+<ul>
+<li><a href="#org91b4bab">3.2.5.1. 有什么用?</a></li>
+<li><a href="#orgfed8940">3.2.5.2. 调度子句</a></li>
+</ul>
+</li>
+<li><a href="#orgb6a3ef6">3.2.6. Working with Loops</a>
+<ul>
+<li><a href="#org732d27b">3.2.6.1. 方法论</a></li>
+<li><a href="#org52096ac">3.2.6.2. 特殊情况之: 嵌套循环</a></li>
+<li><a href="#orgbaea92a">3.2.6.3. 特殊情况之: 规约</a></li>
 </ul>
 </li>
 </ul>
@@ -124,12 +135,12 @@
 <p>
 (一共两篇，这是第一篇)
 </p>
-<div id="outline-container-org2496024" class="outline-2">
-<h2 id="org2496024"><span class="section-number-2">1.</span> Concurrency VS Parallelism</h2>
+<div id="outline-container-org3cfe308" class="outline-2">
+<h2 id="org3cfe308"><span class="section-number-2">1.</span> Concurrency VS Parallelism</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgb14be04" class="outline-3">
-<h3 id="orgb14be04"><span class="section-number-3">1.1.</span> 定义</h3>
+<div id="outline-container-org1790aeb" class="outline-3">
+<h3 id="org1790aeb"><span class="section-number-3">1.1.</span> 定义</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li><p>
@@ -150,25 +161,23 @@
 </ul>
 </div>
 </div>
-
-<div id="outline-container-org49b6f18" class="outline-3">
-<h3 id="org49b6f18"><span class="section-number-3">1.2.</span> 图例</h3>
+<div id="outline-container-org72aee09" class="outline-3">
+<h3 id="org72aee09"><span class="section-number-3">1.2.</span> 图例</h3>
 <div class="outline-text-3" id="text-1-2">
 
-<div id="orgedaf2a8" class="figure">
+<div id="orgead2aa6" class="figure">
 <p><img src="files/para.jpg" alt="para.jpg" />
 </p>
 </div>
 </div>
 </div>
 </div>
-
-<div id="outline-container-org79cb770" class="outline-2">
-<h2 id="org79cb770"><span class="section-number-2">2.</span> OpenMP: 一个开发多线程程序的 API</h2>
+<div id="outline-container-org764745f" class="outline-2">
+<h2 id="org764745f"><span class="section-number-2">2.</span> OpenMP: 一个开发多线程程序的 API</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org6852345" class="outline-3">
-<h3 id="org6852345"><span class="section-number-3">2.1.</span> 基本信息</h3>
+<div id="outline-container-orgb232c13" class="outline-3">
+<h3 id="orgb232c13"><span class="section-number-3">2.1.</span> 基本信息</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 OpenMP construct 大部分是编译器指令，格式为:
@@ -186,8 +195,8 @@ OpenMP construct 大部分是编译器指令，格式为:
 </div>
 </div>
 </div>
-<div id="outline-container-orgaaffb1d" class="outline-3">
-<h3 id="orgaaffb1d"><span class="section-number-3">2.2.</span> 使用 OpenMP</h3>
+<div id="outline-container-orge9a5278" class="outline-3">
+<h3 id="orge9a5278"><span class="section-number-3">2.2.</span> 使用 OpenMP</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 使用 <code>gcc</code> 时，只需要加上 <code>-fopenmp</code> 就可以启用 OpenMP
@@ -199,8 +208,8 @@ OpenMP construct 大部分是编译器指令，格式为:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgffe000e" class="outline-4">
-<h4 id="orgffe000e"><span class="section-number-4">2.2.1.</span> 第一个并发程序: <code>Hello World</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div id="outline-container-orgd799b4c" class="outline-4">
+<h4 id="orgd799b4c"><span class="section-number-4">2.2.1.</span> 第一个并发程序: <code>Hello World</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
 <div class="outline-text-4" id="text-2-2-1">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;omp.h&gt;</span> <span class="org-comment-delimiter">// </span><span class="org-comment">OpenMP include file</span>
@@ -210,9 +219,9 @@ OpenMP construct 大部分是编译器指令，格式为:
 {
 <span class="org-preprocessor">    #pragma</span> omp parallel num_threads(4) <span class="org-comment-delimiter">// </span><span class="org-comment">Parallel region with 4 threads</span>
     {
-        <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
-        printf(<span class="org-string">"Hello World from thread = %d"</span>, id);
-        printf(<span class="org-string">" with %d threads\n"</span>,omp_get_num_threads());
+          <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
+          printf(<span class="org-string">"Hello World from thread = %d"</span>, id);
+          printf(<span class="org-string">" with %d threads\n"</span>,omp_get_num_threads());
     } <span class="org-comment-delimiter">// </span><span class="org-comment">End of the Parallel region</span>
 }
 </pre>
@@ -231,12 +240,12 @@ Hello World from thread = 2 with 4 threads
 </div>
 </div>
 </div>
-<div id="outline-container-org3d3d02a" class="outline-4">
-<h4 id="org3d3d02a"><span class="section-number-4">2.2.2.</span> 线程的互动方式</h4>
+<div id="outline-container-orgb9557eb" class="outline-4">
+<h4 id="orgb9557eb"><span class="section-number-4">2.2.2.</span> 线程的互动方式</h4>
 <div class="outline-text-4" id="text-2-2-2">
 </div>
-<div id="outline-container-orgd3a905f" class="outline-5">
-<h5 id="orgd3a905f"><span class="section-number-5">2.2.2.1.</span> 共享内存计算机</h5>
+<div id="outline-container-org5e85f6b" class="outline-5">
+<h5 id="org5e85f6b"><span class="section-number-5">2.2.2.1.</span> 共享内存计算机</h5>
 <div class="outline-text-5" id="text-2-2-2-1">
 <ul class="org-ul">
 <li><b><b>对称多处理器 (SMP)</b></b></li>
@@ -255,10 +264,10 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org4081f27"></a>What about CPU Cache?<br />
+<li><a id="orgb7fba4a"></a>What about CPU Cache?<br />
 <div class="outline-text-6" id="text-2-2-2-1-1">
 
-<div id="org8f63088" class="figure">
+<div id="org8856846" class="figure">
 <p><img src="files/cache.png" alt="cache.png" />
 </p>
 </div>
@@ -279,9 +288,8 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 </li>
 </ol>
 </div>
-
-<div id="outline-container-org7da0fbe" class="outline-5">
-<h5 id="org7da0fbe"><span class="section-number-5">2.2.2.2.</span> 单线程与多线程</h5>
+<div id="outline-container-orgc077548" class="outline-5">
+<h5 id="orgc077548"><span class="section-number-5">2.2.2.2.</span> 单线程与多线程</h5>
 <div class="outline-text-5" id="text-2-2-2-2">
 <div class="org-center">
 <p>
@@ -305,16 +313,15 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 </ul>
 
 
-<div id="org5fa70c9" class="figure">
+<div id="org095ed34" class="figure">
 <p><img src="files/shared.png" alt="shared.png" />
 </p>
 </div>
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgf5316b1" class="outline-4">
-<h4 id="orgf5316b1"><span class="section-number-4">2.2.3.</span> OpenMP 的系统概述</h4>
+<div id="outline-container-org7e86201" class="outline-4">
+<h4 id="org7e86201"><span class="section-number-4">2.2.3.</span> OpenMP 的系统概述</h4>
 <div class="outline-text-4" id="text-2-2-3">
 <p>
 <b><b>OpenMP 是多线程共享地址模型</b></b>
@@ -351,17 +358,16 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 </div>
 </div>
 </div>
-
-<div id="outline-container-org1c8e07c" class="outline-2">
-<h2 id="org1c8e07c"><span class="section-number-2">3.</span> OpenMP 的功能探索</h2>
+<div id="outline-container-org912d49f" class="outline-2">
+<h2 id="org912d49f"><span class="section-number-2">3.</span> OpenMP 的功能探索</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org373fbfe" class="outline-3">
-<h3 id="org373fbfe"><span class="section-number-3">3.1.</span> 创建线程</h3>
+<div id="outline-container-org6ef455a" class="outline-3">
+<h3 id="org6ef455a"><span class="section-number-3">3.1.</span> 创建线程</h3>
 <div class="outline-text-3" id="text-3-1">
 </div>
-<div id="outline-container-org46f154e" class="outline-4">
-<h4 id="org46f154e"><span class="section-number-4">3.1.1.</span> Fork-join 并行计算模型</h4>
+<div id="outline-container-org1a8cd2a" class="outline-4">
+<h4 id="org1a8cd2a"><span class="section-number-4">3.1.1.</span> Fork-join 并行计算模型</h4>
 <div class="outline-text-4" id="text-3-1-1">
 <ul class="org-ul">
 <li>在 Fork-Join 模型中，通常有一个主线程，负责管理并行任务的执行</li>
@@ -369,20 +375,20 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 当主线程需要进行并行计算时，它会分叉出一组子线程
 </p>
 <div class="org-src-container">
-<pre class="src src-text">         master
-       ----------
-      /__________\
-     / sequential \
+<pre class="src src-text">             master
+           ----------
+          /__________\
+         / sequential \
 -----              -----
-     \ sequential /
-       ----------
+         \ sequential /
+           ----------
 </pre>
 </div></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdf45492" class="outline-4">
-<h4 id="orgdf45492"><span class="section-number-4">3.1.2.</span> 在 OpenMP 中创建线程</h4>
+<div id="outline-container-org33bec97" class="outline-4">
+<h4 id="org33bec97"><span class="section-number-4">3.1.2.</span> 在 OpenMP 中创建线程</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <ul class="org-ul">
 <li>方法一</li>
@@ -395,12 +401,12 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 {
     <span class="org-type">int</span> <span class="org-variable-name">a</span> = 1;
     <span class="org-comment-delimiter">/* </span><span class="org-comment">Each thread executes a copy of the</span>
-<span class="org-comment">       code within the structured block</span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment">         code within the structured block</span><span class="org-comment-delimiter">*/</span>
     omp_set_num_threads(4); <span class="org-comment-delimiter">//</span><span class="org-comment">Runtime function to request a certain number of threads</span>
 <span class="org-preprocessor">    #pragma</span> omp parallel
     {
-        <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
-        foo(a, id) <span class="org-comment-delimiter">// </span><span class="org-comment">for ID = 0 to 3</span>
+          <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
+          foo(a, id) <span class="org-comment-delimiter">// </span><span class="org-comment">for ID = 0 to 3</span>
     } <span class="org-comment-delimiter">// </span><span class="org-comment">End of the Parallel region</span>
 
     <span class="org-keyword">return</span> 0;
@@ -418,11 +424,11 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 {
     <span class="org-type">int</span> <span class="org-variable-name">a</span> = 1;
     <span class="org-comment-delimiter">/* </span><span class="org-comment">Each thread executes a copy of the</span>
-<span class="org-comment">       code within the structured block</span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment">         code within the structured block</span><span class="org-comment-delimiter">*/</span>
 <span class="org-preprocessor">    #pragma</span> omp parallel num_threads(4) <span class="org-comment-delimiter">// </span><span class="org-comment">clause to request a certain number of threads</span>
     {
-        <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
-        foo(a, id) <span class="org-comment-delimiter">// </span><span class="org-comment">for ID = 0 to 3</span>
+          <span class="org-type">int</span> <span class="org-variable-name">id</span> = omp_get_thread_num(); <span class="org-comment-delimiter">// </span><span class="org-comment">Runtime library function to return a thread ID</span>
+          foo(a, id) <span class="org-comment-delimiter">// </span><span class="org-comment">for ID = 0 to 3</span>
     } <span class="org-comment-delimiter">// </span><span class="org-comment">End of the Parallel region</span>
 
     <span class="org-keyword">return</span> 0;
@@ -431,27 +437,27 @@ NUMA 中，内存被分成不同的区域: "近"内存和"远"内存 (远近指�
 </div>
 </div>
 </div>
-<div id="outline-container-org076a2db" class="outline-4">
-<h4 id="org076a2db"><span class="section-number-4">3.1.3.</span> 线程执行</h4>
+<div id="outline-container-org8b96b73" class="outline-4">
+<h4 id="org8b96b73"><span class="section-number-4">3.1.3.</span> 线程执行</h4>
 <div class="outline-text-4" id="text-3-1-3">
 <div class="org-src-container">
-<pre class="src src-text">         |
-       a = 1
-         |
-         |
+<pre class="src src-text">           |
+         a = 1
+           |
+           |
 omp_set_num_threads(4)
-         |--------|--------|--------|
-      foo(a,0) foo(a,1) foo(a,2) foo(a,3) 
-         |--------|--------|--------|
-         | &lt;-- Threads wait here for all threads to finish before proceeding (barrier)
-      return 0
-         |
+           |--------|--------|--------|
+        foo(a,0) foo(a,1) foo(a,2) foo(a,3) 
+           |--------|--------|--------|
+           | &lt;-- Threads wait here for all threads to finish before proceeding (barrier)
+        return 0
+           |
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org42fca5e" class="outline-4">
-<h4 id="org42fca5e"><span class="section-number-4">3.1.4.</span> 编译器在干什么?</h4>
+<div id="outline-container-org34953ef" class="outline-4">
+<h4 id="org34953ef"><span class="section-number-4">3.1.4.</span> 编译器在干什么?</h4>
 <div class="outline-text-4" id="text-3-1-4">
 <p>
 考虑这个 construct:
@@ -476,7 +482,7 @@ omp_set_num_threads(4)
 <span class="org-type">pthread_t</span> <span class="org-variable-name">tid</span>[4];
 <span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 1; i &lt; 4; ++i)
     pthread_create (
-        &amp;tid[i],0,thunk, 0);
+          &amp;tid[i],0,thunk, 0);
 <span class="org-function-name">thunk</span>();
 
 <span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 1; i &lt; 4; ++i)
@@ -493,9 +499,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 </p>
 </div>
 </div>
-
-<div id="outline-container-org60d8282" class="outline-4">
-<h4 id="org60d8282"><span class="section-number-4">3.1.5.</span> 用 OpenMP 来优化定积分计算&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div id="outline-container-orgd945b40" class="outline-4">
+<h4 id="orgd945b40"><span class="section-number-4">3.1.5.</span> 用 OpenMP 来优化定积分计算&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
 <div class="outline-text-4" id="text-3-1-5">
 <p>
 考虑以下定积分:
@@ -518,8 +523,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
     step = 1.0/(<span class="org-type">double</span>) num_steps;
     <span class="org-keyword">for</span> (i=0;i&lt; num_steps; i++)
     {
-        x = (i+0.5)*step;
-        sum = sum + 4.0/(1.0+x*x);
+          x = (i+0.5)*step;
+          sum = sum + 4.0/(1.0+x*x);
     }
     pi = step * sum;
 }
@@ -546,18 +551,18 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 
 <span class="org-preprocessor">    #pragma</span> omp parallel
     {
-        <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
-        <span class="org-type">double</span> <span class="org-variable-name">x</span>;
+          <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
+          <span class="org-type">double</span> <span class="org-variable-name">x</span>;
 
-        id = omp_get_thread_num();
-        nthrds = omp_get_num_threads();
-        <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
+          id = omp_get_thread_num();
+          nthrds = omp_get_num_threads();
+          <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
 
-        <span class="org-keyword">for</span> (i=id, sum[id]=0.0;i&lt; num_steps; i=i+nthrds)
-        {
-            x = (i+0.5)*step;
-            sum[id] += 4.0/(1.0+x*x);
-        }
+          <span class="org-keyword">for</span> (i=id, sum[id]=0.0;i&lt; num_steps; i=i+nthrds)
+          {
+              x = (i+0.5)*step;
+              sum[id] += 4.0/(1.0+x*x);
+          }
     }
     <span class="org-keyword">for</span>(i=0, pi=0.0;i&lt;nthreads;i++)pi += sum[i] * step;
 }
@@ -603,9 +608,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 于是在代码中，只允许一个线程来更新 <code>nthreads</code> , 从而避免多个线程同时写入同一地址
 </p>
 </div>
-
-<div id="outline-container-orgf232fa9" class="outline-5">
-<h5 id="orgf232fa9"><span class="section-number-5">3.1.5.1.</span> 什么是 <code>SPMD</code> ?</h5>
+<div id="outline-container-orga608739" class="outline-5">
+<h5 id="orga608739"><span class="section-number-5">3.1.5.1.</span> 什么是 <code>SPMD</code> ?</h5>
 <div class="outline-text-5" id="text-3-1-5-1">
 <p>
 <code>SPMD (Simple Program Multiple Data)</code> 即单程序多数据的算法设计策略
@@ -630,9 +634,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgc20baa6" class="outline-4">
-<h4 id="orgc20baa6"><span class="section-number-4">3.1.6.</span> 虚假共享: 对定积分程序再次优化</h4>
+<div id="outline-container-org75dc8b9" class="outline-4">
+<h4 id="org75dc8b9"><span class="section-number-4">3.1.6.</span> 虚假共享: 对定积分程序再次优化</h4>
 <div class="outline-text-4" id="text-3-1-6">
 <p>
 虚假共享是指多个线程在不同的内存位置上进行写操作时，这些内存位置恰好位于同一个缓存行中
@@ -643,7 +646,7 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 </p>
 
 
-<div id="org41b16fd" class="figure">
+<div id="org98c9343" class="figure">
 <p><img src="files/false.png" alt="false.png" />
 </p>
 </div>
@@ -661,9 +664,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 数组的元素在内存中是连续存放的，这意味着它们可能会共享同一个缓存行 (尤其是在数组元素较小的情况下)
 </p>
 </div>
-
-<div id="outline-container-orgd9666bd" class="outline-5">
-<h5 id="orgd9666bd"><span class="section-number-5">3.1.6.1.</span> 那怎么办? 填充数组!</h5>
+<div id="outline-container-org0bcd24c" class="outline-5">
+<h5 id="org0bcd24c"><span class="section-number-5">3.1.6.1.</span> 那怎么办? 填充数组!</h5>
 <div class="outline-text-5" id="text-3-1-6-1">
 <p>
 如果我们通过某种方式使得数组的元素之间有足够的空间，确保每个元素位于不同的缓存行中
@@ -693,18 +695,18 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 
 <span class="org-preprocessor">    #pragma</span> omp parallel
     {
-        <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
-        <span class="org-type">double</span> <span class="org-variable-name">x</span>;
+          <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
+          <span class="org-type">double</span> <span class="org-variable-name">x</span>;
 
-        id = omp_get_thread_num();
-        nthrds = omp_get_num_threads();
-        <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
+          id = omp_get_thread_num();
+          nthrds = omp_get_num_threads();
+          <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
 
-        <span class="org-keyword">for</span> (i=id, sum[id]=0.0;i&lt; num_steps; i=i+nthrds)
-        {
-            x = (i+0.5)*step;
-            sum[id][0] += 4.0/(1.0+x*x);
-        }
+          <span class="org-keyword">for</span> (i=id, sum[id]=0.0;i&lt; num_steps; i=i+nthrds)
+          {
+              x = (i+0.5)*step;
+              sum[id][0] += 4.0/(1.0+x*x);
+          }
     }
     <span class="org-keyword">for</span>(i=0, pi=0.0;i&lt;nthreads;i++)pi += sum[i][0] * step;
 }
@@ -722,9 +724,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 </div>
 </div>
 </div>
-
-<div id="outline-container-org40ab607" class="outline-3">
-<h3 id="org40ab607"><span class="section-number-3">3.2.</span> 同步机制</h3>
+<div id="outline-container-org225bd4e" class="outline-3">
+<h3 id="org225bd4e"><span class="section-number-3">3.2.</span> 同步机制</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 之前在 OpenMP 的系统概述中提到:
@@ -743,9 +744,8 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 所以使用同步机制可以用一个 universal 的方式解决之前遇到的问题
 </p>
 </div>
-
-<div id="outline-container-orge38ef89" class="outline-4">
-<h4 id="orge38ef89"><span class="section-number-4">3.2.1.</span> 两种最常见的同步方式</h4>
+<div id="outline-container-org3981ecf" class="outline-4">
+<h4 id="org3981ecf"><span class="section-number-4">3.2.1.</span> 两种最常见的同步方式</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <ul class="org-ul">
 <li>Mutual Exclusion</li>
@@ -762,28 +762,27 @@ OpenMP 使用线程池机制，所以在并行区域内，线程是从一个预�
 Barrier 要求所有参与的线程在某个特定点上停下来，直到所有线程都到达这个点
 </p>
 <div class="org-src-container">
-<pre class="src src-text">         |
-       a = 1
-         |
-         |
+<pre class="src src-text">           |
+         a = 1
+           |
+           |
 omp_set_num_threads(4)
-         |--------|--------|--------|
-      foo(a,0) foo(a,1) foo(a,2) foo(a,3) 
-         |--------|--------|--------|
-         | &lt;-- Threads wait here for all threads to finish before proceeding (barrier)
-      return 0
-         |
+           |--------|--------|--------|
+        foo(a,0) foo(a,1) foo(a,2) foo(a,3) 
+           |--------|--------|--------|
+           | &lt;-- Threads wait here for all threads to finish before proceeding (barrier)
+        return 0
+           |
 </pre>
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgcccf132" class="outline-4">
-<h4 id="orgcccf132"><span class="section-number-4">3.2.2.</span> 其他的同步方式/一些例子</h4>
+<div id="outline-container-org6dc1b57" class="outline-4">
+<h4 id="org6dc1b57"><span class="section-number-4">3.2.2.</span> 其他的同步方式/一些例子</h4>
 <div class="outline-text-4" id="text-3-2-2">
 </div>
-<div id="outline-container-orge20afc8" class="outline-5">
-<h5 id="orge20afc8"><span class="section-number-5">3.2.2.1.</span> 高阶同步</h5>
+<div id="outline-container-org0693c04" class="outline-5">
+<h5 id="org0693c04"><span class="section-number-5">3.2.2.1.</span> 高阶同步</h5>
 <div class="outline-text-5" id="text-3-2-2-1">
 <ul class="org-ul">
 <li>critical</li>
@@ -793,8 +792,8 @@ omp_set_num_threads(4)
 </ul>
 </div>
 </div>
-<div id="outline-container-org90587f3" class="outline-5">
-<h5 id="org90587f3"><span class="section-number-5">3.2.2.2.</span> 底层同步</h5>
+<div id="outline-container-orgac21573" class="outline-5">
+<h5 id="orgac21573"><span class="section-number-5">3.2.2.2.</span> 底层同步</h5>
 <div class="outline-text-5" id="text-3-2-2-2">
 <ul class="org-ul">
 <li>flush</li>
@@ -802,9 +801,8 @@ omp_set_num_threads(4)
 </ul>
 </div>
 </div>
-
-<div id="outline-container-org0eabbd4" class="outline-5">
-<h5 id="org0eabbd4"><span class="section-number-5">3.2.2.3.</span> Barrier</h5>
+<div id="outline-container-orga110543" class="outline-5">
+<h5 id="orga110543"><span class="section-number-5">3.2.2.3.</span> Barrier</h5>
 <div class="outline-text-5" id="text-3-2-2-3">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-preprocessor">#pragma</span> omp parallel
@@ -818,9 +816,8 @@ omp_set_num_threads(4)
 </div>
 </div>
 </div>
-
-<div id="outline-container-org600b4e7" class="outline-5">
-<h5 id="org600b4e7"><span class="section-number-5">3.2.2.4.</span> Critical (Mutual Exclusion)</h5>
+<div id="outline-container-org06ec83c" class="outline-5">
+<h5 id="org06ec83c"><span class="section-number-5">3.2.2.4.</span> Critical (Mutual Exclusion)</h5>
 <div class="outline-text-5" id="text-3-2-2-4">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-type">float</span> <span class="org-variable-name">res</span>;
@@ -831,18 +828,17 @@ omp_set_num_threads(4)
     nthrds = omp_get_num_threads();
     <span class="org-keyword">for</span> (i=id;i&lt;niters;i+=nthrds)
     {
-        B = big_job(i);
+          B = big_job(i);
 <span class="org-preprocessor">#pragma</span> omp critical <span class="org-comment-delimiter">// </span><span class="org-comment">Threads wait for their turns</span>
-        res += consume (B);
+          res += consume (B);
     }
 }
 </pre>
 </div>
 </div>
 </div>
-
-<div id="outline-container-org0e01610" class="outline-5">
-<h5 id="org0e01610"><span class="section-number-5">3.2.2.5.</span> Atomic (Mutual Exclusion)</h5>
+<div id="outline-container-orge81e8b6" class="outline-5">
+<h5 id="orge81e8b6"><span class="section-number-5">3.2.2.5.</span> Atomic (Mutual Exclusion)</h5>
 <div class="outline-text-5" id="text-3-2-2-5">
 <p>
 Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量进行更新时，使用 Atomic 可以确保每次更新都是安全的
@@ -873,13 +869,12 @@ Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量�
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgef97f4a" class="outline-4">
-<h4 id="orgef97f4a"><span class="section-number-4">3.2.3.</span> 利用同步机制优化定积分程序</h4>
+<div id="outline-container-orgf33f9db" class="outline-4">
+<h4 id="orgf33f9db"><span class="section-number-4">3.2.3.</span> 利用同步机制优化定积分程序</h4>
 <div class="outline-text-4" id="text-3-2-3">
 </div>
-<div id="outline-container-orgfb3e65b" class="outline-5">
-<h5 id="orgfb3e65b"><span class="section-number-5">3.2.3.1.</span> Critical</h5>
+<div id="outline-container-orgfe11077" class="outline-5">
+<h5 id="orgfe11077"><span class="section-number-5">3.2.3.1.</span> Critical</h5>
 <div class="outline-text-5" id="text-3-2-3-1">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;omp.h&gt;</span>
@@ -897,21 +892,21 @@ Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量�
 
 <span class="org-preprocessor">#pragma</span> omp parallel
     {
-        <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
-        <span class="org-type">double</span> <span class="org-variable-name">x</span>, <span class="org-variable-name">sum</span>;
+          <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
+          <span class="org-type">double</span> <span class="org-variable-name">x</span>, <span class="org-variable-name">sum</span>;
         <span class="org-comment-delimiter">// </span><span class="org-comment">Create a scalar local to each thread to accumulate partial sums</span>
 
-        id = omp_get_thread_num();
-        nthrds = omp_get_num_threads();
-        <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
+          id = omp_get_thread_num();
+          nthrds = omp_get_num_threads();
+          <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
 
-        <span class="org-keyword">for</span> (i=id, sum=0.0;i&lt; num_steps; i=i+nthrds)
-        {
-            x = (i+0.5)*step;
-            sum += 4.0/(1.0+x*x);
-        }
+          <span class="org-keyword">for</span> (i=id, sum=0.0;i&lt; num_steps; i=i+nthrds)
+          {
+              x = (i+0.5)*step;
+              sum += 4.0/(1.0+x*x);
+          }
 <span class="org-preprocessor">#pragma</span> omp critical
-        pi += sum * step;
+          pi += sum * step;
     <span class="org-comment-delimiter">//</span><span class="org-comment">Must protect summation into pi in a critical region so updates don&#8217;t conflict</span>
     }
 }
@@ -919,9 +914,8 @@ Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量�
 </div>
 </div>
 </div>
-
-<div id="outline-container-org0276752" class="outline-5">
-<h5 id="org0276752"><span class="section-number-5">3.2.3.2.</span> Atomic</h5>
+<div id="outline-container-org36e4324" class="outline-5">
+<h5 id="org36e4324"><span class="section-number-5">3.2.3.2.</span> Atomic</h5>
 <div class="outline-text-5" id="text-3-2-3-2">
 <div class="org-src-container">
 <pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;omp.h&gt;</span>
@@ -939,22 +933,22 @@ Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量�
 
 <span class="org-preprocessor">#pragma</span> omp parallel
     {
-        <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
-        <span class="org-type">double</span> <span class="org-variable-name">x</span>, <span class="org-variable-name">sum</span>;
-        <span class="org-comment-delimiter">// </span><span class="org-comment">Create a scalar local to each thread to accumulate partial sums</span>
+          <span class="org-type">int</span> <span class="org-variable-name">i</span>, <span class="org-variable-name">id</span>, <span class="org-variable-name">nthrds</span>;
+          <span class="org-type">double</span> <span class="org-variable-name">x</span>, <span class="org-variable-name">sum</span>;
+          <span class="org-comment-delimiter">// </span><span class="org-comment">Create a scalar local to each thread to accumulate partial sums</span>
 
-        id = omp_get_thread_num();
-        nthrds = omp_get_num_threads();
-        <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
+          id = omp_get_thread_num();
+          nthrds = omp_get_num_threads();
+          <span class="org-keyword">if</span> (id == 0) nthreads = nthrds;
 
-        <span class="org-keyword">for</span> (i=id, sum=0.0;i&lt; num_steps; i=i+nthrds)
-        {
-            x = (i+0.5)*step;
-            sum += 4.0/(1.0+x*x);
-        }
-        sum = sum * step;
+          <span class="org-keyword">for</span> (i=id, sum=0.0;i&lt; num_steps; i=i+nthrds)
+          {
+              x = (i+0.5)*step;
+              sum += 4.0/(1.0+x*x);
+          }
+          sum = sum * step;
 <span class="org-preprocessor">#pragma</span> omp critical
-        pi += sum;
+          pi += sum;
     <span class="org-comment-delimiter">//</span><span class="org-comment">Must protect summation into pi in a critical region so updates don&#8217;t conflict</span>
     }
 }
@@ -967,25 +961,23 @@ Atomic 是一种特殊的同步机制，当多个线程需要对同一个变量�
 </div>
 </div>
 </div>
-
-<div id="outline-container-org45a30c3" class="outline-4">
-<h4 id="org45a30c3"><span class="section-number-4">3.2.4.</span> SMPD vs. Worksharing</h4>
+<div id="outline-container-org7dab7b2" class="outline-4">
+<h4 id="org7dab7b2"><span class="section-number-4">3.2.4.</span> SMPD vs. Worksharing</h4>
 <div class="outline-text-4" id="text-3-2-4">
 <p>
 先前我们提到了 SMPD 单程序多数据的设计思想，但还有另外一个想法叫做 Worksharing，顾名思义便是共享线程之间工作，避免某些线程过载而其他线程空闲的情况发生
 </p>
 <div class="org-center">
 
-<div id="org9aaccb8" class="figure">
+<div id="org761a7fb" class="figure">
 <p><img src="files/core.jpg" alt="core.jpg" />
 </p>
 </div>
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgfd6235e" class="outline-4">
-<h4 id="orgfd6235e"><span class="section-number-4">3.2.5.</span> Worksharing constructs</h4>
+<div id="outline-container-orga5dd4e0" class="outline-4">
+<h4 id="orga5dd4e0"><span class="section-number-4">3.2.5.</span> Worksharing constructs</h4>
 <div class="outline-text-4" id="text-3-2-5">
 <p>
 OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
@@ -997,7 +989,7 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 <span class="org-preprocessor">#pragma</span> omp <span class="org-keyword">for</span>
     <span class="org-keyword">for</span> (I=0;I&lt;N;I++)
     {
-        foo(I);
+          foo(I);
     }
 }
 </pre>
@@ -1007,9 +999,8 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 默认情况下，变量 I 是 private 的，也可以通过 <code>private(I)</code> 来显式声明这一点
 </p>
 </div>
-
-<div id="outline-container-orgca01907" class="outline-5">
-<h5 id="orgca01907"><span class="section-number-5">3.2.5.1.</span> 有什么用?</h5>
+<div id="outline-container-org91b4bab" class="outline-5">
+<h5 id="org91b4bab"><span class="section-number-5">3.2.5.1.</span> 有什么用?</h5>
 <div class="outline-text-5" id="text-3-2-5-1">
 <p>
 少写就是赢!
@@ -1055,9 +1046,8 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 </p>
 </div>
 </div>
-
-<div id="outline-container-org5211857" class="outline-5">
-<h5 id="org5211857"><span class="section-number-5">3.2.5.2.</span> 调度子句</h5>
+<div id="outline-container-orgfed8940" class="outline-5">
+<h5 id="orgfed8940"><span class="section-number-5">3.2.5.2.</span> 调度子句</h5>
 <div class="outline-text-5" id="text-3-2-5-2">
 <p>
 调度子句影响循环迭代如何映射到线程上
@@ -1126,9 +1116,8 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 </pre>
 </div>
 </div>
-
 <ol class="org-ol">
-<li><a id="orgb99220e"></a>适用范围<br />
+<li><a id="org8d7e45f"></a>适用范围<br />
 <div class="outline-text-6" id="text-3-2-5-2-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1170,9 +1159,8 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 </ol>
 </div>
 </div>
-
-<div id="outline-container-org3e53349" class="outline-4">
-<h4 id="org3e53349"><span class="section-number-4">3.2.6.</span> Working with Loops</h4>
+<div id="outline-container-orgb6a3ef6" class="outline-4">
+<h4 id="orgb6a3ef6"><span class="section-number-4">3.2.6.</span> Working with Loops</h4>
 <div class="outline-text-4" id="text-3-2-6">
 <p>
 在 OpenMP 中，以下两端代码是等价的:
@@ -1185,7 +1173,7 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 <span class="org-preprocessor">#pragma</span> omp <span class="org-keyword">for</span>
     <span class="org-keyword">for</span> (i=0;i&lt; MAX; i++)
     {
-        res[i] = huge();
+          res[i] = huge();
     }
 }
 </pre>
@@ -1201,9 +1189,8 @@ OpenMP 为 C/C++ 提供了 <code>for</code> 作为 Loop construct name
 </pre>
 </div>
 </div>
-
-<div id="outline-container-orgf603fbe" class="outline-5">
-<h5 id="orgf603fbe"><span class="section-number-5">3.2.6.1.</span> 方法论</h5>
+<div id="outline-container-org732d27b" class="outline-5">
+<h5 id="org732d27b"><span class="section-number-5">3.2.6.1.</span> 方法论</h5>
 <div class="outline-text-5" id="text-3-2-6-1">
 <ul class="org-ul">
 <li><p>
@@ -1262,9 +1249,8 @@ j = 5;
 </div>
 </div>
 </div>
-
-<div id="outline-container-org7e86fbb" class="outline-5">
-<h5 id="org7e86fbb"><span class="section-number-5">3.2.6.2.</span> 特殊情况之: 嵌套循环</h5>
+<div id="outline-container-org52096ac" class="outline-5">
+<h5 id="org52096ac"><span class="section-number-5">3.2.6.2.</span> 特殊情况之: 嵌套循环</h5>
 <div class="outline-text-5" id="text-3-2-6-2">
 <p>
 对于嵌套循环，可以使用 <code>collapse(n)</code> 来让 OpenMP 进行优化:
@@ -1275,7 +1261,7 @@ j = 5;
 {
     <span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">j</span>=0; j&lt;M; j++)
     {
-        ......
+          ......
     }
 }
 </pre>
@@ -1286,9 +1272,8 @@ j = 5;
 </p>
 </div>
 </div>
-
-<div id="outline-container-orgca2c399" class="outline-5">
-<h5 id="orgca2c399"><span class="section-number-5">3.2.6.3.</span> 特殊情况之: 规约</h5>
+<div id="outline-container-orgbaea92a" class="outline-5">
+<h5 id="orgbaea92a"><span class="section-number-5">3.2.6.3.</span> 特殊情况之: 规约</h5>
 <div class="outline-text-5" id="text-3-2-6-3">
 <p>
 考虑以下求均值的程序:
@@ -1347,7 +1332,7 @@ ave = ave / MAX;
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: mitchell</p>
-<p class="date">Created: 2025-01-24 Fri 13:18</p>
+<p class="date">Created: 2025-03-12 Wed 13:08</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>
