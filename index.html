@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-03-20 Thu 21:19 -->
+<!-- 2025-04-16 Wed 20:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mitchell's Homepage</title>
@@ -36,11 +36,210 @@
 </p>
 </div>
 <hr />
-<div class="org-center">
-<p>
-EFZCraft 白名单申请: <a href="http://playmc.run:33645/apply">点击这个链接</a>
-</p>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+
+<script>
+const tarotCards = [
+    {
+        number: 0,
+        name_cn: "愚者",
+        name_fr: "Le Fou",
+        meaning: `子曰：「知之為知之，不知為不知，是知 (智) 也。」能夠明白自己的無知，認識生命有更高的追求與意義，便是智慧的開始。很多教徒小時候都會跟隨家人去教堂，遵守誡命，當個好孩子。直至有一天，孩子長大了，有自己的思想，開始覺得有很多不能明白的地方，催逼自己放下一切，輕裝上路；甚至踏出懸崖，離開安全的教會，偷偷地學習禁忌的知識。`
+    },
+    {
+        number: 1,
+        name_cn: "魔術師",
+        name_fr: "Le Bateleur",
+        meaning: `魔術師枱上有四大元素，即劍 (Spade；風)、杯 (Heart；水)、幣 (Diamond；地) 和杖 (Club；火)，由此創造出萬物，標誌著知識的起點是理性的科學。他自己指著天與地，代表透過地上的萬物，我們能窺見天上神的面容。早期的科學家亦因此經常被逐出教會，對教會沒有好感，卻對神非常敬畏。不少修道人曾會在這時期學習不少術數類的知識，明白地上的因果正循著天上的藍圖進行。`
+    },
+    {
+        number: 2,
+        name_cn: "女祭司",
+        name_fr: "La Papesse",
+        meaning: `對物質世界有一定認識後，可以開始學習人心，在這個階段，精神上的鍛鍊變得重要，像正念便能把青春期的情緒馴服。`
+    },
+    {
+        number: 3,
+        name_cn: "皇后",
+        name_fr: "L'Impératrice",
+        meaning: `皇后是母性的表現。這個時候，在能把自我情緒控制的基礎上，我們開始能在戀愛中照顧對方的情緒。同理心亦在這個時候建立，可以在義務工作上貢獻自己。`
+    },
+    {
+        number: 4,
+        name_cn: "皇帝",
+        name_fr: "L'Empereur",
+        meaning: `在這階段，我們投身社會工作，建立自己的事業與家庭，並開始學習承擔責任。`
+    },
+    {
+        number: 5,
+        name_cn: "教宗",
+        name_fr: "Le Pape",
+        meaning: `在社會上生活一段日子後，我們開始思考人生的意義，並尋找宗教或哲學上的答案。`
+    },
+    {
+        number: 6,
+        name_cn: "恋人",
+        name_fr: "Les Amoureux",
+        meaning: `此時人開始明白愛的真正意義，學會在關係中保持自我與他者的平衡。`
+    },
+    {
+        number: 7,
+        name_cn: "战车",
+        name_fr: "Le Chariot",
+        meaning: `代表意志力的鍛鍊，學會控制內心的矛盾與衝突，朝著目標前進。`
+    },
+    {
+        number: 8,
+        name_cn: "正义",
+        name_fr: "La Justice",
+        meaning: `培養客觀判斷力，在複雜情境中保持平衡與公平的階段。`
+    },
+    {
+        number: 9,
+        name_cn: "隐士",
+        name_fr: "L'Ermite",
+        meaning: `從世俗中抽離，通過獨處與反思獲得深層智慧。`
+    },
+    {
+        number: 10,
+        name_cn: "命轮",
+        name_fr: "La Roue de Fortune",
+        meaning: `理解命運的無常，學會與生命週期共處。`
+    },
+    {
+        number: 11,
+        name_cn: "力量",
+        name_fr: "La Force",
+        meaning: `以柔克剛的智慧，通過耐心與同理心克服挑戰。`
+    },
+    {
+        number: 12,
+        name_cn: "倒吊人",
+        name_fr: "Le Pendu",
+        meaning: `換位思考的藝術，通過犧牲與等待獲得新視角。`
+    },
+    {
+        number: 13,
+        name_cn: "死亡",
+        name_fr: "La Mort",
+        meaning: `象徵轉變與新生，舊有模式的終結與新階段的開始。`
+    },
+    {
+        number: 14,
+        name_cn: "节制",
+        name_fr: "Tempérance",
+        meaning: `調和對立元素，尋找生命中的平衡與和諧。`
+    },
+    {
+        number: 15,
+        name_cn: "恶魔",
+        name_fr: "Le Diable",
+        meaning: `面對物質慾望與心靈枷鎖的覺醒時刻。`
+    },
+    {
+        number: 16,
+        name_cn: "高塔",
+        name_fr: "La Maison Dieu",
+        meaning: `突發的變革摧毀虛假結構，為真實重建創造空間。`
+    },
+    {
+        number: 17,
+        name_cn: "星星",
+        name_fr: "L'Étoile",
+        meaning: `在黑暗中找到希望，與宇宙能量重新建立連結。`
+    },
+    {
+        number: 18,
+        name_cn: "月亮",
+        name_fr: "La Lune",
+        meaning: `直面潛意識的恐懼，穿越迷霧尋找真相。`
+    },
+    {
+        number: 19,
+        name_cn: "太阳",
+        name_fr: "Le Soleil",
+        meaning: `純粹的生命能量，自信與創造力的綻放。`
+    },
+    {
+        number: 20,
+        name_cn: "审判",
+        name_fr: "Le Jugement",
+        meaning: `靈魂的覺醒時刻，回應更高使命的召喚。`
+    },
+    {
+        number: 21,
+        name_cn: "世界",
+        name_fr: "Le Monde",
+        meaning: `經過死亡與復活後，人能無間斷地經驗神的臨在，並接入神的智慧，得到最高的智慧與最偉大的愛。由於神是萬物的因，能接入神的智慧等於電腦連上互聯網，能知天下事，亦即認識整個世界的奧秘。`
+    }
+];
+
+function drawCard() {
+    const resultDiv = document.getElementById('tarot-result');
+    resultDiv.style.opacity = 0;
+
+    setTimeout(() => {
+        const card = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+        resultDiv.innerHTML = `
+            <div class="tarot-card">
+                <h2>${card.number} ${card.name_cn} (${card.name_fr})</h2>
+                <div class="meaning">
+                    ${card.meaning.replace(/\n/g, "<br>")}
+                </div>
+            </div>
+        `;
+        resultDiv.style.opacity = 1;
+    }, 300);
+}
+</script>
+
+<style>
+.tarot-card {
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 20px;
+    margin: 15px 0;
+    background: linear-gradient(145deg, #fff9e6, #ffeedd);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.tarot-card:hover {
+    transform: translateY(-5px);
+}
+
+.meaning {
+    line-height: 1.8;
+    color: #444;
+    text-align: justify;
+    font-family: 'Noto Serif SC', serif;
+}
+
+button {
+    background: gold;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+    display: block;
+    margin: 10px auto;
+}
+
+button:hover {
+    background: #FFD700;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+#tarot-result {
+    transition: opacity 0.3s ease-in-out;
+}
+</style>
+
+<button onclick="drawCard()">🃏 抽取塔罗牌</button>
+<div id="tarot-result"></div>
 <hr />
 <div id="outline-container-orgf2cda36" class="outline-2">
 <h2 id="orgf2cda36">Articles</h2>
@@ -132,7 +331,7 @@ Sometimes I translate stuff, sometimes I do some programming, often I do both.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mitchell</p>
-<p class="date">Created: 2025-03-20 Thu 21:19</p>
+<p class="date">Created: 2025-04-16 Wed 20:06</p>
 <p class="validation"><p><a href="https://emacs.org/">This webpage is generated by GNU Emacs</a></p></p>
 </div>
 </body>
