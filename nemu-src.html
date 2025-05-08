@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-03 Sat 17:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>阅读 NEMU 的源码 (更新中)</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="static/css/default.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">阅读 NEMU 的源码 (更新中)</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgd8461b6">1. 用到的工具链</a></li>
+<li><a href="#orgb5c8ff8">2. The Build System</a>
+<ul>
+<li><a href="#org987e0b1">2.1. What does the manual say?</a></li>
+<li><a href="#org6bdbef4">2.2. Read The Logs</a>
+<ul>
+<li><a href="#org47fbd74">2.2.1. Emacs，启动！</a></li>
+</ul>
+</li>
+<li><a href="#orgf6c92c4">2.3. Dig Deeper into the Make System</a></li>
+<li><a href="#orgfd81ebe">2.4. Actually Reading The Makefile</a>
+<ul>
+<li><a href="#orgde535bc">2.4.1. The Filelist</a></li>
+<li><a href="#org83307e0">2.4.2. 死去的配置系统还在追我</a></li>
+<li><a href="#org5e532fd">2.4.3. 编译和链接</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgf8c9d5e">3. 从主函数开始</a>
+<ul>
+<li><a href="#orgcd75c50">3.1. 主函数里有什么？</a>
+<ul>
+<li><a href="#org07e72e9">3.1.1. init_monitor()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd8461b6" class="outline-2">
+<h2 id="orgd8461b6"><span class="section-number-2">1.</span> 用到的工具链</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><code>GDB</code>: 我使用 <code>GDB</code> 来寻找结构体、函数在项目中的位置，它对于分析较大项目的源码非常有用。</li>
+<li><code>cflow</code>: 这是一个用来查看函数之间调用关系的工具。</li>
+<li><code>GNU Global</code>: <code>Global</code> 配合 Emacs 的 <code>ggtags</code> 插件可以实现定义的查找和跳转，它可以与 <code>GDB</code> 配合使用。</li>
+<li><code>GCC</code>: <code>GCC</code> 的 <code>-e</code> 选项可以输出预处理过后的代码，可以更好理解宏展开的过程。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb5c8ff8" class="outline-2">
+<h2 id="orgb5c8ff8"><span class="section-number-2">2.</span> The Build System</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="boyuan-pre.html">之前</a>提到过，了解程序的行为主要有两种方法：
+</p>
+
+<ul class="org-ul">
+<li><code>RTFSC</code>: 了解程序的静态行为，更耗时，但更精确</li>
+<li><code>Trace</code>: 了解程序的动态踪迹，更轻松，但不全面</li>
+</ul>
+
+<p>
+对于一个具有一定规模的项目来说，直接阅读源码可能会陷入过分繁琐的细节中，所以我们先通过分析程序的动态踪迹，获取对程序的一个大体认识。
+</p>
+
+<p>
+但是，哪怕是看踪迹，也有不同的层次：
+</p>
+
+<ul class="org-ul">
+<li><code>strace</code> 为系统调用的踪迹，关注程序与操作系统的交互，更为底层</li>
+<li><code>make -d</code> 用来查看 <code>make</code> 的决策过程，我觉得适合 debug <code>Makefile</code> 的时候使用</li>
+<li><code>????</code> 查看 <code>make</code> 执行的命令，了解 <code>make</code> 的具体操作</li>
+</ul>
+
+<p>
+很明显第三点是符合我们目前需求的做法, But How?
+</p>
+
+<div class="org-center">
+<p>
+<b><b>RTFM</b></b>
+</p>
+</div>
+</div>
+<div id="outline-container-org987e0b1" class="outline-3">
+<h3 id="org987e0b1"><span class="section-number-3">2.1.</span> What does the manual say?</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+通过 <code>man make</code> 阅读 <code>make</code> 工具的手册页，发现了两个实用的选项:
+</p>
+<ul class="org-ul">
+<li><code>-n</code>: 只打印将要执行的命令，但不实际执行它们</li>
+<li><code>-B</code>: 强制构建所有 targets (防止构建完成后 <code>make</code> 跳过某些文件的编译)</li>
+</ul>
+
+<p>
+所以，只要我们执行 <code>make -nB</code> ，就能知道 <code>make</code> 在干什么了吧。
+</p>
+
+<p>
+对，也不完全对。
+</p>
+</div>
+</div>
+<div id="outline-container-org6bdbef4" class="outline-3">
+<h3 id="org6bdbef4"><span class="section-number-3">2.2.</span> Read The Logs</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+执行 <code>make -nB &gt; log.txt</code> 后，它确实显示出了 <code>make</code> 执行的所有命令，但很可惜我看不懂一点。
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-builtin">echo</span> + CC src/nemu-main.c
+mkdir -p .../nemu/build/obj-riscv32-nemu-interpreter/src/
+clang -O2 -MMD -Wall -Werror -I .../nemu/include -I .../nemu/src/isa/riscv32/include -I .../nemu/src/engine/interpreter -I tools/capstone/repo/include -O2  -Og -ggdb3  -DITRACE_COND=true -D__GUEST_ISA__=riscv32
+...........
+...........
+</pre>
+</div>
+
+<p>
+<b><b>实在太乱了</b></b> ，各个文件的路径、编译选项和各种命令行工具混在一起，根本没法读。
+</p>
+
+<p>
+有没有办法让它变得可读一些？
+</p>
+</div>
+<div id="outline-container-org47fbd74" class="outline-4">
+<h4 id="org47fbd74"><span class="section-number-4">2.2.1.</span> Emacs，启动！</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+由于我用 <code>Emacs</code> ，所以直接用了 <code>Emacs</code> 内嵌功能解决这个问题：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">M-x keep-lines RET ^clang RET ;;&#21482;&#20445;&#30041; clang &#24320;&#22836;&#30340;&#34892;
+M-x replace-regexp RET .../nemu/ RET $<span class="org-variable-name">NEMU_HOME</span>/ RET ;;&#20351;&#29992;&#27491;&#21017;&#34920;&#36798;&#24335;&#26367;&#25442;&#24456;&#38271;&#30340;&#36335;&#24452;&#21517;
+M-x replace-regexp RET $<span class="org-variable-name">NEMU_HOME</span>/build/obj-riscv32-nemu-interpreter/ RET $<span class="org-variable-name">OBJ_DIR</span>/ ;;&#26367;&#25442;&#36755;&#20986;&#36335;&#24452;
+M-x replace-regexp RET -O2.*=riscv32 RET ;;&#24573;&#30053;&#30446;&#21069;&#19981;&#37027;&#20040;&#37325;&#35201;&#30340;&#32534;&#35793;&#36873;&#39033; 
+</pre>
+</div>
+
+<p>
+于是我们得到了一个更易读的日志文件：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">NEMU_HOME</span>/build/obj-riscv32-nemu-interpreter/src/nemu-main.o src/nemu-main.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">NEMU_HOME</span>/build/obj-riscv32-nemu-interpreter/src/cpu/difftest/dut.o src/cpu/difftest/dut.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/cpu/difftest/ref.o src/cpu/difftest/ref.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/cpu/cpu-exec.o src/cpu/cpu-exec.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/monitor/monitor.o src/monitor/monitor.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/monitor/sdb/expr.o src/monitor/sdb/expr.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/monitor/sdb/sdb.o src/monitor/sdb/sdb.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/monitor/sdb/watchpoint.o src/monitor/sdb/watchpoint.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/utils/log.o src/utils/log.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/utils/state.o src/utils/state.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/utils/timer.o src/utils/timer.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/utils/disasm.o src/utils/disasm.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/memory/paddr.o src/memory/paddr.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/memory/vaddr.o src/memory/vaddr.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/device/io/map.o src/device/io/map.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/device/io/mmio.o src/device/io/mmio.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/device/io/port-io.o src/device/io/port-io.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/init.o src/isa/riscv32/init.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/system/mmu.o src/isa/riscv32/system/mmu.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/system/intr.o src/isa/riscv32/system/intr.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/difftest/dut.o src/isa/riscv32/difftest/dut.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/reg.o src/isa/riscv32/reg.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/inst.o src/isa/riscv32/inst.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/isa/riscv32/logo.o src/isa/riscv32/logo.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/engine/interpreter/hostcall.o src/engine/interpreter/hostcall.c
+clang $<span class="org-variable-name">CFLAGS</span> -c -o $<span class="org-variable-name">OBJ_DIR</span>/src/engine/interpreter/init.o src/engine/interpreter/init.c
+clang++ -o  $<span class="org-variable-name">NEMU_HOME</span>/build/riscv32-nemu-interpreter ....(&#19968;&#22534;&#20043;&#21069;&#29983;&#25104;&#30340; .o &#25991;&#20214;)
+</pre>
+</div>
+
+<p>
+这下明朗了，它操作哪些文件，路径在哪里一目了然。
+</p>
+
+<p>
+更棒的是，我们读源码的时候只需要读这些和构建有关的文件就可以了，工作量小了很多。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf6c92c4" class="outline-3">
+<h3 id="orgf6c92c4"><span class="section-number-3">2.3.</span> Dig Deeper into the Make System</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+NEMU 使用了 Kconfig 来管理配置选项，你可以通过 <code>make menuconfig</code> 来进行配置。
+</p>
+
+<p>
+我们同样可以使用 <code>make menuconfig -nB &gt; log2.txt</code> 并通过上面的操作来简化这个日志文件。
+</p>
+
+<p>
+那么它究竟干了什么呢？
+</p>
+
+<p>
+简单来说，它试图在 <code>$NEMU_HOME/tools/kconfig/build/</code> 目录下构建两个程序， <code>mconf</code> 与 <code>conf</code>
+</p>
+
+<p>
+然后运行命令 <code>mconf nemu/Kconfig</code> ，将配置选项以图形化的方式呈现出来，并将配置结果记录到 <code>nemu/.config</code> 中
+</p>
+
+<p>
+最后再运行命令 <code>conf --syncconfig nemu/Kconfig</code> ，生成给 Makefile 调用的 <code>auto.conf</code> 与给 C 调用的 <code>autoconf.h</code>
+</p>
+</div>
+</div>
+<div id="outline-container-orgfd81ebe" class="outline-3">
+<h3 id="orgfd81ebe"><span class="section-number-3">2.4.</span> Actually Reading The Makefile</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+直到这时，我发现 <code>Makefile</code> 中会引用一大堆现在还不知道哪来的头文件，而如果不把这些东西弄清楚，之后读源码会非常困难。
+</p>
+
+<p>
+所以还是不能偷懒，该读的还得读。
+</p>
+</div>
+<div id="outline-container-orgde535bc" class="outline-4">
+<h4 id="orgde535bc"><span class="section-number-4">2.4.1.</span> The Filelist</h4>
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+首先引起我注意的，就是 <code>FILELIST_MK</code> ，相关代码如下:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-comment-delimiter"># </span><span class="org-comment">Include all filelist.mk to merge file lists</span>
+<span class="org-variable-name">FILELIST_MK</span> = $(<span class="org-variable-name">shell</span> find -L ./src -name <span class="org-string">"filelist.mk"</span>)
+<span class="org-keyword">include</span> $(<span class="org-variable-name">FILELIST_MK</span>)
+
+<span class="org-variable-name">DIRS-BLACKLIST-y</span> += $(<span class="org-variable-name">DIRS-BLACKLIST</span>)
+<span class="org-variable-name">SRCS-BLACKLIST-y</span> += $(<span class="org-variable-name">SRCS-BLACKLIST</span>) $(<span class="org-variable-name">shell</span> find -L $(<span class="org-variable-name">DIRS-BLACKLIST-y</span>) -name <span class="org-string">"*.c"</span>)
+<span class="org-variable-name">SRCS-y</span> += $(<span class="org-variable-name">shell</span> find -L $(<span class="org-variable-name">DIRS-y</span>) -name <span class="org-string">"*.c"</span>)
+<span class="org-variable-name">SRCS</span> = $(<span class="org-variable-name">filter-out</span> $(<span class="org-variable-name">SRCS-BLACKLIST-y</span>),$(<span class="org-variable-name">SRCS-y</span>))
+</pre>
+</div>
+
+<p>
+它甚至调用了另一个 <code>Makefile</code> &#x2026;
+</p>
+
+<p>
+<code>filelist.mk</code> 中有价值的部分如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-variable-name">SRCS-y</span> += src/nemu-main.c
+<span class="org-variable-name">DIRS-y</span> += src/cpu src/monitor src/utils
+<span class="org-variable-name">DIRS-$(</span><span class="org-variable-name"><span class="org-variable-name">CONFIG_MODE_SYSTEM</span></span><span class="org-variable-name">)</span> += src/memory
+<span class="org-variable-name">DIRS-BLACKLIST-$(</span><span class="org-variable-name"><span class="org-variable-name">CONFIG_TARGET_AM</span></span><span class="org-variable-name">)</span> += src/monitor/sdb
+</pre>
+</div>
+
+<p>
+根据注释(谢天谢地)可以知道：
+</p>
+<ul class="org-ul">
+<li><code>SRCS-y</code>: 参与编译的源文件</li>
+<li><code>DIRS-y</code>: 参与编译的目录，目录中的文件会被加入 <code>SRCS-y</code> 中</li>
+<li><code>SRCS-BLACKLIST-y</code>: 不参与编译的文件黑名单</li>
+<li><code>DIRS-BLACKLIST-y</code>: 不参与编译的目录，目录中的文件会被加入 <code>SRCS-BLACKLIST-y</code> 中</li>
+</ul>
+
+<p>
+但这个 <code>CONFIG_TARGET_AM</code> 是什么呢&#x2026;
+</p>
+</div>
+</div>
+<div id="outline-container-org83307e0" class="outline-4">
+<h4 id="org83307e0"><span class="section-number-4">2.4.2.</span> 死去的配置系统还在追我</h4>
+<div class="outline-text-4" id="text-2-4-2">
+<p>
+之前提到了 Kconfig 会生成 <code>auto.conf</code> ，而 <code>Makefile</code> 中也确实调用了它：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-comment-delimiter"># </span><span class="org-comment">Include variables and rules generated by menuconfig</span>
+-include $(<span class="org-variable-name">NEMU_HOME</span>)/include/config/auto.conf
+-include $(<span class="org-variable-name">NEMU_HOME</span>)/include/config/auto.conf.cmd
+</pre>
+</div>
+
+<p>
+查看这个文件的内容，发现它都以 <code>CONFIG_</code> 格式开头：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-conf"><span class="org-comment-delimiter">#</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">Automatically generated file; DO NOT EDIT.</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">NEMU Configuration Menu</span>
+<span class="org-comment-delimiter">#</span>
+<span class="org-variable-name">CONFIG_DIFFTEST_REF_NAME</span>=<span class="org-string">"none"</span>
+<span class="org-variable-name">CONFIG_ENGINE</span>=<span class="org-string">"interpreter"</span>
+<span class="org-variable-name">CONFIG_PC_RESET_OFFSET</span>=0
+<span class="org-variable-name">CONFIG_TARGET_NATIVE_ELF</span>=y
+<span class="org-variable-name">CONFIG_MSIZE</span>=0x8000000
+<span class="org-variable-name">CONFIG_CC_O2</span>=y
+......
+</pre>
+</div>
+
+<p>
+但是我并没有找到 <code>CONFIG_TARGET_AM</code> 这个变量，应该是我 Make 的时候把它关了。
+</p>
+
+<p>
+所以这行代码到底在干什么呢？
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-variable-name">DIRS-BLACKLIST-$(</span><span class="org-variable-name"><span class="org-variable-name">CONFIG_TARGET_AM</span></span><span class="org-variable-name">)</span> += src/monitor/sdb
+</pre>
+</div>
+
+<p>
+当 <code>CONFIG_TARGET_AM</code> 未定义时，它等价于 <code>DIRS-BLACKLIST- += src/monitor/sdb</code> ，不会影响 BLACKLIST 的值。
+</p>
+
+<p>
+而当 <code>CONFIG_TARGET_AM=y</code> 时，上式则变为 <code>DIRS-BLACKLIST-y += src/monitor/sdb</code> ，编译时将 <code>/sdb</code> 目录排除在外。
+</p>
+
+<p>
+我觉得这是很巧妙的设计。
+</p>
+</div>
+</div>
+<div id="outline-container-org5e532fd" class="outline-4">
+<h4 id="org5e532fd"><span class="section-number-4">2.4.3.</span> 编译和链接</h4>
+<div class="outline-text-4" id="text-2-4-3">
+<p>
+其实目前这个阶段下，我唯一关注的只有头文件的位置，所以只需要关注很小一部分的 <code>Makefile</code> 就好。
+</p>
+
+<p>
+然后我发现具体的构建写在了 <code>nemu/scripts/build.mk</code> 下:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span class="org-comment-delimiter"># </span><span class="org-comment">Compilation patterns</span>
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">OBJ_DIR</span></span><span class="org-makefile-targets">)/%.o</span>: %.c
+          @echo + CC $<span class="org-constant">&lt;</span>
+          @mkdir -p $(<span class="org-variable-name">dir</span> <span class="org-makefile-targets">$</span><span class="org-makefile-targets"><span class="org-constant">@</span></span>)
+          @$(<span class="org-variable-name">CC</span>) $(<span class="org-variable-name">CFLAGS</span>) -c -o <span class="org-makefile-targets">$</span><span class="org-makefile-targets"><span class="org-constant">@</span></span> $<span class="org-constant">&lt;</span>
+          $(<span class="org-variable-name">call</span> call_fixdep, $(<span class="org-variable-name">@</span>:<span class="org-variable-name">.o</span>=.d), <span class="org-makefile-targets">$</span><span class="org-makefile-targets"><span class="org-constant">@</span></span>)
+</pre>
+</div>
+
+<p>
+只需要关注 <code>$CFLAGS</code> 即可，将 <code>-nB</code> 的结果和脚本进行对比，得到以下信息:
+</p>
+
+<p>
+NEMU 构建时的头文件在以下这几个地方：
+</p>
+
+<ul class="org-ul">
+<li><code>$NEMU_HOME/src/isa/riscv32/include</code></li>
+<li><code>$NEMU_HOME/include</code></li>
+<li><code>$NEMU_HOME/src/engine/interpreter</code></li>
+<li><code>$NEMU_HOME/tools/capstone/repo/include</code></li>
+</ul>
+
+<p>
+现在，我们终于可以开始着手阅读 C 源码了！
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf8c9d5e" class="outline-2">
+<h2 id="orgf8c9d5e"><span class="section-number-2">3.</span> 从主函数开始</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+看代码，肯定要从主函数开始看，但是对于大项目，不知道主函数具体在哪个文件里。
+</p>
+
+<p>
+我们有以下几种方式来获取 <code>main()</code> 函数所处的位置:
+</p>
+
+<ul class="org-ul">
+<li>使用 <code>GDB</code></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make clean
+$ make gdb
+
+(gdb) starti
+(gdb) b main
+Breakpoint 1 at 0x555555556361: file src/nemu-main.c, line 29.
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>使用 <code>grep</code> 与正则表达式</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ grep -nr <span class="org-string">"\bmain\b"</span> src/
+src/filelist.mk:16:SRCS-y += src/nemu-main.c
+src/nemu-main.c:24:int main(int argc, char *argv[]) {
+</pre>
+</div>
+
+<p>
+于是我们知道了，NEMU 的主函数位于 <code>src/nemu-main.c</code> 中。
+</p>
+</div>
+<div id="outline-container-orgcd75c50" class="outline-3">
+<h3 id="orgcd75c50"><span class="section-number-3">3.1.</span> 主函数里有什么？</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">main</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-variable-name">argv</span>[]) {
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Initialize the monitor.</span><span class="org-comment-delimiter"> */</span>
+<span class="org-preprocessor">#ifdef</span> CONFIG_TARGET_AM
+  am_init_monitor();
+<span class="org-preprocessor">#else</span>
+  init_monitor(argc, argv);
+<span class="org-preprocessor">#endif</span>
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Start engine.</span><span class="org-comment-delimiter"> */</span>
+  engine_start();
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">See file $NEMU_HOME/src/utils/state.c</span><span class="org-comment-delimiter"> */</span>
+  <span class="org-keyword">return</span> is_exit_status_bad();
+}
+</pre>
+</div>
+
+<p>
+主函数实际上调用了三个函数:
+</p>
+
+<ul class="org-ul">
+<li><code>init_monitor()</code></li>
+<li><code>engine_start()</code></li>
+<li><code>is_exit_status_bad()</code></li>
+</ul>
+
+<p>
+我们一点点来分析。
+</p>
+</div>
+<div id="outline-container-org07e72e9" class="outline-4">
+<h4 id="org07e72e9"><span class="section-number-4">3.1.1.</span> init_monitor()</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+通过 <code>GNU Global</code> 的 TAG 跳转，发现 <code>init_monitor</code> 位于 <code>/src/monitor/monitor.c</code> 中定义：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-type">void</span> <span class="org-function-name">init_monitor</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-variable-name">argv</span>[]) {
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Perform some global initialization.</span><span class="org-comment-delimiter"> */</span>
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Parse arguments.</span><span class="org-comment-delimiter"> */</span>
+  parse_args(argc, argv);
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Set random seed.</span><span class="org-comment-delimiter"> */</span>
+  init_rand();
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Open the log file.</span><span class="org-comment-delimiter"> */</span>
+  init_log(log_file);
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Initialize memory.</span><span class="org-comment-delimiter"> */</span>
+  init_mem();
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Initialize devices.</span><span class="org-comment-delimiter"> */</span>
+  IFDEF(CONFIG_DEVICE, init_device());
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Perform ISA dependent initialization.</span><span class="org-comment-delimiter"> */</span>
+  init_isa();
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Load the image to memory. This will overwrite the built-in image.</span><span class="org-comment-delimiter"> */</span>
+  <span class="org-type">long</span> <span class="org-variable-name">img_size</span> = load_img();
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Initialize differential testing.</span><span class="org-comment-delimiter"> */</span>
+  init_difftest(diff_so_file, img_size, difftest_port);
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Initialize the simple debugger.</span><span class="org-comment-delimiter"> */</span>
+  init_sdb();
+
+  IFDEF(CONFIG_ITRACE, init_disasm());
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">Display welcome message.</span><span class="org-comment-delimiter"> */</span>
+  welcome();
+}
+</pre>
+</div>
+
+<p>
+其实就调用了一大堆函数做初始化，大部分没什么需要特别关注的，所以只讲一些自己注意了的东西：
+</p>
+
+<ul class="org-ul">
+<li><code>parse_args</code> 使用了 <code>getopt</code> 来做参数解析，具体我在<a href="boyuan-project-01.html">这里</a>介绍过。</li>
+<li><code>welcome</code> 中使用了一个宏 <code>Log</code> ，在 <code>/include/utils.h</code> 中，我觉得很实用。</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#define</span> <span class="org-function-name">Log</span>(<span class="org-variable-name">format</span>, ...) \
+  _Log(ANSI_FMT(<span class="org-string">"[%s:%d %s] "</span> format, ANSI_FG_BLUE) <span class="org-string">"\n"</span>, \
+        __FILE__, __LINE__, __func__, ## __VA_ARGS__)
+
+<span class="org-preprocessor">#define</span> <span class="org-function-name">_Log</span>(...) \
+<span class="org-keyword">do</span> { \
+  printf(__VA_ARGS__); \
+  log_write(__VA_ARGS__); \
+} <span class="org-keyword">while</span> (0)
+
+<span class="org-preprocessor">#define</span> <span class="org-function-name">log_write</span>(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
+<span class="org-keyword">do</span> { \
+  <span class="org-keyword">extern</span> <span class="org-type">FILE</span>* <span class="org-variable-name">log_fp</span>; \
+  <span class="org-keyword">extern</span> <span class="org-type">bool</span> <span class="org-function-name">log_enable</span>(); \
+  <span class="org-keyword">if</span> (log_enable() &amp;&amp; log_fp != <span class="org-constant">NULL</span>) { \
+    fprintf(log_fp, __VA_ARGS__); \
+    fflush(log_fp); \
+  } \
+} <span class="org-keyword">while</span> (0) \)
+
+<span class="org-preprocessor">#define</span> <span class="org-function-name">ANSI_FMT</span>(<span class="org-variable-name">str</span>, <span class="org-variable-name">fmt</span>) fmt str ANSI_NONE
+
+<span class="org-preprocessor">#define</span> <span class="org-variable-name">ANSI_NONE</span>       <span class="org-string">"\33[0m"</span>
+<span class="org-preprocessor">#define</span> <span class="org-variable-name">ANSI_FG_BLUE</span>    <span class="org-string">"\33[1;34m"</span>
+<span class="org-comment-delimiter">// </span><span class="org-comment">just for color display, so I omitted the rest.</span>
+</pre>
+</div>
+
+<p>
+<code>MUXDEF</code> 等定义在 <code>/include/marco.h</code> 中：
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#define</span> <span class="org-function-name">IFDEF</span>(<span class="org-variable-name">macro</span>, ...) MUXDEF(macro, __KEEP, __IGNORE)(__VA_ARGS__)
+<span class="org-preprocessor">#define</span> <span class="org-function-name">MUXNDEF</span>(<span class="org-variable-name">macro</span>, <span class="org-variable-name">X</span>, <span class="org-variable-name">Y</span>) MUX_MACRO_PROPERTY(__P_DEF_, macro, Y, X)
+<span class="org-preprocessor">#define</span> <span class="org-function-name">MUX_MACRO_PROPERTY</span>(<span class="org-variable-name">p</span>, <span class="org-variable-name">macro</span>, <span class="org-variable-name">a</span>, <span class="org-variable-name">b</span>) MUX_WITH_COMMA(concat(p, macro), a, b)
+<span class="org-preprocessor">#define</span> <span class="org-function-name">CHOOSE2nd</span>(<span class="org-variable-name">a</span>, <span class="org-variable-name">b</span>, ...) b
+<span class="org-preprocessor">#define</span> <span class="org-function-name">MUX_WITH_COMMA</span>(<span class="org-variable-name">contain_comma</span>, <span class="org-variable-name">a</span>, <span class="org-variable-name">b</span>) CHOOSE2nd(<span class="org-type">contain_comma</span> <span class="org-variable-name">a</span>, b)
+</pre>
+</div>
+
+<p>
+虽然但是，还是完全看不懂&#x2026;
+</p>
+
+<p>
+所以不得不模拟它宏展开的过程了：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">// </span><span class="org-comment">PART I</span>
+<span class="org-comment-delimiter">// </span><span class="org-comment">CONFIG_TRACE is defined in autoconf.h, if you turn it up then it is 1</span>
+Log(<span class="org-string">"Trace: %s"</span>, MUXDEF(CONFIG_TRACE, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED)));
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">_Log</span>(ANSI_FMT(<span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span>, ANSI_FG_BLUE) <span class="org-string">"\n"</span>,            \
+     __FILE__, __LINE__, __func__,MUXDEF(CONFIG_TRACE, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED)));
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">_Log</span>(ANSI_FMT(<span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span>, ANSI_FG_BLUE) <span class="org-string">"\n"</span>,            \
+     __FILE__, __LINE__, __func__,MUXDEF(CONFIG_TRACE, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED)));
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">_Log</span>(ANSI_FG_BLUE <span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span> ANSI_NONE <span class="org-string">"\n"</span>,             \
+     __FILE__, __LINE__, __func__,MUXDEF(CONFIG_TRACE, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED)));
+ <span class="org-comment-delimiter">// </span><span class="org-comment">refer to PART II</span>
+<span class="org-function-name">_Log</span>(ANSI_FG_BLUE <span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span> ANSI_NONE <span class="org-string">"\n"</span>,             \
+     __FILE__, __LINE__, __func__, ANSI_FG_GREEN <span class="org-string">"ON"</span> ANSI_HOME);
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-keyword">do</span> {                     
+    printf(ANSI_FG_BLUE <span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span> ANSI_NONE <span class="org-string">"\n"</span>, __FILE__, __LINE__, __func__, ANSI_FG_GREEN <span class="org-string">"ON"</span> ANSI_HOME);    
+    log_write(ANSI_FG_BLUE <span class="org-string">"[%s:%d %s] "</span> <span class="org-string">"Trace: %s"</span> ANSI_NONE <span class="org-string">"\n"</span>, __FILE__, __LINE__, __func__, ANSI_FG_GREEN <span class="org-string">"ON"</span> ANSI_HOME); 
+} <span class="org-keyword">while</span> (0)
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">PART II</span>
+MUXDEF(1, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED))
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">MUX_MACRO_PROPERTY</span>(__P_DEF_, 1, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED))
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">MUX_WITH_COMMA</span>(concat(__P_DEF_, 1), ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED))
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+<span class="org-function-name">CHOOSE2nd</span>(__P_DEF_1, ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN), ANSI_FMT(<span class="org-string">"OFF"</span>, ANSI_FG_RED))
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+ANSI_FMT(<span class="org-string">"ON"</span>, ANSI_FG_GREEN)
+<span class="org-comment-delimiter">// </span><span class="org-comment">equals to</span>
+ANSI_FG_GREEN <span class="org-string">"ON"</span> ANSI_HOME
+<span class="org-comment-delimiter">// </span><span class="org-comment">Goto Part I</span>
+</pre>
+</div>
+
+<p>
+经过我们的手动化简，发现这行语句实际上在终端里的输出为：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">[src/monitor/monitor.c:28 welcome] Trace: ON
+</pre>
+</div>
+
+<p>
+所以， <code>~Log(...)</code> 干的事情实际上就是把信息打印到屏幕上，同时再写入 Logfile 中，只是使用了比较复杂的宏定义来自动记录如文件名，行号，路径等信息。
+</p>
+
+<ul class="org-ul">
+<li><code>init_difftest()</code></li>
+</ul>
+
+<p>
+这是给 <code>DiffTest</code> 这个协同仿真差分测试框架提供的初始化函数，主要是为了 debug 时使用。
+</p>
+
+<p>
+<code>DiffTest</code> 可以在程序执行时验证每一条指令，核心思想：对于同一规范的两种实现，给定相同的定义中的输入，行为应当完全一致。
+</p>
+
+<p>
+之后我们会深入研究它的源码，目前我们先将它放在一边。
+</p>
+
+<ul class="org-ul">
+<li><code>init_sdb()</code></li>
+</ul>
+
+<p>
+这个函数定义在 <code>src/monitor/sdb/sdb.c</code> 中，它调用了两个函数 <code>init_regex()</code> 和 <code>init_wp_pool()</code>
+</p>
+
+<p>
+我们目前先只关注 <code>init_wp_pool()</code> ，这个函数定义在 <code>src/monitor/sdb/watchpoint.c</code> 中，它初始化了 NEMU 内置调试器的监视点链表。
+</p>
+
+<p>
+有关监视点的具体定义如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">watchpoint</span> {
+  <span class="org-type">int</span> <span class="org-variable-name">NO</span>;
+  <span class="org-keyword">struct</span> <span class="org-type">watchpoint</span> *<span class="org-variable-name">next</span>;
+
+  <span class="org-comment-delimiter">/* </span><span class="org-comment">TODO: Add more members if necessary</span><span class="org-comment-delimiter"> */</span>
+
+} <span class="org-type">WP</span>;
+
+<span class="org-keyword">static</span> <span class="org-type">WP</span> <span class="org-variable-name">wp_pool</span>[NR_WP] = {};
+<span class="org-keyword">static</span> <span class="org-type">WP</span> *<span class="org-variable-name">head</span> = <span class="org-constant">NULL</span>, *<span class="org-variable-name">free_</span> = <span class="org-constant">NULL</span>;
+</pre>
+</div>
+
+<p>
+<code>NO</code> 代表监视点的序号，而 <code>next</code> 是一个指向下一个监视点的指针。
+</p>
+
+<p>
+<code>head</code> 和 <code>free_</code> 是两个链表，前者用来处理使用中的监视点，后者用于处理空闲的监视点结构。
+</p>
+
+<p>
+NEMU 默认情况下提供了 32 个监视点结构，定义在 <code>NR_WP</code> 宏中。
+</p>
+
+<p>
+[未完待续&#x2026;]
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-05-03 Sat 17:33</p>
+</div>
+</body>
+</html>

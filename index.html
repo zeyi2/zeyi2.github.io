@@ -1,191 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Who Has Seen the Wind?</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      font-family: 'Noto Serif SC', serif;
-      color: #444;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      background: #f5f5f0;
-      animation: backgroundFade 120s infinite alternate;
-    }
-
-    /* 背景色慢慢變化 */
-    @keyframes backgroundFade {
-      0% {
-        background: #f5f5f0; /* 淺米白 */
-      }
-      50% {
-        background: #e0f7fa; /* 柔藍色 */
-      }
-      100% {
-        background: #f5f5f0; /* 回到米白 */
-      }
-    }
-
-    /* 呼吸+漂浮圓圈 */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
-      box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.03);
-      pointer-events: none;
-      transform: scale(0.8); /* 初始縮小狀態 */
-      animation: ripple 12s infinite ease-in-out, drift 30s infinite linear alternate;
-      animation-fill-mode: both;
-      z-index: 0;
-    }
-
-    /* 呼吸動畫 */
-    @keyframes ripple {
-      0% {
-        transform: scale(0.8);
-        opacity: 0.4;
-      }
-      50% {
-        transform: scale(1.5);
-        opacity: 0.15;
-      }
-      100% {
-        transform: scale(0.8);
-        opacity: 0.4;
-      }
-    }
-
-    /* 漂移動畫 */
-    @keyframes drift {
-      0% {
-        transform: translate(0px, 0px);
-      }
-      100% {
-        transform: translate(30px, 20px);
-      }
-    }
-
-    /* 每個圓圈不同大小和位置 */
-    .ripple:nth-child(1) {
-      width: 200px;
-      height: 200px;
-      top: 20%;
-      left: 25%;
-      animation-delay: 0s, 0s;
-    }
-
-    .ripple:nth-child(2) {
-      width: 250px;
-      height: 250px;
-      top: 65%;
-      left: 65%;
-      animation-delay: 3s, 5s;
-    }
-
-    .ripple:nth-child(3) {
-      width: 220px;
-      height: 220px;
-      top: 40%;
-      left: 50%;
-      animation-delay: 6s, 10s;
-    }
-
-    .poem {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      z-index: 1;
-    }
-
-    .poem p {
-      font-size: 1.2em;
-      margin: 20px 0;
-      opacity: 0.9;
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .poem p.fade-out {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .poem p:hover {
-      opacity: 1;
-    }
-  </style>
-
-  <script>
-    function reversePoem() {
-      const poemLines = document.querySelectorAll('.poem p');
-      const poemContainer = document.querySelector('.poem');
-
-      sequentialFadeOut(Array.from(poemLines), 0, () => {
-        const reversedLines = Array.from(poemLines).reverse();
-        poemContainer.innerHTML = '';
-
-        reversedLines.forEach(line => {
-          line.classList.add('fade-out');
-          poemContainer.appendChild(line);
-        });
-
-        const newLines = document.querySelectorAll('.poem p');
-        setTimeout(() => {
-          sequentialFadeIn(Array.from(newLines), 0);
-        }, 100);
-      });
-    }
-
-    function sequentialFadeOut(lines, index, callback) {
-      if (index >= lines.length) {
-        setTimeout(callback, 100);
-        return;
-      }
-
-      lines[index].classList.add('fade-out');
-      setTimeout(() => {
-        sequentialFadeOut(lines, index + 1, callback);
-      }, 180);
-    }
-
-    function sequentialFadeIn(lines, index) {
-      if (index >= lines.length) {
-        return;
-      }
-
-      lines[index].classList.remove('fade-out');
-      setTimeout(() => {
-        sequentialFadeIn(lines, index + 1);
-      }, 180);
-    }
-  </script>
+<!-- 2025-05-08 Thu 18:13 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mitchell's Homepage</title>
+<meta name="author" content="Mitchell" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="static/css/default.css" />
 </head>
-
 <body>
-  <!-- 背景圓圈 -->
-  <div class="ripple"></div>
-  <div class="ripple"></div>
-  <div class="ripple"></div>
+<div id="content" class="content">
+<h1 class="title">Mitchell&rsquo;s Homepage</h1>
+<div class="org-center">
+<p>
+<i>I shall be telling this with a sigh</i>
+</p>
 
-  <!-- 詩本體 -->
-  <div class="poem" onclick="reversePoem()">
-    <p><i>The wind is passing by.</i></p>
-    <p><i>But when the trees bow down their heads,</i></p>
-    <p><i>Neither you nor I.</i></p>
-    <p><i>Who has seen the wind?</i></p>
-  </div>
+<p>
+<i>Somewhere ages and ages hence:</i>
+</p>
+
+<p>
+<i>Two roads diverged in a wood, and I-</i>
+</p>
+
+<p>
+<i>I took the one less travelled by,</i>
+</p>
+
+<p>
+<i>And that has made all the difference.</i>
+</p>
+</div>
+<hr />
+<div id="outline-container-orgde6d3b8" class="outline-2">
+<h2 id="orgde6d3b8">Articles</h2>
+<div class="outline-text-2" id="text-orgde6d3b8">
+</div>
+<div id="outline-container-org2b1dbf4" class="outline-5">
+<h5 id="org2b1dbf4"><a href="parallel-prog.html">OpenMP 笔记 01</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="hpc">hpc</span></span></h5>
+</div>
+<div id="outline-container-org0d23f0e" class="outline-5">
+<h5 id="org0d23f0e"><a href="nemu-src.html">阅读 NEMU 的源码</a> (更新中)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="c_lang">c_lang</span></span></h5>
+</div>
+<div id="outline-container-orga6987b2" class="outline-5">
+<h5 id="orga6987b2"><a href="boyuan-project-01.html">博远课题笔记之——命令行参数解析</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
+</div>
+<div id="outline-container-org0af336f" class="outline-5">
+<h5 id="org0af336f"><a href="boyuan-pre.html">技术分享02 命令行操作</a>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="boyuan">boyuan</span></span></h5>
+</div>
+</div>
+<div id="outline-container-org2ff3c47" class="outline-2">
+<h2 id="org2ff3c47">Miscs</h2>
+<div class="outline-text-2" id="text-org2ff3c47">
+</div>
+<ul class="org-ul">
+<li><a id="orge786300"></a><a href="xcas.html">[对 Xcas 的积分测试]​</a><br /></li>
+<li><a id="org2e065da"></a><a href="facebook-is-depressing.html">[Facebook is Depressing]​</a><br /></li>
+<li><a id="orge3c8fe0"></a><a href="anime.html">[Animes]​</a><br /></li>
+</ul>
+</div>
+<div id="outline-container-org2a06462" class="outline-2">
+<h2 id="org2a06462">Mini Projects</h2>
+<div class="outline-text-2" id="text-org2a06462">
+</div>
+<div id="outline-container-org0360122" class="outline-4">
+<h4 id="org0360122"><a href="https://github.com/zeyi2/bf">BF</a>: a (naive) brainfuck interpreter</h4>
+</div>
+</div>
+<div id="outline-container-org648f331" class="outline-2">
+<h2 id="org648f331">Friends</h2>
+<div class="outline-text-2" id="text-org648f331">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><a href="https://blog-vx1c.vercel.app">[可能世界]​</a></td>
+<td class="org-left"><a href="https://mydg-leodu.netlify.app/">[无人区]​</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://b2og.com">[ToBeHonest&rsquo;s BLOG]​</a></td>
+<td class="org-left"><a href="http://styx.sdf.org">[styx 的博客]​</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="http://www.icbrochure.tech/">[ICBrochure]​</a></td>
+<td class="org-left"><a href="https://tttiw.github.io">[tttiw.github.io]​</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://www.cnblogs.com/syqwq">咕噜咕噜酱</a></td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li>互换友链请发邮件</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgeeadc50" class="outline-2">
+<h2 id="orgeeadc50">About</h2>
+<div class="outline-text-2" id="text-orgeeadc50">
+<div class="org-center">
+<p>
+Sometimes I translate stuff, sometimes I do some programming, often I do both.
+</p>
+
+<p>
+<a href="mailto:mitchell@segfault.net">mitchell@segfault.net</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mitchell</p>
+<p class="date">Created: 2025-05-08 Thu 18:13</p>
+</div>
 </body>
 </html>

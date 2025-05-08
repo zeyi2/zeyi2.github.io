@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-03 Sat 17:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>博远课题笔记之——命令行参数解析</title>
+<meta name="author" content="Mitchell" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="static/css/default.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">博远课题笔记之——命令行参数解析</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org593dcf3">1. DISCLAIMER</a></li>
+<li><a href="#org21792b6">2. Introduction</a></li>
+<li><a href="#org64e7492">3. What the hell is <b><b>Option</b></b> ?</a></li>
+<li><a href="#org83522d1">4. So, how to use it?</a>
+<ul>
+<li><a href="#org49f3d18">4.1. Using <code>getopt(...)</code> to parse options</a>
+<ul>
+<li><a href="#orgadc1842">4.1.1. Options, but with parameters</a></li>
+</ul>
+</li>
+<li><a href="#org9b041bd">4.2. Using <code>getopt_long(...)</code></a></li>
+</ul>
+</li>
+<li><a href="#orga4afb9a">5. The Rabbit Hole ?</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org593dcf3" class="outline-2">
+<h2 id="org593dcf3"><span class="section-number-2">1.</span> DISCLAIMER</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+免责声明: 本文内容仅为我的 <b><b>个人理解</b></b>, <b><b>不保证完全正确</b></b>, 需要更精确的信息来源请自己 <b><b>RTFM</b></b>
+</p>
+</div>
+</div>
+<div id="outline-container-org21792b6" class="outline-2">
+<h2 id="org21792b6"><span class="section-number-2">2.</span> Introduction</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+事情的起因是, <code>fake-terminal</code> 这个项目需要有解析用户输入命令的功能, 例如对于用户输入 <code>ls -alR &lt;dir&gt;</code> , 我们的交互式界面需要能把它解析成这样:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">ls -a -l -R &lt;dir&gt;
+</pre>
+</div>
+<p>
+然后再将参数与输出格式对应并打印出信息
+</p>
+
+<p>
+听上去是一个不困难的工作, 但是在面对复杂的参数时, 需要解析的内容也变得更多, 且更复杂, <del>甚至让我滋生了 "用 Racket 搓个 DSL 出来" 这样的混邪想法</del>
+</p>
+
+<p>
+当然, 这样是不好的, 因为这是一个 C Project, 那我也应该 do it in the UNIX way.
+</p>
+
+<p>
+所以我去 <code>RTFSC</code> 了，并在 <code>coreutils</code> 的源码中发现了一个奇怪的程序—— <code>getopt</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org64e7492" class="outline-2">
+<h2 id="org64e7492"><span class="section-number-2">3.</span> What the hell is <b><b>Option</b></b> ?</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+顾名思义, <code>getopt</code> 代表 <code>get options</code> 的意思, 所谓的 <code>option</code> 就是指令中 <code>-</code> 或 <code>--</code> (这种形式被称为 <code>long-option</code>) 后面接的字符串, 每一个参数代表一个不同的功能, 比如:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">ls -alR &lt;dir&gt;
+
+-a: &#26174;&#31034;&#38544;&#34255;&#25991;&#20214;
+-l: &#25171;&#21360;&#35814;&#32454;&#20449;&#24687;
+-R: &#36882;&#24402;&#25171;&#21360;
+</pre>
+</div>
+
+<p>
+代表着执行 <code>ls</code> 程序, 使用 <code>l,a,R</code> 这三个 <code>options</code> , 并给予它们一个参数 <code>&lt;dir&gt;</code> (没错, 你可以给 <code>option</code> 传参)
+</p>
+
+<p>
+我们可以用更严谨的方式来定义 POSIX-Shell 中的 <code>options</code>
+</p>
+<ul class="org-ul">
+<li><code>option</code> 以 <code>-</code> 开头, 若 <code>-</code> 的数量为一, 则为 <code>short-option</code> 反之则为 <code>long-option</code></li>
+<li>如果有多个 <code>short-option</code> , 则可以连在一起, 即 <code>-a -b -c</code> == <code>-abc</code></li>
+<li>每个 <code>option</code> 都可以接收参数</li>
+<li><code>long-option</code> 可以与 <code>short-option</code> 等价 (例如 <code>--help</code> 与 <code>-h</code>)</li>
+</ul>
+
+<p>
+<code>getopt()</code> 帮助开发者在开发命令行工具时, 不需要手写 parser 来解析出 <code>option</code> , 而是让你预先设定好程序支持的 <code>options</code> , 它来帮你做匹配并返回结果
+</p>
+</div>
+</div>
+<div id="outline-container-org83522d1" class="outline-2">
+<h2 id="org83522d1"><span class="section-number-2">4.</span> So, how to use it?</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+遇事不决读 <a href="man/getopt.html">[Manual]​</a>&#x2026;
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">man -k getopt
+man 3 getopt
+</pre>
+</div>
+
+<p>
+<a href="man/getopt.html">[手册]​</a>中告诉我们, <code>getopt()</code> 在 <code>unistd.h</code> 与 <code>getopt.h</code> 这两个头文件中, 定义如下:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;unistd.h&gt;</span>
+
+<span class="org-type">int</span> <span class="org-function-name">getopt</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
+
+<span class="org-keyword">extern</span> <span class="org-type">char</span> *<span class="org-variable-name">optarg</span>;
+<span class="org-keyword">extern</span> <span class="org-type">int</span> <span class="org-variable-name">optind</span>, <span class="org-variable-name">opterr</span>, <span class="org-variable-name">optopt</span>;
+
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;getopt.h&gt;</span>
+
+<span class="org-type">int</span> <span class="org-function-name">getopt_long</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+            <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+<span class="org-type">int</span> <span class="org-function-name">getopt_long_only</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+            <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+</pre>
+</div>
+
+<p>
+这三个函数的使用场景如表格所示:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">函数名</td>
+<td class="org-left">使用场景</td>
+</tr>
+
+<tr>
+<td class="org-left">getopt(&#x2026;)</td>
+<td class="org-left">仅需要解析 <code>short-option</code></td>
+</tr>
+
+<tr>
+<td class="org-left">getopt_long(&#x2026;)</td>
+<td class="org-left">同时解析 <code>short-option</code> 与 <code>long-option</code></td>
+</tr>
+
+<tr>
+<td class="org-left">getopt_long_only(&#x2026;)</td>
+<td class="org-left">仅需要解析 <code>long-option</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>
+不难得出, <code>getopt_long()</code> 在这三者中泛用性最强, 但在学习它的使用之前, 我们先从比较简单的 <code>getopt(...)</code> 入手
+</p>
+</div>
+<div id="outline-container-org49f3d18" class="outline-3">
+<h3 id="org49f3d18"><span class="section-number-3">4.1.</span> Using <code>getopt(...)</code> to parse options</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
+            <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>);
+</pre>
+</div>
+
+<p>
+<code>getopt(...)</code> 接受三个参数:
+</p>
+<ul class="org-ul">
+<li><code>argc</code> : 程序主函数接受到的 args 数量</li>
+<li><code>argv[]</code> : 程序接受到的 argument vector</li>
+<li><code>optstring</code> : 一个包含了所有正确 options 的字串, <code>getopt</code> 使用它做解析</li>
+</ul>
+
+<div class="org-center">
+<p>
+(注: 关于 <code>argc</code> 与 <code>argv[]</code>, 这不在本文的解释范围内, 请参阅 ISO C 规范或 Glibc 手册的第 25.1 节 <a href="https://www.gnu.org/software/libc/manual/html_node/Program-Arguments.html">Program Arguments</a>)
+</p>
+</div>
+
+<p>
+<b><b>需要注意的是, 调用 <code>getopt(...)</code> 时只会解析一次, 所以需要通过循环重复解析, 直到 <code>getopt(...)</code> 的返回值为 -1, 此时才解析完毕</b></b>
+</p>
+
+<p>
+我们可以通过一段伪代码来查看 <code>getopt(..)</code> 的使用方式:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;stdio.h&gt;</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;unistd.h&gt;</span>
+
+<span class="org-type">int</span> <span class="org-function-name">main</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-variable-name">argv</span>[])
+{
+    ...<span class="org-comment-delimiter">//</span><span class="org-comment">DO SOMETHING</span>
+
+    <span class="org-keyword">while</span> (1)
+    {
+          <span class="org-type">int</span> <span class="org-variable-name">opt</span> = getopt(argc, argv, <span class="org-string">"abc"</span>); <span class="org-comment-delimiter">// </span><span class="org-comment">-a -b -c are accepted</span>
+          <span class="org-keyword">if</span> (opt == -1)
+          {
+              <span class="org-keyword">break</span>; <span class="org-comment-delimiter">// </span><span class="org-comment">done parsing</span>
+          }
+          printf(<span class="org-string">"%c\n"</span>, (<span class="org-type">char</span>)opt); <span class="org-comment-delimiter">// </span><span class="org-comment">print the parsed option, one by one</span>
+    }
+
+    ... <span class="org-comment-delimiter">//</span><span class="org-comment">DO SOMETHING</span>
+
+    <span class="org-keyword">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+假设用户输入了一个不在 <code>optstring</code> 中的 <code>option</code>, <code>getopt(...)</code> 会返回 <code>?</code>
+</p>
+
+<p>
+此时如果我们希望获得用户输入的无效 <code>option</code> , 可以参考 <a href="man/getopt.html">[Manual]​</a> 中列出的外部变量:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-keyword">extern</span> <span class="org-type">char</span> *<span class="org-variable-name">optarg</span>;
+<span class="org-keyword">extern</span> <span class="org-type">int</span> <span class="org-variable-name">optind</span>, <span class="org-variable-name">opterr</span>, <span class="org-variable-name">optopt</span>;
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">变量</td>
+<td class="org-left">作用</td>
+</tr>
+
+<tr>
+<td class="org-left">*optarg</td>
+<td class="org-left">当前 option 的参数</td>
+</tr>
+
+<tr>
+<td class="org-left">optind</td>
+<td class="org-left">当下 argv 的 index</td>
+</tr>
+
+<tr>
+<td class="org-left">opterr</td>
+<td class="org-left">默认为 0 值, 非零时代表无效的 option</td>
+</tr>
+
+<tr>
+<td class="org-left">optopt</td>
+<td class="org-left">存放用户输入的无效 option</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+所以只需要访问 <code>optopt</code> 就行了
+</p>
+</div>
+<div id="outline-container-orgadc1842" class="outline-4">
+<h4 id="orgadc1842"><span class="section-number-4">4.1.1.</span> Options, but with parameters</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<p>
+先前的定义中, 我们提到过 <code>option</code> 可以接收参数, 那么我们该怎么让 <code>optget(...)</code> 来处理参数呢?
+</p>
+
+<p>
+通过阅读 <a href="man/getopt.html">[Manual]​</a> 中的示例, 发现其实只需要微调 <code>optstring</code> 就可以了:
+</p>
+<ul class="org-ul">
+<li><code>:</code> 代表该 <code>option</code> 一定需要参数</li>
+<li><code>::</code> 代表该 <code>option</code> 参数可选</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-Bash">"a:b::c"
+- -a 必须需要参数
+- -b 可以选择性传参
+- -c 不需要参数
+</pre>
+</div>
+
+<p>
+如果需要获取参数可以之间访问上文提到的 <code>*optarg</code> 变量
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org9b041bd" class="outline-3">
+<h3 id="org9b041bd"><span class="section-number-3">4.2.</span> Using <code>getopt_long(...)</code></h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-type">int</span> <span class="org-function-name">getopt_long</span>(<span class="org-type">int</span> <span class="org-variable-name">argc</span>, <span class="org-type">char</span> *<span class="org-keyword">const</span> <span class="org-variable-name">argv</span>[],
+              <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">optstring</span>,
+              <span class="org-keyword">const</span> <span class="org-keyword">struct</span> <span class="org-type">option</span> *<span class="org-variable-name">longopts</span>, <span class="org-type">int</span> *<span class="org-variable-name">longindex</span>);
+</pre>
+</div>
+
+<p>
+前三个参数和之前的一样, 后面的突然就看不懂了, 于是继续读 <a href="man/getopt.html">[Manual]​</a>&#x2026;
+</p>
+
+<ul class="org-ul">
+<li><p>
+<code>longindex</code>
+</p>
+
+<p>
+长选项在 <code>longopts</code> 中的 index
+</p></li>
+
+<li><p>
+<code>struct option</code>
+</p>
+
+<p>
+查阅 <a href="man/getopt.html">[手册]​</a> 可得:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C">longopts is a pointer to the first element of an array of <span class="org-keyword">struct</span> <span class="org-type">option</span>
+<span class="org-variable-name">declared</span> in &lt;getopt.h&gt; as
+
+    <span class="org-keyword">struct</span> option {
+           <span class="org-keyword">const</span> <span class="org-type">char</span> *<span class="org-variable-name">name</span>;
+           <span class="org-type">int</span>         <span class="org-variable-name">has_arg</span>;
+           <span class="org-type">int</span>        *<span class="org-variable-name">flag</span>;
+           <span class="org-type">int</span>         <span class="org-variable-name">val</span>;
+    };
+
+The meanings of the different fields <span class="org-type">are</span>:
+
+name   is the name of the <span class="org-type">long</span> option.
+
+has_arg
+          is:  no_argument (or 0) <span class="org-keyword">if</span> the option does not take an argument;
+          <span class="org-function-name">required_argument</span> (or 1) <span class="org-keyword">if</span> the option requires an argument;  <span class="org-type">or</span>
+          <span class="org-function-name">optional_argument</span>  (or  2) <span class="org-keyword">if</span> the option takes an optional argu&#8208;
+          ment.
+
+flag   specifies how results are returned <span class="org-keyword">for</span> a <span class="org-type">long</span> option.   If  flag
+          is  <span class="org-constant">NULL</span>,  <span class="org-variable-name">then</span>  getopt_long()  returns  val.  (<span class="org-type">For</span> <span class="org-variable-name">example</span>, the
+          calling program may set val to the equivalent <span class="org-type">short</span> option <span class="org-type">char</span>&#8208;
+          acter.)   Otherwise, <span class="org-function-name">getopt_long</span>() returns 0, <span class="org-variable-name">and</span> flag points to
+          a variable which is set to val <span class="org-keyword">if</span> the option is found, <span class="org-variable-name">but</span>  left
+          unchanged <span class="org-keyword">if</span> the option is not found.
+
+val    is  the value to <span class="org-keyword">return</span>, <span class="org-variable-name">or</span> to load into the variable pointed to
+          by flag.
+
+The last element of the array has to be filled with zeros.
+
+If longindex is not <span class="org-constant">NULL</span>, <span class="org-variable-name">it</span> points to a variable which is set  to  the
+index of the <span class="org-type">long</span> option relative to longopts.
+</pre>
+</div>
+
+<p>
+所以对于 <code>option</code> 结构体：
+</p>
+<ol class="org-ol">
+<li><code>*name</code>: <code>option</code> 的名字</li>
+<li><code>has_args</code>: <code>option</code> 是否含有参数 (0-&gt;无参数; 1-&gt;有参数; 2-&gt;可选参数)</li>
+<li><code>*flag</code>: 需要改变的 <code>flag</code></li>
+<li><code>val</code>: <code>flag</code> 的改变值 / 函数返回值</li>
+</ol></li>
+</ul>
+
+<p>
+这么说还是很抽象, 比如 <code>flag</code> 是干什么的, 莫名其妙就出现了
+</p>
+
+<p>
+这里给一个 <code>option</code> 结构体的使用例 (伪代码):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-type">int</span> <span class="org-variable-name">flag</span>;
+
+<span class="org-keyword">struct</span> <span class="org-type">option</span> <span class="org-variable-name">foo_options</span>[] =
+{
+    {<span class="org-string">"a"</span>, 0, &amp;flag, 1},
+    {<span class="org-string">"b"</span>, 1, &amp;flag, 0},
+    {<span class="org-string">"c"</span>, 0, <span class="org-constant">NULL</span>, <span class="org-string">'c'</span>},
+    {0, 0, 0, 0} <span class="org-comment-delimiter">// </span><span class="org-comment">null terminator, like '\0'</span>
+};
+</pre>
+</div>
+
+<p>
+在这个示例中, <code>foo_options[2]</code> 的 <code>name</code> 被设置为 <code>c</code>, 返回值被设置为 <code>'c'</code> , 于是开发者可以用 <code>switch</code> 语句来处理返回值, 执行 <code>--c</code> 所对应的语句了
+</p>
+
+<p>
+对于 <code>--a, --b</code> 这两个 <code>option</code> , 它们都返回 <code>0</code> , 但会修改 <code>flag</code> 的值, 然后开发者就可以用 <code>flag</code> 来做其它的判断
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orga4afb9a" class="outline-2">
+<h2 id="orga4afb9a"><span class="section-number-2">5.</span> The Rabbit Hole ?</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+目前, 我们已经可以成功让命令行程序解析程序的 <code>options</code> 了, 但是, <code>getopt</code> 可能并非很多情况下的最优解
+</p>
+
+<p>
+<code>Glibc</code> 的手册中提到了一个不属于 <code>POSIX Shell</code> 规范中的程序 <code>argp</code> , 它提供了比 <code>getopt</code> 更多的功能与更友好的界面
+</p>
+
+<p>
+美中不足的是, 它的可移植性没有 <code>getopt</code> 好, 需要手动安装依赖
+</p>
+
+<p>
+(另请参阅: Glibc 手册 25.3 节 <a href="https://www.gnu.org/software/libc/manual/html_node/Argp.html">Parsing Program Options with Argp</a>)
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mitchell</p>
+<p class="date">Created: 2025-05-03 Sat 17:33</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-03 Sat 17:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>技术分享02 命令行操作</title>
+<meta name="author" content="mitchell [[mailto:mitchell@sdf.org][&lt;mitchell@sdf.org]]&gt;" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="static/css/default.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">技术分享02 命令行操作</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org1d63389">1. 什么是命令行</a>
+<ul>
+<li><a href="#org9fd137d">1.1. GUI? CLI? 这都什么玩意</a></li>
+<li><a href="#org72609a8">1.2. GUI VS CLI</a></li>
+</ul>
+</li>
+<li><a href="#orgaca1641">2. 为什么需要使用命令行</a>
+<ul>
+<li><a href="#org33176a6">2.1. 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#org6aa9ba5">2.2. 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org75347a4">3. Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
+<ul>
+<li><a href="#orgca2f462">3.1. 文本编辑</a>
+<ul>
+<li><a href="#org1e109a0">3.1.1. 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
+</ul>
+</li>
+<li><a href="#orgceca6df">3.2. 文件管理</a></li>
+<li><a href="#org7a7204e">3.3. 进程管理</a></li>
+<li><a href="#org753b87a">3.4. 输入输出 (小工具们互相组合的核心)</a>
+<ul>
+<li><a href="#orgab0f98d">3.4.1. 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</a>
+<ul>
+<li><a href="#orgc3bcf4d">3.4.1.1. 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org594b94a">3.4.2. <code>xargs</code>: 将标准输入转变为命令的参数</a>
+<ul>
+<li><a href="#orgbeeebad">3.4.2.1. 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org68bd649">3.5. 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</a>
+<ul>
+<li><a href="#orge81cfb8">3.5.1. 通配符</a></li>
+<li><a href="#org8501c9a">3.5.2. 正则表达式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgea773a1">4. Read The (Friendly|Fruitful) Manual</a></li>
+<li><a href="#org61ce458">5. 自动化的力量</a>
+<ul>
+<li><a href="#org5f6af70">5.1. 这就是我们热血沸腾的组合技</a>
+<ul>
+<li><a href="#org4b75388">5.1.1. CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+<li><a href="#orgc4888cf">5.1.2. 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></a></li>
+</ul>
+</li>
+<li><a href="#orga081cfa">5.2. 脚本: 摆脱重复的工作</a>
+<ul>
+<li><a href="#org43b221e">5.2.1. Windows 批处理文件 / Powershell</a></li>
+<li><a href="#org7bc409a">5.2.2. Unix Bash/Zsh/Fish</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org56674bd">6. 打开黑盒子</a>
+<ul>
+<li><a href="#org5e189c4">6.1. 命令行工具的本质是什么?</a></li>
+<li><a href="#orgcbf1651">6.2. <code>strace</code> : 一个重要的踪迹工具</a></li>
+<li><a href="#org6dddf13">6.3. <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a>
+<ul>
+<li><a href="#org9f03ea8">6.3.1. <code>ls</code> 如何运行?</a></li>
+<li><a href="#orgda677c8">6.3.2. <code>ls</code> 是如何被找到的?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org6f858e2">7. So&#x2026; What is command line?</a></li>
+<li><a href="#org72c39d0">8. 与时俱进: 更先进的工具们</a></li>
+<li><a href="#orgebb3173">9. Acknowledgement</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1d63389" class="outline-2">
+<h2 id="org1d63389"><span class="section-number-2">1.</span> 什么是命令行</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org9fd137d" class="outline-3">
+<h3 id="org9fd137d"><span class="section-number-3">1.1.</span> GUI? CLI? 这都什么玩意</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li><b><b>GUI</b></b>: 用鼠标双击会跳窗口的软件</li>
+<li><b><b>CLI</b></b>: 在终端里敲键盘才能用的软件(吗?)</li>
+</ul>
+<div class="org-center">
+
+<div id="org94d1026" class="figure">
+<p><img src="files/icon.png" alt="icon.png" />
+</p>
+</div>
+
+<p>
+比如原神就不是命令行软件
+</p>
+
+<p>
+<del>但原神的服务器可能是</del>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org72609a8" class="outline-3">
+<h3 id="org72609a8"><span class="section-number-3">1.2.</span> GUI VS CLI</h3>
+<div class="outline-text-3" id="text-1-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Type</td>
+<td class="org-left">GUI</td>
+<td class="org-left">CLI</td>
+</tr>
+
+<tr>
+<td class="org-left">浏览器</td>
+<td class="org-left">Chrome/Firefox</td>
+<td class="org-left">w3m/lynx</td>
+</tr>
+
+<tr>
+<td class="org-left">图像处理</td>
+<td class="org-left">PhotoShop</td>
+<td class="org-left">ImageMagick</td>
+</tr>
+
+<tr>
+<td class="org-left">视频编辑</td>
+<td class="org-left">Pr/Davinci Resolve</td>
+<td class="org-left">FFmpeg</td>
+</tr>
+
+<tr>
+<td class="org-left">文本编辑</td>
+<td class="org-left">VSCode/Sublime</td>
+<td class="org-left">Vim/TECO</td>
+</tr>
+</tbody>
+</table>
+<p>
+看上去，常用的功能 GUI 软件都提供了，点点鼠标都能做&#x2026;
+</p>
+
+<p>
+那么为什么还要花时间和精力学习命令行呢?
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaca1641" class="outline-2">
+<h2 id="orgaca1641"><span class="section-number-2">2.</span> 为什么需要使用命令行</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<b><b>因为我们用计算机的目的不同: 程序员要写程序</b></b>
+</p>
+<ul class="org-ul">
+<li>而命令行比 GUI 更高效</li>
+</ul>
+<p>
+比如 <code>apt install gcc</code> 一行就能安装完整的C语言编译工具
+</p>
+</div>
+<div id="outline-container-org33176a6" class="outline-3">
+<h3 id="org33176a6"><span class="section-number-3">2.1.</span> 比较两个文件是否完全相同&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>命令行的解决方案</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-sh">1. &#25991;&#26412;&#25991;&#20214;&#30340;&#27604;&#36739;: vimdiff file1 file2
+2. &#38750;&#25991;&#26412;&#25991;&#20214;&#30340;&#27604;&#36739;: diff file1 file2
+3. &#24456;&#22823;&#30340;&#25991;&#20214;: md5sum file1 file2
+</pre>
+</div>
+<ul class="org-ul">
+<li>GUI 呢?</li>
+</ul>
+<p>
+也许你下载了一个计算 MD5 的 GUI 工具
+</p>
+<ul class="org-ul">
+<li>你需要点击多少次鼠标?</li>
+</ul>
+<p>
+也许你觉得就这么一次操作也省不了多少时间
+</p>
+<ul class="org-ul">
+<li><b><b>真相 - 你的工作效率就是这样一点点降低的</b></b></li>
+</ul>
+<p>
+更重要的是:
+<b><b>有些复杂的事情 GUI 几乎做不了</b></b>
+</p>
+</div>
+</div>
+<div id="outline-container-org6aa9ba5" class="outline-3">
+<h3 id="org6aa9ba5"><span class="section-number-3">2.2.</span> 列出一个C语言项目中所有被包含过的头文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>GUI 怎么实现?</li>
+</ul>
+<p>
+如果找不到这样的软件，就没法做
+</p>
+<ul class="org-ul">
+<li>命令行下只需要</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-sh">find . -name <span class="org-string">"*.[ch]"</span> | xargs cat | grep <span class="org-string">"^#include"</span> | sort | uniq
+</pre>
+</div>
+
+<p>
+所以你就发现了命令行的优点:
+</p>
+<ul class="org-ul">
+<li>每个小工具只做一件事</li>
+<li>小工具采用文本进行输入输出, 从而易于使用</li>
+<li>通过小工具之间的组合来解决复杂问题</li>
+</ul>
+
+<p>
+这也是 <b><b>Unix哲学</b></b> 的一部分
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org75347a4" class="outline-2">
+<h2 id="org75347a4"><span class="section-number-2">3.</span> Wonderful Tools, Wonderful Things&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<b><b>注: 你需要一个Unix Shell才能进行实操，如果你没有，可以先搜索 WSL (之后会有讲解)</b></b>
+</p>
+</div>
+<div id="outline-container-orgca2f462" class="outline-3">
+<h3 id="orgca2f462"><span class="section-number-3">3.1.</span> 文本编辑</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Vim / Emacs</li>
+</ul>
+<p>
+<b><b>Vim 特点:</b></b> 命令式编程
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Key</td>
+<td class="org-left">Cursor Movement</td>
+</tr>
+
+<tr>
+<td class="org-left">h,j,k,l</td>
+<td class="org-left">Left,down,up,right</td>
+</tr>
+
+<tr>
+<td class="org-left">(number)w</td>
+<td class="org-left">Jump to the start of a word</td>
+</tr>
+
+<tr>
+<td class="org-left">(number)e</td>
+<td class="org-left">Jump to the end of a word</td>
+</tr>
+
+<tr>
+<td class="org-left">$</td>
+<td class="org-left">End of the line</td>
+</tr>
+
+<tr>
+<td class="org-left">gg</td>
+<td class="org-left">First line of the document</td>
+</tr>
+
+<tr>
+<td class="org-left">G</td>
+<td class="org-left">Last line of the document</td>
+</tr>
+
+<tr>
+<td class="org-left">%</td>
+<td class="org-left">Match () {} []</td>
+</tr>
+
+<tr>
+<td class="org-left">u</td>
+<td class="org-left">Undo</td>
+</tr>
+
+<tr>
+<td class="org-left">v</td>
+<td class="org-left">visual mode</td>
+</tr>
+
+<tr>
+<td class="org-left">y</td>
+<td class="org-left">Copy/Yank</td>
+</tr>
+
+<tr>
+<td class="org-left">p</td>
+<td class="org-left">Paste</td>
+</tr>
+</tbody>
+</table>
+<div class="org-center">
+<p>
+记不住? 试试在终端里敲一下 <code>vimtutor</code>
+</p>
+</div>
+<p>
+Unix "一切皆文件"的概念结合 Vim 强大的编辑能力可以做一些很有趣的事情
+</p>
+
+<p>
+让我们实操一下 :)
+</p>
+</div>
+<div id="outline-container-org1e109a0" class="outline-4">
+<h4 id="org1e109a0"><span class="section-number-4">3.1.1.</span> 用 Vim 编辑二进制文件&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+对于可执行文件 <code>hello</code> ，我们可以直接修改文件来改变它的输出
+</p>
+
+<p>
+比如我们可以把 "Hello World" 修改成任意的字符
+</p>
+<hr />
+<p>
+原理:
+</p>
+<ul class="org-ul">
+<li>一切皆文件，所以一切可编辑</li>
+<li>我们可以在 Vim 中用 <code>!</code> 调用一个外部程序 ~xxd~，将人类看不懂的可执行文件转变成能看懂一些的十六进制文件</li>
+<li>(即在 Vim 中按下 :%!xxd)</li>
+<li>如果我们向下导航，会发现: 我们输出的 "Hello World" 字符串也是可以在文件中被找到的</li>
+<li>做出合理假设，当我们编辑可执行文件中 "Hello World" 对应的十六进制数，它的输出也会发生变化</li>
+<li>(编辑完按下 :%!xxd -r 再保存)</li>
+</ul>
+<hr />
+<p>
+<b><b>但是——</b></b>
+</p>
+<ul class="org-ul">
+<li>如果两个程序的输出肉眼看上去完全一样，这两个程序就一样吗?</li>
+</ul>
+
+<p>
+事情可能没有我们想象中的那么简单 :)
+</p>
+
+<p>
+还记得我们上面提到的内容吗？
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">1. &#25991;&#26412;&#25991;&#20214;&#30340;&#27604;&#36739;: vimdiff file1 file2
+2. &#38750;&#25991;&#26412;&#25991;&#20214;&#30340;&#27604;&#36739;: diff file1 file2
+3. &#24456;&#22823;&#30340;&#25991;&#20214;: md5sum file1 file2
+</pre>
+</div>
+
+<p>
+执行 <code>diff hello1 hello</code> ，发现这两个文件并不一样，但是程序是怎么知道这件事的？
+</p>
+
+<p>
+介绍一个新的工具 <code>objdump</code> , 通过它我们查看可执行文件的汇编代码
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">objdump -S hello &gt; hello.txt
+objdump -S hello1 &gt; hello1.txt
+vimdiff hello.txt hello1.txt
+</pre>
+</div>
+
+<p>
+于是，我们终于可以很直观地看到这两个程序内在的区别了
+</p>
+<hr />
+<div class="org-center">
+<p>
+某种程度上计算机和丘比很像
+</p>
+
+
+<div id="org58d2afe" class="figure">
+<p><img src="files/QB.jpg" alt="QB.jpg" />
+</p>
+</div>
+
+<p>
+从不说谎, <del>但会骗你</del>
+</p>
+</div>
+<hr />
+<p>
+<b><b>注: 为什么有必要了解一些 Emacs 键位</b></b>
+</p>
+
+<p>
+不为别的，因为一些发行版自带的终端不支持 Vim 键位而支持 Emacs 快捷键
+</p>
+<ul class="org-ul">
+<li><code>Ctrl+a</code> 跳转句首</li>
+<li><code>Ctrl+e</code> 跳转行末</li>
+<li><code>Alt+f</code> 与 <code>Alt+b</code> 在单词间跳转</li>
+</ul>
+
+<p>
+<b><b>一切为了效率</b></b>
+</p>
+<hr />
+</div>
+</div>
+</div>
+<div id="outline-container-orgceca6df" class="outline-3">
+<h3 id="orgceca6df"><span class="section-number-3">3.2.</span> 文件管理</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-sh">ls, rm, mkdir, mv, pwd, cat...
+</pre>
+</div>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">命令</td>
+<td class="org-left">用途</td>
+<td class="org-left">例子</td>
+<td class="org-left">解释</td>
+</tr>
+
+<tr>
+<td class="org-left">ls</td>
+<td class="org-left">打印目录中的内容</td>
+<td class="org-left">ls .</td>
+<td class="org-left">打印当前目录下的内容</td>
+</tr>
+
+<tr>
+<td class="org-left">rm</td>
+<td class="org-left">删除文件/文件夹</td>
+<td class="org-left">rm -rf /dir</td>
+<td class="org-left">递归地删除某一个文件夹</td>
+</tr>
+
+<tr>
+<td class="org-left">mkdir</td>
+<td class="org-left">创建目录</td>
+<td class="org-left">mkdir ./test</td>
+<td class="org-left">在当前路径下创建 <code>test</code> 文件夹</td>
+</tr>
+
+<tr>
+<td class="org-left">mv</td>
+<td class="org-left">移动或重命名文件</td>
+<td class="org-left">mv test.c test1.c</td>
+<td class="org-left">将 <code>test.c</code> 重命名为 <code>test1.c</code></td>
+</tr>
+
+<tr>
+<td class="org-left">pwd</td>
+<td class="org-left">打印当前的工作目录</td>
+<td class="org-left">pwd</td>
+<td class="org-left">打印当前工作目录</td>
+</tr>
+
+<tr>
+<td class="org-left">cat</td>
+<td class="org-left">串接文件并打印到标准输出</td>
+<td class="org-left">cat a.txt</td>
+<td class="org-left">打印 <code>a.txt</code> 中的内容</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org7a7204e" class="outline-3">
+<h3 id="org7a7204e"><span class="section-number-3">3.3.</span> 进程管理</h3>
+<div class="outline-text-3" id="text-3-3">
+<div class="org-src-container">
+<pre class="src src-sh">Ctrl-Z+bg, jobs, fg, kill -9 &lt;pid&gt;, ps aux, htop, top
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org753b87a" class="outline-3">
+<h3 id="org753b87a"><span class="section-number-3">3.4.</span> 输入输出 (小工具们互相组合的核心)</h3>
+<div class="outline-text-3" id="text-3-4">
+<div class="org-src-container">
+<pre class="src src-sh">&#31649;&#36947;, xargs
+</pre>
+</div>
+</div>
+<div id="outline-container-orgab0f98d" class="outline-4">
+<h4 id="orgab0f98d"><span class="section-number-4">3.4.1.</span> 管道 <code>|</code> = 一个用于连接程序间输入输出的缓冲区</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<div class="org-src-container">
+<pre class="src src-Bash">+-------+  stdout   +------+  stdin   +-------+
+| prog1 | --------&gt; | pipe | -------&gt; | prog2 |
++-------+           +------+          +-------+
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc3bcf4d" class="outline-5">
+<h5 id="orgc3bcf4d"><span class="section-number-5">3.4.1.1.</span> 怎么使用管道呢?&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h5>
+<div class="outline-text-5" id="text-3-4-1-1">
+<div class="org-src-container">
+<pre class="src src-sh">ls /bin | wc -l
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org594b94a" class="outline-4">
+<h4 id="org594b94a"><span class="section-number-4">3.4.2.</span> <code>xargs</code>: 将标准输入转变为命令的参数</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-builtin">echo</span> <span class="org-string">"a.c b.c c.c"</span> | xargs rm
+&#30456;&#24403;&#20110;:
+rm <span class="org-string">"a.c b.c c.c"</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-orgbeeebad" class="outline-5">
+<h5 id="orgbeeebad"><span class="section-number-5">3.4.2.1.</span> 来个简单的应用吧!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h5>
+<div class="outline-text-5" id="text-3-4-2-1">
+<p>
+Bob 写代码时出现了他无法理解的 Bug，他决定在编辑器里发邮件去电邮列表里询问大佬
+</p>
+
+<p>
+但是需要传的附件很多，一个个附上去很麻烦，怎么办?
+</p>
+
+<ul class="org-ul">
+<li>首先我们将用 <code>xargs</code> 打印 <code>/xargs</code> 目录下所有的 <code>.c</code> 文件</li>
+<li>然后我们将它们打包成一个 <code>.tar</code> 压缩文档</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org68bd649" class="outline-3">
+<h3 id="org68bd649"><span class="section-number-3">3.5.</span> 通配符/正则表达式 (搭配 sed, awk, grep 使用更佳)</h3>
+<div class="outline-text-3" id="text-3-5">
+</div>
+<div id="outline-container-orge81cfb8" class="outline-4">
+<h4 id="orge81cfb8"><span class="section-number-4">3.5.1.</span> 通配符</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">通配符</td>
+<td class="org-left">功能</td>
+<td class="org-left">示例</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>*</code></td>
+<td class="org-left">匹配多个字符</td>
+<td class="org-left"><code>*.txt</code> 匹配所有以 <code>.txt</code> 结尾的文件</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>?</code></td>
+<td class="org-left">匹配任意单个字符</td>
+<td class="org-left"><code>file?.txt</code> 匹配 <code>file1.txt</code>, <code>filea.txt</code> &#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>[]</code></td>
+<td class="org-left">匹配括号中的任意字符</td>
+<td class="org-left"><code>file[1-3].txt</code> 匹配 <code>file1.txt</code>, <code>file2.txt</code>, <code>file3.txt</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>[!]</code></td>
+<td class="org-left">匹配不在括号中的任意字符</td>
+<td class="org-left"><code>file[!1-3].txt</code> 匹配除 <code>file1.txt</code>, <code>file2.txt</code>, <code>file3.txt</code> 的文件</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>{}</code></td>
+<td class="org-left">匹配指定的字符串</td>
+<td class="org-left"><code>file{1,2}.txt</code> 匹配 <code>file1.txt</code>, <code>file2.txt</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org8501c9a" class="outline-4">
+<h4 id="org8501c9a"><span class="section-number-4">3.5.2.</span> 正则表达式</h4>
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+由于 <code>POSIX</code> / <code>Python</code> &amp; <code>Perl</code> / <code>grep</code> &amp; <code>egrep</code> 使用的规范不一样，故这里先略过
+</p>
+<hr />
+<p>
+那么问题来了:
+</p>
+<blockquote>
+<p>
+东西好多，我记不住/学不会怎么办?
+</p>
+</blockquote>
+<p>
+<b><b>- RTFM!</b></b>
+</p>
+<hr />
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgea773a1" class="outline-2">
+<h2 id="orgea773a1"><span class="section-number-2">4.</span> Read The (Friendly|Fruitful) Manual</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<b><b>最重要的 Linux 命令:</b></b> <b><b><code>man</code></b></b>
+</p>
+<ul class="org-ul">
+<li>查阅命令/库函数/系统文件等内容的手册</li>
+<li><code>man man</code> - 学习如何RTFM</li>
+<li><code>man ls</code> - 查看如何使用 <code>ls</code> 命令</li>
+</ul>
+
+<p>
+所以你现在知道应该怎么学习正则表达式了吧: <code>man 7 regex</code>
+</p>
+<hr />
+<p>
+如果手册上没有怎么办?
+</p>
+
+<p>
+虽然基本上不太可能，但如果真的没有，你可以:
+</p>
+
+<ul class="org-ul">
+<li><b><b>Search The Friendly Web</b></b> (Google, StackOverflow, Github Issues&#x2026;)</li>
+<li><b><b>Ask The Friendly LLM</b></b> (ChatGPT, 文心一言&#x2026;)</li>
+<li><b><b>Read The Source Code</b></b></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="outline-container-org61ce458" class="outline-2">
+<h2 id="org61ce458"><span class="section-number-2">5.</span> 自动化的力量</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org5f6af70" class="outline-3">
+<h3 id="org5f6af70"><span class="section-number-3">5.1.</span> 这就是我们热血沸腾的组合技</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+前面提到了: 我们通过小工具之间的组合来解决复杂问题，并给出了一个看上去很复杂的例子 <del>(其实并不)</del>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">find . -name <span class="org-string">"*.[ch]"</span> | xargs cat | grep <span class="org-string">"^#include"</span> | sort | uniq
+</pre>
+</div>
+<p>
+那么，我们怎么运用刚才学到的知识理解它的语义?
+</p>
+<div class="org-src-container">
+<pre class="src src-Bash">find . -name "*.[ch]" | ;; 在当前目录下寻找所有以 .c 与 .h 结尾的文件，并将结果通过管道传给下一条命令
+xargs cat | ;; 运用 xargs 打印这些文件的内容，并将结果通过管道传给下一条命令
+grep "^#include" | ;; 使用 grep 查找所有以 #include 开头的内容，并将结果通过管道传给下一条命令
+sort | ;; 对上面的结果进行排序，并将结果通过管道传给下一条命令
+uniq ;; 对上面的结果进行去重
+</pre>
+</div>
+<p>
+是不是感觉其实没有那么困难?
+</p>
+<hr />
+<p>
+仅作展示，不需要深入细节
+</p>
+<hr />
+</div>
+<div id="outline-container-org4b75388" class="outline-4">
+<h4 id="org4b75388"><span class="section-number-4">5.1.1.</span> CPU频率监视器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div class="outline-text-4" id="text-5-1-1">
+<div class="org-src-container">
+<pre class="src src-sh">watch -n 1 <span class="org-string">"cat /proc/cpuinfo | grep MHz | awk '{print \$1 NR \$3 \$4 \$2}'"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc4888cf" class="outline-4">
+<h4 id="orgc4888cf"><span class="section-number-4">5.1.2.</span> 密码生成器&#xa0;&#xa0;&#xa0;<span class="tag"><span class="example">example</span></span></h4>
+<div class="outline-text-4" id="text-5-1-2">
+<div class="org-src-container">
+<pre class="src src-sh">head -c 32 &lt; /dev/urandom | base64 | tr -dc <span class="org-string">'[:alnum:]'</span> | head -c 16
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga081cfa" class="outline-3">
+<h3 id="orga081cfa"><span class="section-number-3">5.2.</span> 脚本: 摆脱重复的工作</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+把命令写到一个文件里面
+</p>
+<ul class="org-ul">
+<li>可以重复执行, 不用每次都手动键入了</li>
+<li>可以被其他脚本调用, 自动化工作</li>
+<li><b><b>效率提升</b></b></li>
+</ul>
+</div>
+<div id="outline-container-org43b221e" class="outline-4">
+<h4 id="org43b221e"><span class="section-number-4">5.2.1.</span> Windows 批处理文件 / Powershell</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<p>
+微软有一份非常详细的入门指南
+</p>
+<ul class="org-ul">
+<li><a href="https://learn.microsoft.com/en-us/training/modules/introduction-to-powershell/">https://learn.microsoft.com/en-us/training/modules/introduction-to-powershell/</a></li>
+<li><a href="https://learn.microsoft.com/en-us/powershell/scripting/samples/sample-scripts-for-administration?view=powershell-7.4">https://learn.microsoft.com/en-us/powershell/scripting/samples/sample-scripts-for-administration?view=powershell-7.4</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7bc409a" class="outline-4">
+<h4 id="org7bc409a"><span class="section-number-4">5.2.2.</span> Unix Bash/Zsh/Fish</h4>
+<div class="outline-text-4" id="text-5-2-2">
+<p>
+<b>*注: 有关 Bash 语法，可参见 <code>man bash</code> *</b>
+</p>
+<ul class="org-ul">
+<li>为常用命令设置别名</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-builtin">alias</span> <span class="org-variable-name">ls</span>=<span class="org-string">'ls --color=auto'</span>
+</pre>
+</div>
+<p>
+把这一行加入 <code>.bashrc</code> ，再执行 <code>source ~/.bashrc</code> ，你的 <code>ls</code> 命令就有彩色输出了!
+</p>
+<ul class="org-ul">
+<li>修改/创建你自己的命令</li>
+</ul>
+
+<p>
+比如我觉得每次 <code>cd</code> 完还需要再 <code>ls</code> 一次也太麻烦了，为什么不能把这两个操作合并在一起呢?
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-builtin">cd</span>() {
+    <span class="org-builtin">builtin</span> cd <span class="org-string">"$@"</span>
+    ls --color --group-directories-first -Xh
+}
+</pre>
+</div>
+<ul class="org-ul">
+<li>把常用命令放在一起执行</li>
+</ul>
+<p>
+这是我之前控制电脑功耗的小脚本，它基本上就是打包了一大堆命令
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-comment-delimiter">#</span><span class="org-comment">!/bin/</span><span class="org-keyword">bash</span>
+
+<span class="org-keyword">if</span> [ <span class="org-string">"$1"</span> == <span class="org-string">"1"</span> ]; <span class="org-keyword">then</span>
+    <span class="org-builtin">echo</span> <span class="org-string">"&#21551;&#29992;&#25152;&#26377;&#30005;&#28304;&#20248;&#21270;&#35774;&#32622;"</span>
+    sudo systemctl start cpupower &amp;&amp; 
+    sudo rfkill block bluetooth &amp;&amp;
+    sudo cpupower frequency-set -g powersave &amp;&amp; 
+    sudo powertop --auto-tune &amp;&amp;
+    sudo systemctl start laptop-mode
+<span class="org-keyword">elif</span> [ <span class="org-string">"$1"</span> == <span class="org-string">"0"</span> ]; <span class="org-keyword">then</span>
+    <span class="org-builtin">echo</span> <span class="org-string">"&#24674;&#22797;&#21040;&#40664;&#35748;&#29366;&#24577;"</span>
+    sudo cpupower frequency-set -g performance
+    sudo systemctl stop laptop-mode
+<span class="org-keyword">else</span>
+    <span class="org-builtin">echo</span> <span class="org-string">"&#20351;&#29992;: $0 [enable|disable]"</span>
+<span class="org-keyword">fi</span>
+</pre>
+</div>
+<ul class="org-ul">
+<li>Shebang Hacks</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">//</span><span class="org-comment">usr/bin/cc -o ${o=`mktemp`} "$0" &amp;&amp; exec -a "$0" "$o" "$@"</span>
+
+<span class="org-preprocessor">#include</span><span class="org-string">&lt;stdio.h&gt;</span>
+<span class="org-type">int</span> <span class="org-function-name">main</span>(){
+    printf(<span class="org-string">"hello world\n"</span>);
+    <span class="org-keyword">return</span> 0;
+}
+</pre>
+</div>
+<p>
+<b><b>有什么用?</b></b>
+</p>
+<ul class="org-ul">
+<li>现在你的文件即是一个合法的 C 语言文件，也是一个合法的 Bash 脚本文件</li>
+</ul>
+<p>
+<b><b>也就是说:</b></b>
+</p>
+<ul class="org-ul">
+<li><p>
+你可以像执行脚本一样之间执行 C 源码了 (而且你会得到和编译一样的结果)
+</p>
+<div class="org-src-container">
+<pre class="src src-Bash">$ chmod +x foo.c
+$ ./foo.c
+hello world
+$ gcc foo.c -o foo
+$ ./foo
+hello world
+</pre>
+</div></li>
+</ul>
+<p>
+<b><b>科技并带着趣味</b></b>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org56674bd" class="outline-2">
+<h2 id="org56674bd"><span class="section-number-2">6.</span> 打开黑盒子</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org5e189c4" class="outline-3">
+<h3 id="org5e189c4"><span class="section-number-3">6.1.</span> 命令行工具的本质是什么?</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+统计一下工具的类型分布:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-builtin">echo</span> $<span class="org-variable-name">PATH</span> | tr -t : <span class="org-string">'\n'</span> | xargs -I{} find {} -maxdepth 1 -type f -executable | <span class="org-sh-escaped-newline">\</span>
+  xargs file -b -e elf | sort | uniq -c | sort -nr
+</pre>
+</div>
+<p>
+结果: 大部分是可执行文件(ELF), 小部分是脚本
+</p>
+<div class="org-src-container">
+<pre class="src src-Bash">3070 ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV)
+  354 POSIX shell script, ASCII text executable
+  345 Python script, ASCII text executable
+  263 ELF 64-bit LSB executable, x86-64, version 1 (SYSV)
+  105 Perl script text executable
+   65 ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux)
+   57 Bourne-Again shell script, ASCII text executable
+   49 ELF 64-bit LSB pie executable, x86-64, version 1 (GNU/Linux)
+   17 setuid ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV)
+   15 POSIX shell script, Unicode text, UTF-8 text executable
+    5 ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV)
+</pre>
+</div>
+
+<p>
+但这向我们抛出了更多的问题，例如:
+</p>
+<ul class="org-ul">
+<li>操作系统是怎么找到这些可执行文件的?</li>
+<li>这些文件在执行的时候发生了什么?</li>
+<li>&#x2026;</li>
+</ul>
+<p>
+你会发现凭借现有的工具，几乎没法回答它们
+</p>
+</div>
+</div>
+<div id="outline-container-orgcbf1651" class="outline-3">
+<h3 id="orgcbf1651"><span class="section-number-3">6.2.</span> <code>strace</code> : 一个重要的踪迹工具</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+了解程序的方式有两个:
+</p>
+<ul class="org-ul">
+<li>Source: 了解程序的每一处静态细节</li>
+<li>Trace: 了解程序运行的动态行为</li>
+</ul>
+
+<p>
+<code>strace</code> 是一个踪迹工具，它能帮助我们分析程序的动态行为
+</p>
+</div>
+</div>
+<div id="outline-container-org6dddf13" class="outline-3">
+<h3 id="org6dddf13"><span class="section-number-3">6.3.</span> <code>strace</code> 实战&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h3>
+<div class="outline-text-3" id="text-6-3">
+</div>
+<div id="outline-container-org9f03ea8" class="outline-4">
+<h4 id="org9f03ea8"><span class="section-number-4">6.3.1.</span> <code>ls</code> 如何运行?</h4>
+<div class="outline-text-4" id="text-6-3-1">
+<div class="org-src-container">
+<pre class="src src-sh">strace ls
+strace ls -l
+</pre>
+</div>
+<p>
+在阅读 <code>strace</code> 结果的时候我们发现了一些奇怪的东西
+</p>
+<div class="org-src-container">
+<pre class="src src-BASH">getdents64(3, 0x6540a956a700 /* .. entries */, 32768) = 168
+
+write(1, "a.c  a.h  a.txt ..., 62a.c  a.h  a.txt  b.c  b.h  b.txt  c.c  c.txt  d.txt  e.h  m.h) = 62
+</pre>
+</div>
+
+<p>
+<code>write()</code> 和 <code>getdents64()</code> 在干什么?
+</p>
+
+<p>
+让我们 <b><b>RTFM</b></b>: <code>man 2 write</code>, <code>man getdents64</code>
+</p>
+
+<p>
+手册告诉我们， <code>getdents64</code> 帮助我们 "get directory entries"
+</p>
+
+<p>
+同时，在 <code>write</code> 的手册页中，我们找到了一个叫 <code>fd</code> 的东西:
+</p>
+<ul class="org-ul">
+<li>0号文件 - 标准输入 (默认为当前终端)</li>
+<li>1号文件 - 标准输出 (默认为当前终端)</li>
+<li>2号文件 - 标准错误 (默认为当前终端)</li>
+</ul>
+
+<p>
+所以, <code>write()</code> 在这里把 <code>getdents64</code> 的结果打印到了终端上
+</p>
+
+<p>
+这时候, <code>ls</code> 在我们的眼里就不再神秘了
+</p>
+
+<p>
+更棒的是，在查看了系统调用后，我们甚至可以通过调用 <code>getdents64()</code> 等函数来实现我们自己的 <code>ls</code>
+</p>
+<hr />
+<p>
+注: 这个 <code>ls.c</code> 原理上并不是 <code>coreutils</code> 的复刻，有关这个文件的背景，请看<a href="boyuan-project-01.html">这篇</a>博客文章
+</p>
+<hr />
+</div>
+</div>
+<div id="outline-container-orgda677c8" class="outline-4">
+<h4 id="orgda677c8"><span class="section-number-4">6.3.2.</span> <code>ls</code> 是如何被找到的?</h4>
+<div class="outline-text-4" id="text-6-3-2">
+<div class="org-src-container">
+<pre class="src src-sh">strace -f bash -c <span class="org-string">"ls"</span>
+</pre>
+</div>
+<p>
+通过阅读它的输出，我们发现了这些内容:
+</p>
+<div class="org-src-container">
+<pre class="src src-BASH">newfstatat(AT_FDCWD, "/usr/local/bin/ls"...
+newfstatat(AT_FDCWD, "/usr/bin/ls" ...
+newfstatat(AT_FDCWD, "/usr/bin/ls" ...
+</pre>
+</div>
+<p>
+所以我们可以推测，bash 在这些目录中寻找 <code>ls</code> 这个可执行文件，并执行它
+</p>
+
+<p>
+新的问题又出现了，是不是所有的命令行工具都是这么被找到的呢？
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">$ whereis ls
+ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz
+
+$ whereis cd
+<span class="org-builtin">cd</span>:
+</pre>
+</div>
+
+<p>
+诶？为什么 <code>cd</code> 命令找不到呢？
+</p>
+
+<p>
+因为 <code>cd</code> 调用 <code>chdir()</code> 函数来改变工作目录，而这个函数只能影响当前程序的目录
+</p>
+
+<p>
+所以 <code>cd</code> 其实是由 shell 来实现的
+</p>
+
+<p>
+(很合理，因为改变 shell 的事情必须 shell 自己来干, <del>但正常情况下就是想不到</del>)
+</p>
+
+<p>
+印证了之前的话: <b><b>计算机从不说谎，但会骗你</b></b>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org6f858e2" class="outline-2">
+<h2 id="org6f858e2"><span class="section-number-2">7.</span> So&#x2026; What is command line?</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+说了这么多，我们平时用的命令行到底是什么？
+</p>
+
+<p>
+之前我们给它下了个不准确的定义：
+</p>
+
+<ul class="org-ul">
+<li><b><b>CLI</b></b>: 在终端里敲键盘才能用的软件</li>
+</ul>
+
+<p>
+现在，让我们把它变得更准确些
+</p>
+
+<p>
+你可以想象成，我们执行了一个 shell 程序，这个程序有这些功能
+</p>
+<ul class="org-ul">
+<li>它可以解释自己定义的一套语法 (即它是个解释器)</li>
+<li>它可以帮助你在系统的文件海洋中导航 (built-in cd command)</li>
+<li>它通过各种方式在系统中帮助你寻找并执行可执行文件 (即它是个搜索器)</li>
+<li>它不仅可以帮助你执行程序，还可以把它们拼起来 (比如管道等)</li>
+</ul>
+
+<p>
+于是，命令行便不再是一个黑盒子，而真正变成了我们可以理解并使用的效率工具
+</p>
+</div>
+</div>
+<div id="outline-container-org72c39d0" class="outline-2">
+<h2 id="org72c39d0"><span class="section-number-2">8.</span> 与时俱进: 更先进的工具们</h2>
+<div class="outline-text-2" id="text-8">
+<ul class="org-ul">
+<li><code>the-fuck</code>: 智能纠错</li>
+</ul>
+<div class="org-center">
+
+<div id="orgc39661e" class="figure">
+<p><img src="files/thefuck.gif" alt="thefuck.gif" />
+</p>
+</div>
+</div>
+<ul class="org-ul">
+<li><code>hackshell</code>: 来自 THC 的奇妙黑魔法 <code>source &lt;(curl -SsfL https://thc.org/hs)</code></li>
+</ul>
+<div class="org-center">
+
+<div id="org3733255" class="figure">
+<p><img src="files/hackshell.png" alt="hackshell.png" />
+</p>
+</div>
+</div>
+<ul class="org-ul">
+<li><code>python</code> VS <code>perl/sed/awk</code>: 现代最强 VS 史上最强 (但这次真赢了)</li>
+<li><code>ChatGPT</code>: 吸收天地精华的大模型</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgebb3173" class="outline-2">
+<h2 id="orgebb3173"><span class="section-number-2">9.</span> Acknowledgement</h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li>本文极大程度地引用与参考了 "一生一芯" 计划与南京大学 jyy 老师操作系统课的内容</li>
+</ul>
+
+<p>
+(非常抱歉没有来得及发邮件征求许可就直接上台了，我的问题)
+</p>
+</br>
+</br>
+<hr />
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: mitchell <a href="mailto:mitchell@sdf.org">&lt;mitchell@sdf.org</a>&gt;</p>
+<p class="date">Created: 2025-05-03 Sat 17:33</p>
+</div>
+</body>
+</html>
