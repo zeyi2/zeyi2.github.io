@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-08-22 五 17:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>编译器竞赛总结</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">编译器竞赛总结</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org0f523b7">1. 反思</a></li>
+<li><a href="#org8f60e64">2. 其它</a></li>
+</ul>
+</div>
+</div>
+<p>
+这学期参加了编译系统设计赛，受益匪浅。
+</p>
+
+<p>
+在比赛的初期，我拖延症十分严重，一方面是我之前从来没写过 C++，二是我对基于 SSA 形式的编译器不算非常了解，处于摸黑的状态，尤其是后端优化，这部分的内容在很多的编译原理教材里都被忽略了。现在看来，前期没有能重视一些重要的学习资源，导致整个项目充满着一排脑袋想出来的设计，之后意识到错误时已为时已晚，只能通过各种奇怪的 Hack 来修补，导致整个项目的代码异常 Bloat 且难懂
+</p>
+<div id="outline-container-org0f523b7" class="outline-2">
+<h2 id="org0f523b7"><span class="section-number-2">1.</span> 反思</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><p>
+前端:
+</p>
+
+<p>
+我们没有用手写递归下降的方法，而是使用 <code>Bisonc++</code> 和 <code>Flexc++</code> 直接生成；这部分算是整个项目里写的最清楚的部分，不过 SysY 这个语言从语法上并不算特别复杂(?)，或许自己从头写 Parser 也是可行的？
+</p>
+
+<ul class="org-ul">
+<li>一些相关的参考资料: <i>Parsing Technique</i></li>
+</ul></li>
+
+<li><p>
+中端:
+</p>
+
+<p>
+大部分队伍应该是基于 LLVM IR 来写的，这是一个比较讨巧的做法，因为这样不仅可以很方便地验证前端的正确性(只需要把 emit 出的 IR 文件扔给 clang 看能不能跑出正确的结果就行)，同时在后续优化时也可以和 LLVM 的 Pass 做对比来查看有效性/正确性等，但我们在写基础框架时没有考虑到这一层，我们的 IR 是基于 shecc 这个编译器项目的 IR 修改而成，日后这个设计直接拖累了中端写 Pass 的效率，因为 shecc 是一个教学用编译器，它在开发时没有考虑过写复杂优化的情况(事实上，它的优化只有一些简单的窥孔)，所以为了让它能够进行复杂优化，我们不得不整出很多额外的数据结构来传递这些信息(这其中又使用了大量的 STL 库，导致开不开 -O3 对我们编译器的性能影响很大，总之全是 bad practice)
+</p>
+
+<ul class="org-ul">
+<li>构建 SSA 的算法模仿 LLVM: 先用 Semi-NCA 计算支配树，然后用数据流方程求解活跃性，插 Phi-Node，重命名变量</li>
+<li>现在想想，应该直接用 LLVM IR 或者 Pizlonator SSA 的，这两个设计都是简洁且 robust 的设计，可惜那时候我不知道</li>
+</ul></li>
+
+<li><p>
+后端:
+</p>
+
+<p>
+最大的失误是没有在 SSA-form 下做寄存器分配，同时策略过于简单，导致在复杂优化的情况下会给出异常糟糕的分配结果(例如在循环展开后把循环内变量给 spill 到内存，导致多出一堆内存操作)
+</p>
+
+<ul class="org-ul">
+<li>在 SSA-form 下做寄存器分配有特殊优势：它构建出的冲突图具有特殊的性质，可以在多项式时间内找到解，同时，保留 SSA-form 也可以避免迭代式的解构，让整个寄存器分配变成线性的流程，对降低复杂度和代码量很有帮助</li>
+<li>总结回顾，寄存器分配其实是可以渐进完成的，例如一开始先全部 spill 到栈上，然后 codegen 时用六个寄存器(整数三个，浮点数三个，对应 dest/src0/src1)进行加载，这样首先能保证正确性，我们花费了太多时间在跑通最开始那个糟糕的线性扫描方法，导致后面来不及写新的，更好的分配方式了。</li>
+</ul></li>
+
+<li><p>
+CI:
+</p>
+
+<p>
+写本地测试时，考虑了 QEMU 和 RISCV 硬件的两种评测方式，本来应该是很完善的框架，但最后却把我们坑了，因为主板方不知道那整来的 FPGA 板子的内存操作异常慢，Store 和 Load 的开销很大，但本地模拟器和市面上能买到的 RISCV 硬件不会有这种问题，导致了实际上最大的瓶颈在本地测试时不可见，直接影响是我们决赛时修了两天的中端 Pass，在距离截止时间4小时才发现问题出在内存操作，但此时修已经来不及了
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8f60e64" class="outline-2">
+<h2 id="org8f60e64"><span class="section-number-2">2.</span> 其它</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>中端 Pass 中，GVN/SCCP 很重要，循环分析/规范化很重要，测试用例里有很多循环相关的用例，做了类似 LICM 的特定优化会有很大的提升；以及，由于开发板的内存操作很低效，最好有 SROA 这样的 Pass 把内存操作提升到寄存器赋值，实现后其它 Pass 也能有更多的优化机会，能快不少</li>
+
+<li>后端代码生成时，注意浮点数相关的操作，SysY 只有 32 位的 int 和 float，如果用了 64 位的 Add 操作，需要加一个 sext.w</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-08-22 五 17:33</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
