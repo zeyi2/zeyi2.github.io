@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitchell's Homepage</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style type="text/css">
+/* Based on werc.cat-v.org, suckless.org and garbe.us */
+
+/* General */
+:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #c7d2fe; --header-h: 56px; }
+body {
+    color: #0f172a;            /* dark slate for readability */
+    background-color: #f7fbff; /* subtle blue-tinted background */
+    font-family: sans-serif;
+    font-size: 80%;
+    margin: 0;
+    padding: 0
+}
+
+/* Plan banner (fixed at bottom) */
+#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #dbeafe; color: #1e40af; font-weight: 600; padding: 0 12px; z-index: 1100; text-align: right; }
+body { padding-bottom: var(--plan-banner-h); }
+/* Full-height vertical divider matching the sidebar edge */
+body::before { content: ""; position: fixed; top: var(--header-h); bottom: var(--plan-banner-h); left: var(--sidebar-w); width: 1px; background: var(--divider-color); pointer-events: none; z-index: 900; }
+
+/* Header */
+.header { background-color: #dbeafe; border: 0; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }        /* blue-100 */
+.header a { border: 0; color: #0f172a; text-decoration: none; }
+.midHeader img { border: 0; }
+
+.headerTitle { font-size: 1.6em; font-weight: bold; margin: 0 0 0 0.5em; padding: 0.5em; }
+.headerTitle a { border: 0; text-decoration: none; }
+
+.headerSubtitle { font-size: 0.6em; font-weight: normal; margin-left: 1em; color: #1e40af; } /* blue-800 for contrast */
+
+/* Side (werc-like) */
+#side-bar {
+    width: var(--sidebar-w);
+    float: left;
+    clear: left;
+    border-right: 1px solid #c7d2fe; /* blue-200 */
+    margin: 0;
+    padding: 0;
+    background-color: #eff6ff; /* blue-50 */
+}
+
+#side-bar div { border-bottom: 1px solid #ddd; }
+
+.sideBarTitle { font-weight: bold; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; }
+
+#side-bar ul {
+	list-style-type: none;
+	list-style-position: outside;
+	margin: 0;
+	padding: 0 0 0.3em 0;
+}
+
+li ul { padding-left: 0.6em !important; }
+
+#side-bar li { margin: 0; padding: 0.1ex 0; }
+
+#side-bar a {
+    color: #2563eb; /* blue-600 */
+    background-color: transparent;
+    margin: 0;
+    padding: 0.25em 1ex 0.25em 2mm;
+    display: block;
+    text-transform: capitalize;
+    font-weight: bold !important;
+    font-size: 102%;
+    border-left: #ffffff solid 0.2em;
+}
+
+.thisPage, .thisPage a {
+    color: #0f172a !important;
+    background-color: #ffffff;
+    padding-left: 5mm;
+}
+
+#side-bar a:hover {
+    color: #ffffff;
+    background-color: #1d4ed8; /* blue-700 */
+    border-left: #1e3a8a solid 0.2em; /* blue-900 */
+    text-decoration: none;
+}
+ 
+/* Main Copy (werc-like) */
+#main {
+    max-width: 70em;
+    color: #0f172a;
+    background-color: transparent;
+    text-align: justify;
+    line-height: 1.5em;
+    margin: 0 0 0 var(--sidebar-w);
+    padding: 0.5em 1.5em 2em 1em;
+    border-left: 1px solid #c7d2fe; /* blue-200 */
+}
+
+#main a { color: #2563eb; text-decoration: none; }
+#main a:hover { color: #1d4ed8; text-decoration: underline; }
+#main h1, #main h2 { color: #2563eb; border-bottom: 1px solid #2563eb; padding-bottom: 0.5ex; }
+#main ul { list-style-type: square; }
+
+/* Responsive media */
+#main img, img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Footer */
+#footer {
+    background-color: #e2e8f0; /* slate-200 */
+    color: #0f172a;
+    font-size: 91%;
+    padding: 2em;
+    clear: both;
+}
+
+#footer .left { text-align: left; float: left; clear: left; }
+#footer .right { text-align: right; }
+#footer a { color: #0f172a; text-decoration: none; }
+#footer a:hover { text-decoration: underline; }
+
+abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
+blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
+hr { border-width: 0 0 0.1em 0; border-color: #666; }
+
+code, pre { font-size: 1.1em }
+pre { margin-left: 2em; }
+</style>
+</head>
+<body>
+<div id="plan-banner">The plan fell off.</div>
+<div class="header">
+  <h1 class="headerTitle">
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>回望高天</em></span>
+  </h1>
+</div>
+<div id="side-bar">
+<ul>
+<li><a href="index.html">&rsaquo; .</a></li>
+<li><a href="../index.html">&rsaquo; ..</a></li>
+<li><a href="llvm-roadmap.html" class="thisPage">&raquo;<i> llvm-roadmap</i></a></li>
+</ul>
+</div>
+<div id="main">
+<h1>LLVM 贡献记录</h1>
+<p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
+<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
+<h2>Clang-tidy</h2>
+<h3><code>cert</code> 重构</h3>
+<ul>
+<li>
+Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)
+</li><li>
+Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)
+</li><li>
+Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)
+</li><li>
+Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)
+</li><li>
+Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)
+</li><li>
+Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)
+</li>
+</ul>
+<p>学到了有关 Clang-tidy Checks 的取名方式：</p>
+<blockquote>
+<p>we never used "dont" in check name (thought we can use verbs like "avoid" (avoid-goto etc..))</p>
+<p><code>avoid</code> is used when check category is generic like "cppcoreguidelines" or "readabilty". "bugprone" category means by default that we should avoid some language construct.</p>
+</blockquote>
+<h3>Check Fixes</h3>
+<ul>
+<li>
+Fix <code>readability-container-data-pointer check</code> (<a href="https://github.com/llvm/llvm-project/pull/165636">#165636</a>)
+</li>
+</ul>
+<p>学到了关于代码风格的知识：</p>
+<blockquote>
+<p>Clang 的代码库要求贡献者尽可能为变量加上 <code>const</code></p>
+</blockquote>
+<p>更完整的代码规范在 <a href="https://llvm.org/docs/CodingStandards.html">官网上</a>，不过太长了还没读完。</p>
+<p>我 C++ 水平实在是有点次，该读书了。</p>
+<p>同时在 Review 过程中，@vbvictor 给了一个我写代码时没想到的 false-positive: <a href="https://github.com/llvm/llvm-project/pull/165636#discussion_r2507197041">link</a>，已严肃学习。</p>
+<p>以及 <code>TK_IgnoreUnlessSpelledInSource</code> 和 <code>TK_AsIs</code> 的区别是，前者会忽略编译器隐式生成的节点 (e.g. 默认构造函数、隐式转换)，后者则不会对 AST 做任何过滤。</p>
+<ul>
+<li>
+Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-access</code> (<a href="https://github.com/llvm/llvm-project/pull/167209">#167209</a>)
+</li>
+</ul>
+<p>学习了怎么给 Clang-tidy 的 Check 添加 Option，以后要改/实现类似功能的时候直接翻这个 PR 作参考就行。</p>
+<h3>CI 改进</h3>
+<p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
+<p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
+<h4>Doc Fixes</h4>
+<ul>
+<li>
+Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
+</li><li>
+Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
+</li><li>
+Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
+</li><li>
+Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)
+</li><li>
+Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)
+</li><li>
+Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)
+</li><li>
+Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)
+</li>
+</ul>
+<p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
+<ul>
+<li>
+Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="github.com/llvm/llvm-project/pull/167126">#167126</a>)
+</li>
+</ul>
+<p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
+<h4>检测脚本</h4>
+<ul>
+<li>
+Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)
+</li>
+</ul>
+<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，不幸的是没有人 care，所以大概率这个得拖很久...</p>
+<ul>
+<li>
+Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
+</li>
+</ul>
+<p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
+<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 (什么猴子马戏团)。</p>
+<h1>Clang Static Analyzer</h1>
+<p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
+<ul>
+<li>
+Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https://github.com/llvm/llvm-project/pull/167822">#167822</a>)
+</li>
+</ul>
+<p>@NagyDonat 很贴心地补充了 CSA 中这些 Check 的历史背景：</p>
+<blockquote>
+<p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
+</blockquote>
+<h1>Clang</h1>
+<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Leagcy 解释器添加一些向量指令的支持，不过还没做完：</p>
+<ul>
+<li>
+Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
+</li>
+</ul>
+<p>做完再写。</p>
+
+</div>
+</body>
+</html>
