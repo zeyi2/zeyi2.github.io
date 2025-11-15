@@ -135,7 +135,7 @@ pre { margin-left: 2em; }
 <div id="plan-banner">The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>回望高天</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>living in a simulation</em></span>
   </h1>
 </div>
 <div id="side-bar">
@@ -143,6 +143,8 @@ pre { margin-left: 2em; }
 <li><a href="index.html">&rsaquo; .</a></li>
 <li><a href="../index.html">&rsaquo; ..</a></li>
 <li><a href="llvm-roadmap.html" class="thisPage">&raquo;<i> llvm-roadmap</i></a></li>
+<li><a href="optimizations/index.html">&rsaquo; optimizations</a>
+</li>
 </ul>
 </div>
 <div id="main">
@@ -191,6 +193,12 @@ Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-ac
 </li>
 </ul>
 <p>学习了怎么给 Clang-tidy 的 Check 添加 Option，以后要改/实现类似功能的时候直接翻这个 PR 作参考就行。</p>
+<ul>
+<li>
+Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include</code> (<a href="https://github.com/llvm/llvm-project/pull/168196#issuecomment-3536324291">#168196</a>)
+</li>
+</ul>
+<p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -226,6 +234,9 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </li>
 </ul>
 <p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，不幸的是没有人 care，所以大概率这个得拖很久...</p>
+<p>2025/11/15 更新：</p>
+<p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
+<p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
 <ul>
 <li>
 Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
