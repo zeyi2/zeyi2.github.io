@@ -1,185 +1,18 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mitchell's Homepage</title>
-<link rel="icon" href="/favicon.png" type="image/png">
-<style type="text/css">
-/* Modern minimal theme: airy spacing, vibrant accent */
-
-/* General */
-:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #eef2f7; --header-h: 56px; }
-body {
-  color: #0f172a;
-  background-color: #ffffff;
-  font-family: Inter, "SF Pro Text", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-  font-size: 84%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Plan banner */
-#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #f1f5f9; color: #7c3aed; font-weight: 700; padding: 0 12px; z-index: 1100; text-align: right; letter-spacing: 0.2px; }
-body { padding-bottom: var(--plan-banner-h); }
-body::before { content: ""; position: fixed; top: var(--header-h); bottom: var(--plan-banner-h); left: var(--sidebar-w); width: 1px; background: var(--divider-color); pointer-events: none; z-index: 900; }
-
-/* Header */
-.header { background-color: #ffffff; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); border-bottom: 1px solid #eef2f7; position: sticky; top: 0; z-index: 100; }
-.header a { color: #0f172a; text-decoration: none; }
-.midHeader img { border: 0; }
-.headerTitle { font-size: 1.7em; font-weight: 800; margin: 0 0 0 0.5em; padding: 0.5em; }
-.headerSubtitle { font-size: 0.64em; font-weight: 500; margin-left: 1em; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; }
-
-/* Sidebar */
-#side-bar {
-  width: var(--sidebar-w);
-  float: left;
-  clear: left;
-  border-right: 1px solid #eef2f7;
-  margin: 0;
-  padding: 0;
-  background-color: #fbfdff;
-}
-#side-bar div { border-bottom: 1px solid #f3f5fa; }
-.sideBarTitle { font-weight: 800; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; color: #0f172a; }
-#side-bar ul { list-style: none; margin: 0; padding: 0 0 0.6em 0; }
-li ul { padding-left: 0.6em !important; }
-#side-bar li { margin: 0; padding: 0.15ex 0; }
-#side-bar a {
-  color: #0f172a;
-  background: transparent;
-  margin: 0;
-  padding: 0.5em 1ex 0.5em 2mm;
-  display: block;
-  text-transform: none;
-  font-weight: 700 !important;
-  font-size: 104%;
-  border-left: transparent solid 0.22em;
-  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
-}
-.thisPage, .thisPage a { color: #0f172a !important; background: #f8fafc; padding-left: 5mm; border-left-color: #7c3aed; }
-#side-bar a:hover { color: #7c3aed; background: #f3f0ff; border-left: #7c3aed solid 0.22em; text-decoration: none; }
-
-/* Main */
-#main {
-  max-width: 76em;
-  color: #0f172a;
-  background: transparent;
-  text-align: justify;
-  line-height: 1.7em;
-  margin: 0 0 0 var(--sidebar-w);
-  padding: 1.25em 2.25em 2.75em 1.5em;
-  border-left: 1px solid #eef2f7;
-}
-#main a { color: #7c3aed; text-decoration: none; font-weight: 600; }
-#main a:hover { color: #6d28d9; text-decoration: underline; }
-#main h1, #main h2 { color: #111827; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.4ex; }
-#main ul { list-style-type: disc; }
-
-/* Media */
-#main img, img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 1px 8px rgba(2, 6, 23, 0.08); }
-
-/* Footer */
-#footer { background: #f8fafc; color: #0f172a; font-size: 92%; padding: 2em; clear: both; border-top: 1px solid #eef2f7; }
-#footer .left { text-align: left; float: left; clear: left; }
-#footer .right { text-align: right; }
-#footer a { color: #0f172a; text-decoration: none; }
-#footer a:hover { text-decoration: underline; color: #7c3aed; }
-
-abbr, acronym { border-bottom: 1px dotted #64748b; cursor: help; }
-blockquote { border-left: 3px solid #e2e8f0; font-style: italic; padding: 1em; color: #334155; background: #f8fafc; border-radius: 6px; }
-hr { border: 0; border-bottom: 1px solid #eef2f7; }
-code, pre { font-size: 1.04em; font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-pre { margin-left: 2em; padding: 1em; background: #0b122104; border: 1px solid #eef2f7; border-radius: 8px; overflow: auto; }
-
-</style>
-</head>
-<body>
-<div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
-<div class="header">
-  <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>living in a simulation</em></span>
-  </h1>
-  <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
-    <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
-  </form>
-</div>
-<script>window.SW_BASE="../";</script>
-<script>
-(function(){
-  var q = document.getElementById('sw-q');
-  if(!q) return;
-  var panel = document.createElement('div');
-  panel.id = 'sw-search-panel';
-  panel.style.position = 'fixed';
-  panel.style.top = getComputedStyle(document.body).getPropertyValue('--header-h') || '56px';
-  panel.style.left = getComputedStyle(document.body).getPropertyValue('--sidebar-w') || '0';
-  panel.style.right = '12px';
-  panel.style.maxHeight = '40vh';
-  panel.style.overflow = 'auto';
-  panel.style.padding = '10px 12px';
-  panel.style.border = '1px solid var(--divider-color)';
-  panel.style.background = getComputedStyle(document.getElementById('main')||document.body).backgroundColor || '#fff';
-  panel.style.boxShadow = '0 4px 16px rgba(2,6,23,0.15)';
-  panel.style.display = 'none';
-  panel.style.zIndex = 1200;
-  document.body.appendChild(panel);
-
-  function show(){ panel.style.display='block'; }
-  function hide(){ panel.style.display='none'; }
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hide(); });
-  document.addEventListener('click', function(e){ if(panel.style.display==='none') return; if(!panel.contains(e.target) && e.target!==q) hide(); });
-
-  var cache;
-  async function load(){
-    if(cache) return cache;
-    const res = await fetch((window.SW_BASE||'') + 'search-index.json', {cache:'no-store'});
-    const data = await res.json();
-    data.forEach(d=>{ d._text=(d.title+' '+(d.text||'')).toLowerCase(); });
-    cache = data; return data;
-  }
-  function esc(s){ return (s||'').replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
-  function snippet(text, q){
-    const t=text||''; const qq = q.trim().toLowerCase();
-    if(!qq) return esc(t.slice(0,160))+'...';
-    const i=t.toLowerCase().indexOf(qq);
-    if(i<0) return esc(t.slice(0,160))+'...';
-    const s=Math.max(0,i-60), e=Math.min(t.length,i+100);
-    return (s>0?'...':'') + esc(t.slice(s,i)) + '<mark>'+esc(t.slice(i,i+qq.length))+'</mark>' + esc(t.slice(i+qq.length,e)) + (e<t.length?'...':'');
-  }
-  function render(list, terms){
-    if(!terms.length){ panel.innerHTML=''; hide(); return; }
-    const html = list.map(function(d){
-      var href = (window.SW_BASE||'') + d.url;
-      var snip = snippet(d.text||'', terms.join(' '));
-      return '<div style="margin-bottom:0.8em"><a href="'+href+'"><strong>'+esc(d.title)+'</strong></a><div style="color:#475569">'+snip+'</div></div>';
-    }).join('');
-    panel.innerHTML = html || '<em>No results</em>';
-    show();
-  }
-  async function search(qv){
-    const idx = await load();
-    var terms = (qv||'').toLowerCase().trim().split(/\s+/).filter(Boolean);
-    if(!terms.length){ render([], terms); return; }
-    const res = idx.filter(function(d){ return terms.every(function(t){ return d._text.indexOf(t) !== -1; }); });
-    render(res.slice(0,100), terms);
-  }
-  q.addEventListener('input', function(e){ search(e.target.value); });
-})();
-</script>
-
-<div id="side-bar">
-<ul>
-<li><a href="index.html">&rsaquo; .</a></li>
-<li><a href="../index.html">&rsaquo; ..</a></li>
-<li><a href="llvm-roadmap.html" class="thisPage">&raquo;<i> llvm-roadmap</i></a></li>
-<li><a href="optimizations/index.html">&rsaquo; optimizations</a>
-</li>
-</ul>
-</div>
-<div id="main">
-<h1>LLVM 贡献记录</h1>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mitchell's Homepage</title>
+    <link>https://zeyi2.github.io</link>
+    <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>living in a simulation</description>
+    <lastBuildDate>Sun, 16 Nov 2025 13:30:40 +0800</lastBuildDate>
+    <item>
+      <title>LLVM 贡献记录</title>
+      <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
+      <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
+      <pubDate>Sun, 16 Nov 2025 13:21:59 +0800</pubDate>
+      <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
+      <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
 <p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
 <h2>Clang-tidy</h2>
@@ -293,8 +126,7 @@ Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https
 Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
 </li>
 </ul>
-<p>做完再写。</p>
-
-</div>
-</body>
-</html>
+<p>做完再写。</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>
