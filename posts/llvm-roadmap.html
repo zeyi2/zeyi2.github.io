@@ -6,93 +6,129 @@
 <title>Mitchell's Homepage</title>
 <link rel="icon" href="/favicon.png" type="image/png">
 <style type="text/css">
-/* Modern minimal theme: airy spacing, vibrant accent */
+/* Based on werc.cat-v.org, suckless.org and garbe.us */
 
 /* General */
-:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #eef2f7; --header-h: 56px; }
+:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #c7d2fe; --header-h: 56px; }
 body {
-  color: #0f172a;
-  background-color: #ffffff;
-  font-family: Inter, "SF Pro Text", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-  font-size: 84%;
-  margin: 0;
-  padding: 0;
+    color: #0f172a;            /* dark slate for readability */
+    background-color: #f7fbff; /* subtle blue-tinted background */
+    font-family: sans-serif;
+    font-size: 80%;
+    margin: 0;
+    padding: 0
 }
 
-/* Plan banner */
-#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #f1f5f9; color: #7c3aed; font-weight: 700; padding: 0 12px; z-index: 1100; text-align: right; letter-spacing: 0.2px; }
+/* Plan banner (fixed at bottom) */
+#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #dbeafe; color: #1e40af; font-weight: 600; padding: 0 12px; z-index: 1100; text-align: right; }
 body { padding-bottom: var(--plan-banner-h); }
+/* Full-height vertical divider matching the sidebar edge */
 body::before { content: ""; position: fixed; top: var(--header-h); bottom: var(--plan-banner-h); left: var(--sidebar-w); width: 1px; background: var(--divider-color); pointer-events: none; z-index: 900; }
 
 /* Header */
-.header { background-color: #ffffff; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); border-bottom: 1px solid #eef2f7; position: sticky; top: 0; z-index: 100; }
-.header a { color: #0f172a; text-decoration: none; }
+.header { background-color: #dbeafe; border: 0; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }        /* blue-100 */
+.header a { border: 0; color: #0f172a; text-decoration: none; }
 .midHeader img { border: 0; }
-.headerTitle { font-size: 1.7em; font-weight: 800; margin: 0 0 0 0.5em; padding: 0.5em; }
-.headerSubtitle { font-size: 0.64em; font-weight: 500; margin-left: 1em; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; }
 
-/* Sidebar */
+.headerTitle { font-size: 1.6em; font-weight: bold; margin: 0 0 0 0.5em; padding: 0.5em; }
+.headerTitle a { border: 0; text-decoration: none; }
+
+.headerSubtitle { font-size: 0.6em; font-weight: normal; margin-left: 1em; color: #1e40af; } /* blue-800 for contrast */
+
+/* Side (werc-like) */
 #side-bar {
-  width: var(--sidebar-w);
-  float: left;
-  clear: left;
-  border-right: 1px solid #eef2f7;
-  margin: 0;
-  padding: 0;
-  background-color: #fbfdff;
+    width: var(--sidebar-w);
+    float: left;
+    clear: left;
+    border-right: 1px solid #c7d2fe; /* blue-200 */
+    margin: 0;
+    padding: 0;
+    background-color: #eff6ff; /* blue-50 */
 }
-#side-bar div { border-bottom: 1px solid #f3f5fa; }
-.sideBarTitle { font-weight: 800; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; color: #0f172a; }
-#side-bar ul { list-style: none; margin: 0; padding: 0 0 0.6em 0; }
+
+#side-bar div { border-bottom: 1px solid #ddd; }
+
+.sideBarTitle { font-weight: bold; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; }
+
+#side-bar ul {
+	list-style-type: none;
+	list-style-position: outside;
+	margin: 0;
+	padding: 0 0 0.3em 0;
+}
+
 li ul { padding-left: 0.6em !important; }
-#side-bar li { margin: 0; padding: 0.15ex 0; }
+
+#side-bar li { margin: 0; padding: 0.1ex 0; }
+
 #side-bar a {
-  color: #0f172a;
-  background: transparent;
-  margin: 0;
-  padding: 0.5em 1ex 0.5em 2mm;
-  display: block;
-  text-transform: none;
-  font-weight: 700 !important;
-  font-size: 104%;
-  border-left: transparent solid 0.22em;
-  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+    color: #2563eb; /* blue-600 */
+    background-color: transparent;
+    margin: 0;
+    padding: 0.25em 1ex 0.25em 2mm;
+    display: block;
+    text-transform: capitalize;
+    font-weight: bold !important;
+    font-size: 102%;
+    border-left: #ffffff solid 0.2em;
 }
-.thisPage, .thisPage a { color: #0f172a !important; background: #f8fafc; padding-left: 5mm; border-left-color: #7c3aed; }
-#side-bar a:hover { color: #7c3aed; background: #f3f0ff; border-left: #7c3aed solid 0.22em; text-decoration: none; }
 
-/* Main */
+.thisPage, .thisPage a {
+    color: #0f172a !important;
+    background-color: #ffffff;
+    padding-left: 5mm;
+}
+
+#side-bar a:hover {
+    color: #ffffff;
+    background-color: #1d4ed8; /* blue-700 */
+    border-left: #1e3a8a solid 0.2em; /* blue-900 */
+    text-decoration: none;
+}
+ 
+/* Main Copy (werc-like) */
 #main {
-  max-width: 76em;
-  color: #0f172a;
-  background: transparent;
-  text-align: justify;
-  line-height: 1.7em;
-  margin: 0 0 0 var(--sidebar-w);
-  padding: 1.25em 2.25em 2.75em 1.5em;
-  border-left: 1px solid #eef2f7;
+    max-width: 70em;
+    color: #0f172a;
+    background-color: transparent;
+    text-align: justify;
+    line-height: 1.5em;
+    margin: 0 0 0 var(--sidebar-w);
+    padding: 0.5em 1.5em 2em 1em;
+    border-left: 1px solid #c7d2fe; /* blue-200 */
 }
-#main a { color: #7c3aed; text-decoration: none; font-weight: 600; }
-#main a:hover { color: #6d28d9; text-decoration: underline; }
-#main h1, #main h2 { color: #111827; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.4ex; }
-#main ul { list-style-type: disc; }
 
-/* Media */
-#main img, img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 1px 8px rgba(2, 6, 23, 0.08); }
+#main a { color: #2563eb; text-decoration: none; }
+#main a:hover { color: #1d4ed8; text-decoration: underline; }
+#main h1, #main h2 { color: #2563eb; border-bottom: 1px solid #2563eb; padding-bottom: 0.5ex; }
+#main ul { list-style-type: square; }
+
+/* Responsive media */
+#main img, img {
+    max-width: 100%;
+    height: auto;
+}
 
 /* Footer */
-#footer { background: #f8fafc; color: #0f172a; font-size: 92%; padding: 2em; clear: both; border-top: 1px solid #eef2f7; }
+#footer {
+    background-color: #e2e8f0; /* slate-200 */
+    color: #0f172a;
+    font-size: 91%;
+    padding: 2em;
+    clear: both;
+}
+
 #footer .left { text-align: left; float: left; clear: left; }
 #footer .right { text-align: right; }
 #footer a { color: #0f172a; text-decoration: none; }
-#footer a:hover { text-decoration: underline; color: #7c3aed; }
+#footer a:hover { text-decoration: underline; }
 
-abbr, acronym { border-bottom: 1px dotted #64748b; cursor: help; }
-blockquote { border-left: 3px solid #e2e8f0; font-style: italic; padding: 1em; color: #334155; background: #f8fafc; border-radius: 6px; }
-hr { border: 0; border-bottom: 1px solid #eef2f7; }
-code, pre { font-size: 1.04em; font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-pre { margin-left: 2em; padding: 1em; background: #0b122104; border: 1px solid #eef2f7; border-radius: 8px; overflow: auto; }
+abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
+blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
+hr { border-width: 0 0 0.1em 0; border-color: #666; }
 
+code, pre { font-size: 1.1em }
+pre { margin-left: 2em; }
 </style>
 </head>
 <body>
@@ -230,6 +266,18 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 </li>
 </ul>
 <p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
+<blockquote>
+<p>2025/11/17 Update:</p>
+<p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+</blockquote>
+<ul>
+<li>
+<p>Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)</p>
+</li>
+</ul>
+<p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
+<p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
+<p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -265,12 +313,14 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </li>
 </ul>
 <p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，不幸的是没有人 care，所以大概率这个得拖很久...</p>
-<p>2025/11/15 更新：</p>
+<blockquote>
+<p>2025/11/15 Update:</p>
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+</blockquote>
 <ul>
 <li>
-Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
+<p>Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)</p>
 </li>
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>

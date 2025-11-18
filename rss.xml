@@ -5,12 +5,12 @@
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
     <description>living in a simulation</description>
-    <lastBuildDate>Sun, 16 Nov 2025 13:30:40 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 18 Nov 2025 20:04:04 +0800</lastBuildDate>
     <item>
       <title>LLVM 贡献记录</title>
       <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Sun, 16 Nov 2025 13:21:59 +0800</pubDate>
+      <pubDate>Tue, 18 Nov 2025 19:44:22 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -63,6 +63,18 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 </li>
 </ul>
 <p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
+<blockquote>
+<p>2025/11/17 Update:</p>
+<p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+</blockquote>
+<ul>
+<li>
+<p>Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)</p>
+</li>
+</ul>
+<p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
+<p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
+<p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -98,12 +110,14 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </li>
 </ul>
 <p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，不幸的是没有人 care，所以大概率这个得拖很久...</p>
-<p>2025/11/15 更新：</p>
+<blockquote>
+<p>2025/11/15 Update:</p>
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+</blockquote>
 <ul>
 <li>
-Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
+<p>Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)</p>
 </li>
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
