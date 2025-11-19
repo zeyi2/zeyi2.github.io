@@ -5,12 +5,163 @@
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
     <description>living in a simulation</description>
-    <lastBuildDate>Tue, 18 Nov 2025 20:04:04 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 19 Nov 2025 18:47:41 +0800</lastBuildDate>
+    <item>
+      <title>LLVM Coding Standard, in a nutshell</title>
+      <link>https://zeyi2.github.io/posts/coding-standard.html</link>
+      <guid>https://zeyi2.github.io/posts/coding-standard.html</guid>
+      <pubDate>Wed, 19 Nov 2025 18:47:39 +0800</pubDate>
+      <description> LLVM Coding Standard, in a nutshell Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节 以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了</description>
+      <content:encoded><![CDATA[<h1>LLVM Coding Standard, in a nutshell</h1>
+<blockquote>
+<p>Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节</p>
+<p>以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了。</p>
+</blockquote>
+<p><strong>References</strong>:</p>
+<ul>
+<li>
+<p><a href="llvm.org/docs/ProgrammersManual.html">LLVM Programmer’s Manual</a></p>
+</li><li>
+<p><a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a></p>
+</li>
+</ul>
+<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
+<h2>The Golden Rule</h2>
+<p><strong>If you are extending, enhancing, or bug fixing already implemented code, use the style that is already being used so that the source is uniform and easy to follow.</strong></p>
+<p>You should refer to typical files in the repo when reviewing user's code. (e.g. <code>grep -rn *.cpp</code>)</p>
+<h2>Formatting</h2>
+<p>Run these commands after making changes/ before starting code review:</p>
+<ul>
+<li>
+Python: <code>darker -r HEAD^ $(git diff --name-only --diff-filter=d HEAD^)</code>
+</li><li>
+C++: <code>git clang-format HEAD~1</code>
+</li>
+</ul>
+<p>Fix/Report issues if linter failed.</p>
+<h2>Comments</h2>
+<ul>
+<li>
+C++: <code>//</code> for normal comments, <code>///</code> for doxygen
+</li><li>
+C: Maintain C89 compatibility
+</li>
+</ul>
+<h2>Whitespace</h2>
+<p><strong>No trailing whitespaces</strong></p>
+<h2>Casts</h2>
+<ul>
+<li>
+No <strong>RTTI</strong> or <strong>Exceptions</strong>: <code>dynamic_cast&lt;></code> not allowed
+</li><li>
+Handrolled <code>isa&lt;>, cast&lt;>, and dyn_cast&lt;></code> is allowed
+</li><li>
+Prefer <code>static_cast, reinterpret_cast, const_cast</code>
+</li>
+</ul>
+<h2><code>class</code> and <code>struct</code></h2>
+<ul>
+<li>
+<code>struct</code> should be used when all members are declared public.
+</li><li>
+All declarations and definitions of a given <code>class</code> or <code>struct</code> must use the same keyword.
+</li>
+</ul>
+<h2><code>auto</code></h2>
+<ul>
+<li>
+Use <code>auto</code>, but be aware of unnecessary copies (e.g. range-based <code>for</code> loops, use <code>auto &amp;/*</code>)
+</li>
+</ul>
+<h2><code>#include</code> as Little as Possible</h2>
+<ul>
+<li>
+Less include means less code, means faster compile time/binary size/speed.
+</li><li>
+This one is <strong>very very important</strong>, you should <strong>never forget it</strong>.
+</li><li>
+<strong>Double check when reviewing/writing code.</strong>
+</li>
+</ul>
+<h2><code>continue</code> and Early Exits</h2>
+<ul>
+<li>
+To simplify code.
+</li>
+</ul>
+<h2>No Predicate Loops, use Predicate Functions</h2>
+<h2>Miscs</h2>
+<ul>
+<li>
+No Static Constructors
+</li><li>
+Don't use Braced Initializer Lists to Call a Constructor (C++11)
+</li><li>
+<strong>Always check if user's <code>git branch</code> name is ideal, rename when necessary.</strong>
+</li>
+</ul>
+<h2>Naming</h2>
+<p>Always check inconsistent naming when reviewing/writing code:</p>
+<ul>
+<li>
+Type: start with an upper-case letter
+</li><li>
+Var: camel case, start with an upper-case letter
+</li><li>
+Func: imperative, verb phrases, camel case, start with a lowercase letter
+</li><li>
+Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kind</code> Suffix, otherwise align with <code>Type</code>
+</li>
+</ul>
+<p><strong>Exception:</strong> classes that mimic STL classes can have member names in STL’s style of lowercase words separated by underscores.</p>
+<h2>Assert</h2>
+<ul>
+<li>
+<strong>Use the "assert" macro to its fullest.</strong>
+</li>
+</ul>
+<p>Also, see <code>llvm_unreachable</code></p>
+<h2>Forbidden usage</h2>
+<ul>
+<li>
+<code>using namespace std</code>
+</li><li>
+<code>#include &lt;iostream></code>: use <code>llvm::MemoryBuffer</code>
+</li>
+</ul>
+<h2>Omit braces when possible</h2>
+<h2>Check UNIX newline at EOF</h2>
+<h2>Preferred APIs</h2>
+<p><strong>Please remember the #include rule</strong></p>
+<ul>
+<li>
+<code>StringRef</code> when handling <code>std::string</code>
+</li><li>
+<code>Error</code> as replacement to <code>Exception</code>/<code>std::error_code</code>
+</li><li>
+<code>llvm::ArrayRef</code>, <code>TinyPtrVector</code>, <code>SmallVector</code> over <code>std::vector/list</code>
+</li><li>
+Never use <code>&lt;list></code> to avoid heap allocation (extremely high constant factor).
+</li><li>
+Sets: <code>SmallSet</code>, <code>SmallPtrSet</code>, <code>StringSet</code>, <code>DenseSet</code>, <code>RadixTree</code>, <code>SparseSet</code>, <code>FoldingSet</code>..
+</li><li>
+Avoid <code>&lt;set></code>: malloc intensive, large per-element space overhead)
+</li><li>
+Map: <code>StringMap</code>, <code>IndexedMap</code>, <code>DenseMap</code>, <code>ValueMap</code>
+</li><li>
+Avoid <code>&lt;map></code>: large constant factor
+</li><li>
+Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc intensive
+</li><li>
+Avoid <code>std::vector&lt;bool></code>.
+</li>
+</ul>]]></content:encoded>
+    </item>
     <item>
       <title>LLVM 贡献记录</title>
       <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Tue, 18 Nov 2025 19:44:22 +0800</pubDate>
+      <pubDate>Wed, 19 Nov 2025 18:44:04 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -66,6 +217,9 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <blockquote>
 <p>2025/11/17 Update:</p>
 <p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+<p>2025/11/19 Update:</p>
+<p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
+<p>似乎 Ready to merge :)</p>
 </blockquote>
 <ul>
 <li>
@@ -75,6 +229,10 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
 <p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
 <p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+</blockquote>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -84,6 +242,8 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
 </li><li>
 Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
+</li><li>
+Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
 </li><li>
 Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
 </li><li>
@@ -103,6 +263,10 @@ Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href
 </li>
 </ul>
 <p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
+</blockquote>
 <h4>检测脚本</h4>
 <ul>
 <li>
@@ -114,6 +278,8 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 <p>2025/11/15 Update:</p>
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+<p>2025/11/19 Update:</p>
+<p>先 Close 了，有空再看。</p>
 </blockquote>
 <ul>
 <li>
@@ -122,6 +288,11 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
 <p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 (什么猴子马戏团)。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
+<p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
+</blockquote>
 <h1>Clang Static Analyzer</h1>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>

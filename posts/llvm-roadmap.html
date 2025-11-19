@@ -209,6 +209,7 @@ pre { margin-left: 2em; }
 <ul>
 <li><a href="index.html">&rsaquo; .</a></li>
 <li><a href="../index.html">&rsaquo; ..</a></li>
+<li><a href="coding-standard.html">&rsaquo; coding-standard</a></li>
 <li><a href="llvm-roadmap.html" class="thisPage">&raquo;<i> llvm-roadmap</i></a></li>
 <li><a href="optimizations/index.html">&rsaquo; optimizations</a>
 </li>
@@ -269,6 +270,9 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <blockquote>
 <p>2025/11/17 Update:</p>
 <p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+<p>2025/11/19 Update:</p>
+<p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
+<p>似乎 Ready to merge :)</p>
 </blockquote>
 <ul>
 <li>
@@ -278,6 +282,10 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
 <p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
 <p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+</blockquote>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -287,6 +295,8 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
 </li><li>
 Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
+</li><li>
+Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
 </li><li>
 Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
 </li><li>
@@ -306,6 +316,10 @@ Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href
 </li>
 </ul>
 <p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
+</blockquote>
 <h4>检测脚本</h4>
 <ul>
 <li>
@@ -317,6 +331,8 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 <p>2025/11/15 Update:</p>
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+<p>2025/11/19 Update:</p>
+<p>先 Close 了，有空再看。</p>
 </blockquote>
 <ul>
 <li>
@@ -325,6 +341,11 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
 <p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 (什么猴子马戏团)。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
+<p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
+</blockquote>
 <h1>Clang Static Analyzer</h1>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>
