@@ -127,15 +127,78 @@ abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
 blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
 hr { border-width: 0 0 0.1em 0; border-color: #666; }
 
-code, pre { font-size: 1.1em }
-pre { margin-left: 2em; }
+code, pre { font-family: 'Courier New', Courier, monospace; font-size: 1.1em; }
+pre {
+    background-color: #f8fafc; /* slate-50 */
+    border: 1px solid #e2e8f0; /* slate-200 */
+    border-radius: 8px;
+    padding: 1em;
+    overflow-x: auto;
+}
+pre > code {
+    font-size: 1em;
+}
+
+/* Spoiler text */
+.spoiler {
+    background-color: #0f172a;
+    color: #0f172a;
+    padding: 0 3px;
+    border-radius: 3px;
+    transition: color 0.15s ease-in-out;
+}
+.spoiler:hover {
+    color: #f7fbff;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+th, td {
+    border: 1px solid #c7d2fe; /* --divider-color */
+    padding: 0.5em;
+    text-align: left;
+}
+thead {
+    background-color: #eff6ff; /* blue-50 */
+}
+
+/* Task list items */
+li.task-list-item {
+    list-style-type: none; /* Remove default bullet point */
+    margin-left: -20px; /* Adjust as needed to align with other list items */
+}
+
+li.task-list-item input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and text */
+    vertical-align: middle; /* Align checkbox with text baseline */
+}
+
+/* Footnotes */
+.footnotes {
+    font-size: 0.9em;
+    color: #475569; /* slate-600 */
+}
+.footnotes ol {
+    padding-left: 20px;
+}
+.footnotes li {
+    margin-bottom: 0.5em;
+}
+.footnotes a {
+    text-decoration: none;
+}
 </style>
 </head>
 <body>
+<img src="../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; width: 500px; z-index: 1000; opacity: 0.5;"/>
 <div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>living in a simulation</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>the front fell off</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -227,7 +290,68 @@ pre { margin-left: 2em; }
 <h2>关于网站：</h2>
 <p>这次 Blog 翻修参考了 <a href="https://werc.cat-v.org/">werc</a> 的设计，很可惜的是我没时间维护服务器，所以还是用静态页面生成的方式。</p>
 <p>以及 Markdown Parser 怎么这么难写，前前后后折腾了一周才搓出来个勉强能用的。</p>
+<blockquote>
+<p>2025/11/20 Update:</p>
+<p>在经历了和 AWK 斗智斗勇的两个小时后，现在我的博客总算支持：</p>
+</blockquote>
+<ul>
+<li class="task-list-item"><input type="checkbox" checked disabled>
+<del>删除线</del>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled>
+<span class="spoiler">你知道的太多了.jpg</span>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled>
+代码块 <sup><a href="#fn-1" id="fnref-1">1</a></sup>
+<pre><code class="language-c">
+#include &lt;stdio.h>
+<strong>int</strong> main() {
+    <strong>return</strong> 0;
+}
+</code></pre>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled>
+脚注 <sup><a href="#fn-2" id="fnref-2">2</a></sup>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled>
+表格
+<table>
+<thead>
+<tr>
+<th> Header 1</th>
+<th>Header 2</th>
+<th>Header 3 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> Row 1 Col 1</td>
+<td>Row 1 Col 2</td>
+<td>Row 1 Col 3 </td>
+</tr>
+<tr>
+<td> Row 2 Col 1</td>
+<td>Row 2 Col 2</td>
+<td>Row 2 Col 3 </td>
+</tr>
+<tr>
+<td> Row 3 Col 1</td>
+<td>Row 3 Col 2</td>
+<td>Row 3 Col 3 </td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>像这样。</p>
 
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn-1">但是高亮没有完整支持，哭 <a href="#fnref-1">↩</a></li>
+<li id="fn-2"><strong><em><a href="https://zeyi2.github.io/">而且支持链接</a></em></strong> <a href="#fnref-2">↩</a></li>
+</ol>
+</div>
 </div>
 </body>
 </html>

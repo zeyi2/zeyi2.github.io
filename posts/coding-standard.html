@@ -127,15 +127,78 @@ abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
 blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
 hr { border-width: 0 0 0.1em 0; border-color: #666; }
 
-code, pre { font-size: 1.1em }
-pre { margin-left: 2em; }
+code, pre { font-family: 'Courier New', Courier, monospace; font-size: 1.1em; }
+pre {
+    background-color: #f8fafc; /* slate-50 */
+    border: 1px solid #e2e8f0; /* slate-200 */
+    border-radius: 8px;
+    padding: 1em;
+    overflow-x: auto;
+}
+pre > code {
+    font-size: 1em;
+}
+
+/* Spoiler text */
+.spoiler {
+    background-color: #0f172a;
+    color: #0f172a;
+    padding: 0 3px;
+    border-radius: 3px;
+    transition: color 0.15s ease-in-out;
+}
+.spoiler:hover {
+    color: #f7fbff;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+th, td {
+    border: 1px solid #c7d2fe; /* --divider-color */
+    padding: 0.5em;
+    text-align: left;
+}
+thead {
+    background-color: #eff6ff; /* blue-50 */
+}
+
+/* Task list items */
+li.task-list-item {
+    list-style-type: none; /* Remove default bullet point */
+    margin-left: -20px; /* Adjust as needed to align with other list items */
+}
+
+li.task-list-item input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and text */
+    vertical-align: middle; /* Align checkbox with text baseline */
+}
+
+/* Footnotes */
+.footnotes {
+    font-size: 0.9em;
+    color: #475569; /* slate-600 */
+}
+.footnotes ol {
+    padding-left: 20px;
+}
+.footnotes li {
+    margin-bottom: 0.5em;
+}
+.footnotes a {
+    text-decoration: none;
+}
 </style>
 </head>
 <body>
+<img src="../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; width: 500px; z-index: 1000; opacity: 0.5;"/>
 <div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>living in a simulation</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>the trolling business</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -224,9 +287,10 @@ pre { margin-left: 2em; }
 <p><strong>References</strong>:</p>
 <ul>
 <li>
-<p><a href="llvm.org/docs/ProgrammersManual.html">LLVM Programmer’s Manual</a></p>
-</li><li>
-<p><a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a></p>
+<a href="https://llvm.org/docs/ProgrammersManual.html">LLVM Programmer's Manual</a>
+</li>
+<li>
+<a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a>
 </li>
 </ul>
 <p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
@@ -238,7 +302,8 @@ pre { margin-left: 2em; }
 <ul>
 <li>
 Python: <code>darker -r HEAD^ $(git diff --name-only --diff-filter=d HEAD^)</code>
-</li><li>
+</li>
+<li>
 C++: <code>git clang-format HEAD~1</code>
 </li>
 </ul>
@@ -247,7 +312,8 @@ C++: <code>git clang-format HEAD~1</code>
 <ul>
 <li>
 C++: <code>//</code> for normal comments, <code>///</code> for doxygen
-</li><li>
+</li>
+<li>
 C: Maintain C89 compatibility
 </li>
 </ul>
@@ -257,9 +323,11 @@ C: Maintain C89 compatibility
 <ul>
 <li>
 No <strong>RTTI</strong> or <strong>Exceptions</strong>: <code>dynamic_cast&lt;></code> not allowed
-</li><li>
+</li>
+<li>
 Handrolled <code>isa&lt;>, cast&lt;>, and dyn_cast&lt;></code> is allowed
-</li><li>
+</li>
+<li>
 Prefer <code>static_cast, reinterpret_cast, const_cast</code>
 </li>
 </ul>
@@ -267,7 +335,8 @@ Prefer <code>static_cast, reinterpret_cast, const_cast</code>
 <ul>
 <li>
 <code>struct</code> should be used when all members are declared public.
-</li><li>
+</li>
+<li>
 All declarations and definitions of a given <code>class</code> or <code>struct</code> must use the same keyword.
 </li>
 </ul>
@@ -281,9 +350,11 @@ Use <code>auto</code>, but be aware of unnecessary copies (e.g. range-based <cod
 <ul>
 <li>
 Less include means less code, means faster compile time/binary size/speed.
-</li><li>
+</li>
+<li>
 This one is <strong>very very important</strong>, you should <strong>never forget it</strong>.
-</li><li>
+</li>
+<li>
 <strong>Double check when reviewing/writing code.</strong>
 </li>
 </ul>
@@ -298,9 +369,11 @@ To simplify code.
 <ul>
 <li>
 No Static Constructors
-</li><li>
+</li>
+<li>
 Don't use Braced Initializer Lists to Call a Constructor (C++11)
-</li><li>
+</li>
+<li>
 <strong>Always check if user's <code>git branch</code> name is ideal, rename when necessary.</strong>
 </li>
 </ul>
@@ -309,11 +382,14 @@ Don't use Braced Initializer Lists to Call a Constructor (C++11)
 <ul>
 <li>
 Type: start with an upper-case letter
-</li><li>
+</li>
+<li>
 Var: camel case, start with an upper-case letter
-</li><li>
+</li>
+<li>
 Func: imperative, verb phrases, camel case, start with a lowercase letter
-</li><li>
+</li>
+<li>
 Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kind</code> Suffix, otherwise align with <code>Type</code>
 </li>
 </ul>
@@ -329,7 +405,8 @@ Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kin
 <ul>
 <li>
 <code>using namespace std</code>
-</li><li>
+</li>
+<li>
 <code>#include &lt;iostream></code>: use <code>llvm::MemoryBuffer</code>
 </li>
 </ul>
@@ -340,23 +417,32 @@ Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kin
 <ul>
 <li>
 <code>StringRef</code> when handling <code>std::string</code>
-</li><li>
+</li>
+<li>
 <code>Error</code> as replacement to <code>Exception</code>/<code>std::error_code</code>
-</li><li>
+</li>
+<li>
 <code>llvm::ArrayRef</code>, <code>TinyPtrVector</code>, <code>SmallVector</code> over <code>std::vector/list</code>
-</li><li>
+</li>
+<li>
 Never use <code>&lt;list></code> to avoid heap allocation (extremely high constant factor).
-</li><li>
+</li>
+<li>
 Sets: <code>SmallSet</code>, <code>SmallPtrSet</code>, <code>StringSet</code>, <code>DenseSet</code>, <code>RadixTree</code>, <code>SparseSet</code>, <code>FoldingSet</code>..
-</li><li>
+</li>
+<li>
 Avoid <code>&lt;set></code>: malloc intensive, large per-element space overhead)
-</li><li>
+</li>
+<li>
 Map: <code>StringMap</code>, <code>IndexedMap</code>, <code>DenseMap</code>, <code>ValueMap</code>
-</li><li>
+</li>
+<li>
 Avoid <code>&lt;map></code>: large constant factor
-</li><li>
+</li>
+<li>
 Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc intensive
-</li><li>
+</li>
+<li>
 Avoid <code>std::vector&lt;bool></code>.
 </li>
 </ul>

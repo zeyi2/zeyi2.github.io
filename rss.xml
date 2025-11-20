@@ -4,13 +4,13 @@
     <title>Mitchell's Homepage</title>
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>living in a simulation</description>
-    <lastBuildDate>Wed, 19 Nov 2025 18:47:41 +0800</lastBuildDate>
+    <description>The Internet is not for sissies.</description>
+    <lastBuildDate>Thu, 20 Nov 2025 19:28:09 +0800</lastBuildDate>
     <item>
       <title>LLVM Coding Standard, in a nutshell</title>
       <link>https://zeyi2.github.io/posts/coding-standard.html</link>
       <guid>https://zeyi2.github.io/posts/coding-standard.html</guid>
-      <pubDate>Wed, 19 Nov 2025 18:47:39 +0800</pubDate>
+      <pubDate>Thu, 20 Nov 2025 19:27:25 +0800</pubDate>
       <description> LLVM Coding Standard, in a nutshell Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节 以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了</description>
       <content:encoded><![CDATA[<h1>LLVM Coding Standard, in a nutshell</h1>
 <blockquote>
@@ -20,9 +20,10 @@
 <p><strong>References</strong>:</p>
 <ul>
 <li>
-<p><a href="llvm.org/docs/ProgrammersManual.html">LLVM Programmer’s Manual</a></p>
-</li><li>
-<p><a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a></p>
+<a href="https://llvm.org/docs/ProgrammersManual.html">LLVM Programmer's Manual</a>
+</li>
+<li>
+<a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a>
 </li>
 </ul>
 <p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
@@ -34,7 +35,8 @@
 <ul>
 <li>
 Python: <code>darker -r HEAD^ $(git diff --name-only --diff-filter=d HEAD^)</code>
-</li><li>
+</li>
+<li>
 C++: <code>git clang-format HEAD~1</code>
 </li>
 </ul>
@@ -43,7 +45,8 @@ C++: <code>git clang-format HEAD~1</code>
 <ul>
 <li>
 C++: <code>//</code> for normal comments, <code>///</code> for doxygen
-</li><li>
+</li>
+<li>
 C: Maintain C89 compatibility
 </li>
 </ul>
@@ -53,9 +56,11 @@ C: Maintain C89 compatibility
 <ul>
 <li>
 No <strong>RTTI</strong> or <strong>Exceptions</strong>: <code>dynamic_cast&lt;></code> not allowed
-</li><li>
+</li>
+<li>
 Handrolled <code>isa&lt;>, cast&lt;>, and dyn_cast&lt;></code> is allowed
-</li><li>
+</li>
+<li>
 Prefer <code>static_cast, reinterpret_cast, const_cast</code>
 </li>
 </ul>
@@ -63,7 +68,8 @@ Prefer <code>static_cast, reinterpret_cast, const_cast</code>
 <ul>
 <li>
 <code>struct</code> should be used when all members are declared public.
-</li><li>
+</li>
+<li>
 All declarations and definitions of a given <code>class</code> or <code>struct</code> must use the same keyword.
 </li>
 </ul>
@@ -77,9 +83,11 @@ Use <code>auto</code>, but be aware of unnecessary copies (e.g. range-based <cod
 <ul>
 <li>
 Less include means less code, means faster compile time/binary size/speed.
-</li><li>
+</li>
+<li>
 This one is <strong>very very important</strong>, you should <strong>never forget it</strong>.
-</li><li>
+</li>
+<li>
 <strong>Double check when reviewing/writing code.</strong>
 </li>
 </ul>
@@ -94,9 +102,11 @@ To simplify code.
 <ul>
 <li>
 No Static Constructors
-</li><li>
+</li>
+<li>
 Don't use Braced Initializer Lists to Call a Constructor (C++11)
-</li><li>
+</li>
+<li>
 <strong>Always check if user's <code>git branch</code> name is ideal, rename when necessary.</strong>
 </li>
 </ul>
@@ -105,11 +115,14 @@ Don't use Braced Initializer Lists to Call a Constructor (C++11)
 <ul>
 <li>
 Type: start with an upper-case letter
-</li><li>
+</li>
+<li>
 Var: camel case, start with an upper-case letter
-</li><li>
+</li>
+<li>
 Func: imperative, verb phrases, camel case, start with a lowercase letter
-</li><li>
+</li>
+<li>
 Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kind</code> Suffix, otherwise align with <code>Type</code>
 </li>
 </ul>
@@ -125,7 +138,8 @@ Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kin
 <ul>
 <li>
 <code>using namespace std</code>
-</li><li>
+</li>
+<li>
 <code>#include &lt;iostream></code>: use <code>llvm::MemoryBuffer</code>
 </li>
 </ul>
@@ -136,23 +150,32 @@ Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kin
 <ul>
 <li>
 <code>StringRef</code> when handling <code>std::string</code>
-</li><li>
+</li>
+<li>
 <code>Error</code> as replacement to <code>Exception</code>/<code>std::error_code</code>
-</li><li>
+</li>
+<li>
 <code>llvm::ArrayRef</code>, <code>TinyPtrVector</code>, <code>SmallVector</code> over <code>std::vector/list</code>
-</li><li>
+</li>
+<li>
 Never use <code>&lt;list></code> to avoid heap allocation (extremely high constant factor).
-</li><li>
+</li>
+<li>
 Sets: <code>SmallSet</code>, <code>SmallPtrSet</code>, <code>StringSet</code>, <code>DenseSet</code>, <code>RadixTree</code>, <code>SparseSet</code>, <code>FoldingSet</code>..
-</li><li>
+</li>
+<li>
 Avoid <code>&lt;set></code>: malloc intensive, large per-element space overhead)
-</li><li>
+</li>
+<li>
 Map: <code>StringMap</code>, <code>IndexedMap</code>, <code>DenseMap</code>, <code>ValueMap</code>
-</li><li>
+</li>
+<li>
 Avoid <code>&lt;map></code>: large constant factor
-</li><li>
+</li>
+<li>
 Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc intensive
-</li><li>
+</li>
+<li>
 Avoid <code>std::vector&lt;bool></code>.
 </li>
 </ul>]]></content:encoded>
@@ -161,7 +184,7 @@ Avoid <code>std::vector&lt;bool></code>.
       <title>LLVM 贡献记录</title>
       <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Wed, 19 Nov 2025 18:44:04 +0800</pubDate>
+      <pubDate>Thu, 20 Nov 2025 19:26:38 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -171,15 +194,20 @@ Avoid <code>std::vector&lt;bool></code>.
 <ul>
 <li>
 Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)
-</li><li>
+</li>
+<li>
 Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)
-</li><li>
+</li>
+<li>
 Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)
-</li><li>
+</li>
+<li>
 Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)
-</li><li>
+</li>
+<li>
 Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)
-</li><li>
+</li>
+<li>
 Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)
 </li>
 </ul>
@@ -219,11 +247,11 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
 <p>2025/11/19 Update:</p>
 <p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
-<p>似乎 Ready to merge :)</p>
+<p><del>似乎 Ready to merge :)</del> <em><strong>合了</strong></em></p>
 </blockquote>
 <ul>
 <li>
-<p>Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)</p>
+Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)
 </li>
 </ul>
 <p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
@@ -240,20 +268,30 @@ Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include<
 <ul>
 <li>
 Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
-</li><li>
+</li>
+<li>
 Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
-</li><li>
+</li>
+<li>
 Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
-</li><li>
+</li>
+<li>
 Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
-</li><li>
+</li>
+<li>
 Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)
-</li><li>
+</li>
+<li>
 Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)
-</li><li>
+</li>
+<li>
 Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)
-</li><li>
+</li>
+<li>
 Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)
+</li>
+<li>
+Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https://github.com/llvm/llvm-project/pull/168722">#168722</a>)
 </li>
 </ul>
 <p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
@@ -271,11 +309,11 @@ Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href
 <ul>
 <li>
 Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)
+<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，<del>不幸的是没有人 care，所以大概率这个得拖很久...</del></p>
 </li>
 </ul>
-<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，不幸的是没有人 care，所以大概率这个得拖很久...</p>
 <blockquote>
-<p>2025/11/15 Update:</p>
+2025/11/15 Update:
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
 <p>2025/11/19 Update:</p>
@@ -283,16 +321,41 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </blockquote>
 <ul>
 <li>
-<p>Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)</p>
+Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
 </li>
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
-<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 (什么猴子马戏团)。</p>
+<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 <span class="spoiler">(什么猴子马戏团)</span>。 </p>
 <blockquote>
 <p>2025/11/19 Update:</p>
 <p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
 <p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
 </blockquote>
+<ul>
+<li>
+Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://github.com/llvm/llvm-project/pull/168827">#168827</a>)
+</li>
+</ul>
+<p>尝试把 <code>doc8</code> 集成到 LLVM 的 CI 里，一边和 Gemini 吵架一边写代码，开了 PR 以后悲剧地发现 Premerge CI 里不会触发新的 Dockerfile 构建，为了先证明这玩意能跑，于是写出了以下<strong>逆天</strong>内容：</p>
+<pre><code class="language-yml">
+      - name: Install linter dependencies
+        run: |
+          pip install doc8 --break-system-packages
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+</code></pre>
+<p><span class="spoiler">可怕吗，是的很可怕</span> </p>
+<p>事实证明这玩意确实能跑：</p>
+<pre><code class="language-bash">
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:99: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:100: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:105: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:106: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:107: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:111: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:112: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
+</code></pre>
+<p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
 <h1>Clang Static Analyzer</h1>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>
