@@ -191,14 +191,54 @@ li.task-list-item input[type="checkbox"] {
 .footnotes a {
     text-decoration: none;
 }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  :root { --sidebar-w: 12em; }
+  #hdr-search input { min-width: auto; width: 18em; }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 0;
+    --plan-banner-h: 32px;
+  }
+  body::before { display: none; }
+  /* Watermark image tuning on small screens */
+  #bg-watermark,
+  body > img[src$="images/bg.png"] {
+    width: 40vw !important;
+    max-width: 220px !important;
+    right: 8px !important;
+    bottom: calc(var(--plan-banner-h) + 8px) !important;
+    opacity: 0.35 !important;
+  }
+  .header { flex-wrap: wrap; }
+  .headerTitle { font-size: 1.3em; padding: 0.5em 0.5em 0.25em; }
+  .headerSubtitle { font-size: 0.7em; }
+  #hdr-search { width: 100%; padding: 0 0.5rem 0.5rem; }
+  #hdr-search input { min-width: 0; width: 100%; }
+
+  #side-bar {
+    float: none;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--divider-color);
+  }
+  #side-bar a { display: inline-block; border-left: 0; padding: 0.5em 0.75em; }
+
+  #main { margin: 0; padding: 1em; border-left: 0; text-align: left; }
+
+  #footer .left, #footer .right { float: none; text-align: left; }
+}
 </style>
 </head>
 <body>
-<img src="../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; width: 500px; z-index: 1000; opacity: 0.5;"/>
+<img id="bg-watermark" src="../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; z-index: 1000; opacity: 0.5;"/>
 <div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>the trolling business</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
