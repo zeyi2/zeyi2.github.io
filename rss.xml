@@ -4,13 +4,13 @@
     <title>Mitchell's Homepage</title>
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>lgtm</description>
-    <lastBuildDate>Sun, 23 Nov 2025 14:37:28 +0800</lastBuildDate>
+    <description>Nuke it.</description>
+    <lastBuildDate>Tue, 25 Nov 2025 12:31:23 +0800</lastBuildDate>
     <item>
       <title>学习小组的资料</title>
       <link>https://zeyi2.github.io/posts/boyuan-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/boyuan-roadmap.html</guid>
-      <pubDate>Sun, 23 Nov 2025 14:35:34 +0800</pubDate>
+      <pubDate>Tue, 25 Nov 2025 12:31:12 +0800</pubDate>
       <description> 学习小组的资料 Tips: 这些只是我自己曾经/现在使用的材料，不一定适合所有人 C K&amp;amp;R All-time classic, 练习题建议全做一遍 Learn C the Hard Way 建议完成：练习 0 到练习 18， 练习 32，练习 33，练习 42，练习 44 Beej's Guid</description>
       <content:encoded><![CDATA[<h1>学习小组的资料</h1>
 <p><strong>Tips: 这些只是我自己曾经/现在使用的材料，不一定适合所有人</strong></p>
@@ -18,25 +18,31 @@
 <ul>
 <li>
 <a href="https://seriouscomputerist.atariverse.com/media/pdf/book/C%20Programming%20Language%20-%202nd%20Edition%20(OCR).pdf">K&amp;R</a>
-</li>
+<ul>
 <li>
 All-time classic, 练习题建议全做一遍
 </li>
+</ul>
+</li>
 <li>
 <a href="https://wizardforcel.gitbooks.io/lcthw/content/preface.html">Learn C the Hard Way</a>
-</li>
+<ul>
 <li>
 建议完成：练习 0 到练习 18， 练习 32，练习 33，练习 42，练习 44
 </li>
+</ul>
+</li>
 <li>
 <a href="https://beej.us/guide/bgc/html/split/">Beej's Guide to C Programming</a>
-</li>
+<ul>
 <li>
 或许是最新人友好的 C 教程，这本很有名，但我没有读完
 </li>
+</ul>
+</li>
 <li>
 <a href="https://git.kernel.org/">Linux Kernel Source Code</a>
-</li>
+<ul>
 <li>
 Learn C the <strong>really hard</strong> way
 </li>
@@ -46,44 +52,54 @@ Learn C the <strong>really hard</strong> way
 <li>
 (最好的学习方法是找个有内核交 PATCH 经验的带，虽然我自己太菜没有被带起来)
 </li>
+</ul>
+</li>
 <li>
 <a href="https://users.ece.cmu.edu/~eno/coding/CCodingStandard.html">C Coding Standard</a>
 </li>
 <li>
 <a href="https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard">SEI CERT C Coding Standard</a>
-</li>
+<ul>
 <li>
 这两个 Standard 可以帮助你写出更安全的 C 程序
 </li>
 <li>
 如果你选择了合适的工具 (e.g. <a href="https://clang.llvm.org/extra/clang-tidy/">Clang-tidy</a>)，那么你可以找出你代码中大部分的风格问题
 </li>
+</ul>
+</li>
 <li>
 <a href="https://docs.cpl.icu/#/">南大 C 语言程序设计</a>
-</li>
+<ul>
 <li>
 我大一的时候蹭了这门课，观感上还行 (但确实有一些我很不喜欢的内容/题目，但无伤大雅)
 </li>
 <li>
-好处是南大的课程质量和清晰程度远超 ECNU <del>(例如我大一的 C 语言专业课上完全没有提结构体和宏 <span class="spoiler">怎么能有这么逆天的课啊</span>)</del>，且 OJ 对外开放注册
+好处是南大的课程质量和清晰程度远超 ECNU <del>(例如我大一的 C 语言课上完全没有提结构体和宏 <span class="spoiler">怎么能有这么逆天的课</span>)</del>，且 OJ 对外开放注册
+</li>
+</ul>
 </li>
 </ul>
 <h2>汇编</h2>
 <ul>
 <li>
 <a href="https://github.com/FFmpeg/asm-lessons">FFmpeg's Assembly Lessons</a>
-</li>
+<ul>
 <li>
 目前看来还是半成品, but still nice and interesting to read.
+</li>
+</ul>
 </li>
 <li>
 <a href="https://dramforever.github.io/easyriscv/">DRAM 的 RISC-V 汇编教程</a>
 </li>
 <li>
 <a href="https://godbolt.org/">Compiler Explorer</a>
-</li>
+<ul>
 <li>
 我学习汇编的方式是研究编译器的输出
+</li>
+</ul>
 </li>
 </ul>
 <h2>C++</h2>
@@ -91,18 +107,22 @@ Learn C the <strong>really hard</strong> way
 <ul>
 <li>
 <a href="https://www.stroustrup.com/tour3.html">A Tour of C++</a>
-</li>
+<ul>
 <li>
 我在两周速成 C++ 时选用的手册
 </li>
+</ul>
+</li>
 <li>
 <a href="https://github.com/llvm/llvm-project">LLVM Project</a>
-</li>
+<ul>
 <li>
 LLVM 的代码库质量非常的高 <del>(我在 Clang-tidy 里污染的部分除外)</del>，是很好的 C++ 学习资料
 </li>
 <li>
 以及我博客里有一个 LLVM Coding Standard 相关的文章，可以参考
+</li>
+</ul>
 </li>
 </ul>
 <h2>Rust</h2>
@@ -120,17 +140,19 @@ LLVM 的代码库质量非常的高 <del>(我在 Clang-tidy 里污染的部分�
 <ul>
 <li>
 <a href="https://silent-piccolo-dd5.notion.site/Haskell-1a491b17d4dd4e49a76b6be96d496600">馒头的 real world haskell</a>
-</li>
+<ul>
 <li>
 充满了 Learn You a Haskell for Great Good 等书学不到的现代 Haskell 工业界的最佳实践
 </li>
 </ul>
+</li>
+</ul>
 <h3>Lisp</h3>
-<p>Seriously, why would you want to learn Lisp in 2025?</p>
+<p>Seriously, why would you learn Lisp in 2025?</p>
 <ul>
 <li>
 <a href="http://xahlee.info/emacs/emacs/elisp.html">李杀的 Emacs Lisp 教程</a>
-</li>
+<ul>
 <li>
 推荐的原因是 ELisp 在血缘上可能和原始的 Lisp 更接近一点，虽然如果不用 Emacs 学 Elisp 完全没用。
 </li>
@@ -138,16 +160,20 @@ LLVM 的代码库质量非常的高 <del>(我在 Clang-tidy 里污染的部分�
 如果你用 Vim/其它编辑器或 IDE 且还想学 Lisp，直接读 <a href="https://gigamonkeys.com/book/">Practical Common Lisp</a> 吧
 </li>
 </ul>
+</li>
+</ul>
 <h2>工具使用</h2>
 <ul>
 <li>
 Linux: 自己装一个 (Hardware OR WSL) 然后读 <a href="https://man7.org/linux/man-pages/">Manpage</a> 和 <a href="https://wiki.archlinux.org/title/Main_page">ArchWiki</a>
-</li>
+<ul>
 <li>
 注: Arch Linux 用户会折腾出很多抽象的 Workaround
 </li>
 <li>
 (e.g. 内核的 UAC 问题他们会直接在 pipewire 关硬件音量控制 <span class="spoiler">大脑皮层过于光滑了</span>)，注意辨别
+</li>
+</ul>
 </li>
 <li>
 Git: 读 <a href="https://git-scm.com/book/en/v2">Pro Git</a>，一步到位
@@ -476,7 +502,7 @@ Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://git
 </li>
 </ul>
 <blockquote>
-2025/11/15 Update:
+<p>2025/11/15 Update:</p>
 <p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
 <p>2025/11/19 Update:</p>
