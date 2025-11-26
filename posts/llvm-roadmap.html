@@ -238,7 +238,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Leave site?</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -395,6 +395,15 @@ Add options to throw unannotated functions in <code>bugprone-exception-escape</c
 <p>2025/11/19 Update:</p>
 <p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
 </blockquote>
+<ul>
+<li>
+Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href="https://github.com/llvm/llvm-project/pull/169215">#169215</a>)
+</li>
+</ul>
+<p>崩溃的原因是 <code>FormatStringConverter::appendFormatText</code> 里用了 <code>signed chars</code>，遇到非 ASCII 字符时就变成负数走到控制字符的路径了，传到 <code>llvm::hexdigit</code>直接 OOB 然后 Crash. 问题简单到没开 GDB 光读代码就理解了。</p>
+<p>然后找 Bug 加修 Bug 一共半小时，尝试让 Windows 过 CI 测试花了三天还没修出来，原因是 LLVM 的 Windows CI 不知道 UTF-8 是什么，只认自己的编码逻辑，导致测试点里写 UTF-8 字符直接挂。</p>
+<p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span> </p>
+<p>把能用的不能用的方法都试了一遍，还是过不了，人麻了。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -431,7 +440,7 @@ Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https:/
 <p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
 <ul>
 <li>
-Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="github.com/llvm/llvm-project/pull/167126">#167126</a>)
+Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="https://github.com/llvm/llvm-project/pull/167126">#167126</a>)
 </li>
 </ul>
 <p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
@@ -464,6 +473,8 @@ Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project
 <p>2025/11/19 Update:</p>
 <p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
 <p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
+<p>2025/11/26 Update:</p>
+<p>Approve 了，再等一个 Reviewer Approve 后就可以 Merge 了。</p>
 </blockquote>
 <ul>
 <li>
@@ -490,7 +501,27 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 ./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
 </code></pre>
 <p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
-<h1>Clang Static Analyzer</h1>
+<h3>Issues</h3>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/169602">clang-tidy ignoring compilation database compiler options when single check specified</a>
+</li>
+</ul>
+<p>没复现出来，但告诉了开 Issue 的人可以用 <code>-extra-arg=-v</code>，放两天看看有没有进展。</p>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a>
+</li>
+</ul>
+<p>考虑了几个很常见的控制/信息流相关的情况，感觉 Clang Tidy 其实不太好做这个 Check (AST 信息很有限)</p>
+<p>@vbvictor 提到了一个 <a href="https://github.com/llvm/llvm-project/pull/158462">PR</a> 实现了相关的一部分逻辑，一看 <code>+ 1246  -0</code> 立刻失去了 Review 的动力，等我做好心理准备再去看。</p>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/168310">Clang-tidy bugprone-unchecked-optional-access doesn't work when #including <a href="iox/optional.hpp">iox/optional.hpp</a></a>
+</li>
+</ul>
+<p>复现不出来，人也不回复，就这样吧。</p>
+<h2>Clang Static Analyzer</h2>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>
 <li>
@@ -501,7 +532,7 @@ Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https
 <blockquote>
 <p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
 </blockquote>
-<h1>Clang</h1>
+<h2>Clang</h2>
 <p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完：</p>
 <ul>
 <li>

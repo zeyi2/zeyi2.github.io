@@ -4,8 +4,235 @@
     <title>Mitchell's Homepage</title>
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>Nuke it.</description>
-    <lastBuildDate>Tue, 25 Nov 2025 12:31:23 +0800</lastBuildDate>
+    <description>Singularity is here</description>
+    <lastBuildDate>Wed, 26 Nov 2025 14:26:47 +0800</lastBuildDate>
+    <item>
+      <title>LLVM 贡献记录</title>
+      <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
+      <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
+      <pubDate>Wed, 26 Nov 2025 14:23:33 +0800</pubDate>
+      <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
+      <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
+<p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
+<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
+<h2>Clang-tidy</h2>
+<h3><code>cert</code> 重构</h3>
+<ul>
+<li>
+Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)
+</li>
+<li>
+Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)
+</li>
+<li>
+Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)
+</li>
+<li>
+Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)
+</li>
+<li>
+Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)
+</li>
+<li>
+Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)
+</li>
+</ul>
+<p>学到了有关 Clang-tidy Checks 的取名方式：</p>
+<blockquote>
+<p>we never used "dont" in check name (thought we can use verbs like "avoid" (avoid-goto etc..))</p>
+<p><code>avoid</code> is used when check category is generic like "cppcoreguidelines" or "readabilty". "bugprone" category means by default that we should avoid some language construct.</p>
+</blockquote>
+<h3>Check Fixes</h3>
+<ul>
+<li>
+Fix <code>readability-container-data-pointer check</code> (<a href="https://github.com/llvm/llvm-project/pull/165636">#165636</a>)
+</li>
+</ul>
+<p>学到了关于代码风格的知识：</p>
+<blockquote>
+<p>Clang 的代码库要求贡献者尽可能为变量加上 <code>const</code></p>
+</blockquote>
+<p>更完整的代码规范在 <a href="https://llvm.org/docs/CodingStandards.html">官网上</a>，不过太长了还没读完。</p>
+<p>我 C++ 水平实在是有点次，该读书了。</p>
+<p>同时在 Review 过程中，@vbvictor 给了一个我写代码时没想到的 false-positive: <a href="https://github.com/llvm/llvm-project/pull/165636#discussion_r2507197041">link</a>，已严肃学习。</p>
+<p>以及 <code>TK_IgnoreUnlessSpelledInSource</code> 和 <code>TK_AsIs</code> 的区别是，前者会忽略编译器隐式生成的节点 (e.g. 默认构造函数、隐式转换)，后者则不会对 AST 做任何过滤。</p>
+<ul>
+<li>
+Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-access</code> (<a href="https://github.com/llvm/llvm-project/pull/167209">#167209</a>)
+</li>
+</ul>
+<p>学习了怎么给 Clang-tidy 的 Check 添加 Option，以后要改/实现类似功能的时候直接翻这个 PR 作参考就行。</p>
+<ul>
+<li>
+Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include</code> (<a href="https://github.com/llvm/llvm-project/pull/168196#issuecomment-3536324291">#168196</a>)
+</li>
+</ul>
+<p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
+<blockquote>
+<p>2025/11/17 Update:</p>
+<p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+<p>2025/11/19 Update:</p>
+<p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
+<p><del>似乎 Ready to merge :)</del> <em><strong>合了</strong></em></p>
+</blockquote>
+<ul>
+<li>
+Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)
+</li>
+</ul>
+<p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
+<p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
+<p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+</blockquote>
+<ul>
+<li>
+Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href="https://github.com/llvm/llvm-project/pull/169215">#169215</a>)
+</li>
+</ul>
+<p>崩溃的原因是 <code>FormatStringConverter::appendFormatText</code> 里用了 <code>signed chars</code>，遇到非 ASCII 字符时就变成负数走到控制字符的路径了，传到 <code>llvm::hexdigit</code>直接 OOB 然后 Crash. 问题简单到没开 GDB 光读代码就理解了。</p>
+<p>然后找 Bug 加修 Bug 一共半小时，尝试让 Windows 过 CI 测试花了三天还没修出来，原因是 LLVM 的 Windows CI 不知道 UTF-8 是什么，只认自己的编码逻辑，导致测试点里写 UTF-8 字符直接挂。</p>
+<p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span> </p>
+<p>把能用的不能用的方法都试了一遍，还是过不了，人麻了。</p>
+<h3>CI 改进</h3>
+<p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
+<p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
+<h4>Doc Fixes</h4>
+<ul>
+<li>
+Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
+</li>
+<li>
+Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
+</li>
+<li>
+Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
+</li>
+<li>
+Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
+</li>
+<li>
+Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)
+</li>
+<li>
+Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)
+</li>
+<li>
+Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)
+</li>
+<li>
+Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)
+</li>
+<li>
+Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https://github.com/llvm/llvm-project/pull/168722">#168722</a>)
+</li>
+</ul>
+<p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
+<ul>
+<li>
+Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="https://github.com/llvm/llvm-project/pull/167126">#167126</a>)
+</li>
+</ul>
+<p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
+</blockquote>
+<h4>检测脚本</h4>
+<ul>
+<li>
+Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)
+<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，<del>不幸的是没有人 care，所以大概率这个得拖很久...</del></p>
+</li>
+</ul>
+<blockquote>
+<p>2025/11/15 Update:</p>
+<p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
+<p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+<p>2025/11/19 Update:</p>
+<p>先 Close 了，有空再看。</p>
+</blockquote>
+<ul>
+<li>
+Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
+</li>
+</ul>
+<p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
+<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 <span class="spoiler">(什么猴子马戏团)</span>。 </p>
+<blockquote>
+<p>2025/11/19 Update:</p>
+<p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
+<p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
+<p>2025/11/26 Update:</p>
+<p>Approve 了，再等一个 Reviewer Approve 后就可以 Merge 了。</p>
+</blockquote>
+<ul>
+<li>
+Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://github.com/llvm/llvm-project/pull/168827">#168827</a>)
+</li>
+</ul>
+<p>尝试把 <code>doc8</code> 集成到 LLVM 的 CI 里，一边和 Gemini 吵架一边写代码，开了 PR 以后悲剧地发现 Premerge CI 里不会触发新的 Dockerfile 构建，为了先证明这玩意能跑，于是写出了以下<strong>逆天</strong>内容：</p>
+<pre><code class="language-yml">
+      - name: Install linter dependencies
+        run: |
+          pip install doc8 --break-system-packages
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+</code></pre>
+<p><span class="spoiler">可怕吗，是的很可怕</span> </p>
+<p>事实证明这玩意确实能跑：</p>
+<pre><code class="language-bash">
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:99: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:100: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:105: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:106: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:107: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:111: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:112: D001 Line too long
+./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
+</code></pre>
+<p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
+<h3>Issues</h3>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/169602">clang-tidy ignoring compilation database compiler options when single check specified</a>
+</li>
+</ul>
+<p>没复现出来，但告诉了开 Issue 的人可以用 <code>-extra-arg=-v</code>，放两天看看有没有进展。</p>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a>
+</li>
+</ul>
+<p>考虑了几个很常见的控制/信息流相关的情况，感觉 Clang Tidy 其实不太好做这个 Check (AST 信息很有限)</p>
+<p>@vbvictor 提到了一个 <a href="https://github.com/llvm/llvm-project/pull/158462">PR</a> 实现了相关的一部分逻辑，一看 <code>+ 1246  -0</code> 立刻失去了 Review 的动力，等我做好心理准备再去看。</p>
+<ul>
+<li>
+<a href="https://github.com/llvm/llvm-project/issues/168310">Clang-tidy bugprone-unchecked-optional-access doesn't work when #including <a href="iox/optional.hpp">iox/optional.hpp</a></a>
+</li>
+</ul>
+<p>复现不出来，人也不回复，就这样吧。</p>
+<h2>Clang Static Analyzer</h2>
+<p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
+<ul>
+<li>
+Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https://github.com/llvm/llvm-project/pull/167822">#167822</a>)
+</li>
+</ul>
+<p>@NagyDonat 很贴心地补充了 CSA 中这些 Check 的历史背景：</p>
+<blockquote>
+<p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
+</blockquote>
+<h2>Clang</h2>
+<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完：</p>
+<ul>
+<li>
+Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
+</li>
+</ul>
+<p>做完再写。</p>]]></content:encoded>
+    </item>
     <item>
       <title>学习小组的资料</title>
       <link>https://zeyi2.github.io/posts/boyuan-roadmap.html</link>
@@ -368,202 +595,6 @@ Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc int
 Avoid <code>std::vector&lt;bool></code>.
 </li>
 </ul>]]></content:encoded>
-    </item>
-    <item>
-      <title>LLVM 贡献记录</title>
-      <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
-      <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Thu, 20 Nov 2025 19:26:38 +0800</pubDate>
-      <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
-      <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
-<p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
-<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
-<h2>Clang-tidy</h2>
-<h3><code>cert</code> 重构</h3>
-<ul>
-<li>
-Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)
-</li>
-<li>
-Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)
-</li>
-<li>
-Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)
-</li>
-<li>
-Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)
-</li>
-<li>
-Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)
-</li>
-<li>
-Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)
-</li>
-</ul>
-<p>学到了有关 Clang-tidy Checks 的取名方式：</p>
-<blockquote>
-<p>we never used "dont" in check name (thought we can use verbs like "avoid" (avoid-goto etc..))</p>
-<p><code>avoid</code> is used when check category is generic like "cppcoreguidelines" or "readabilty". "bugprone" category means by default that we should avoid some language construct.</p>
-</blockquote>
-<h3>Check Fixes</h3>
-<ul>
-<li>
-Fix <code>readability-container-data-pointer check</code> (<a href="https://github.com/llvm/llvm-project/pull/165636">#165636</a>)
-</li>
-</ul>
-<p>学到了关于代码风格的知识：</p>
-<blockquote>
-<p>Clang 的代码库要求贡献者尽可能为变量加上 <code>const</code></p>
-</blockquote>
-<p>更完整的代码规范在 <a href="https://llvm.org/docs/CodingStandards.html">官网上</a>，不过太长了还没读完。</p>
-<p>我 C++ 水平实在是有点次，该读书了。</p>
-<p>同时在 Review 过程中，@vbvictor 给了一个我写代码时没想到的 false-positive: <a href="https://github.com/llvm/llvm-project/pull/165636#discussion_r2507197041">link</a>，已严肃学习。</p>
-<p>以及 <code>TK_IgnoreUnlessSpelledInSource</code> 和 <code>TK_AsIs</code> 的区别是，前者会忽略编译器隐式生成的节点 (e.g. 默认构造函数、隐式转换)，后者则不会对 AST 做任何过滤。</p>
-<ul>
-<li>
-Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-access</code> (<a href="https://github.com/llvm/llvm-project/pull/167209">#167209</a>)
-</li>
-</ul>
-<p>学习了怎么给 Clang-tidy 的 Check 添加 Option，以后要改/实现类似功能的时候直接翻这个 PR 作参考就行。</p>
-<ul>
-<li>
-Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include</code> (<a href="https://github.com/llvm/llvm-project/pull/168196#issuecomment-3536324291">#168196</a>)
-</li>
-</ul>
-<p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
-<blockquote>
-<p>2025/11/17 Update:</p>
-<p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
-<p>2025/11/19 Update:</p>
-<p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
-<p><del>似乎 Ready to merge :)</del> <em><strong>合了</strong></em></p>
-</blockquote>
-<ul>
-<li>
-Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)
-</li>
-</ul>
-<p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
-<p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
-<p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
-<blockquote>
-<p>2025/11/19 Update:</p>
-<p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
-</blockquote>
-<h3>CI 改进</h3>
-<p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
-<p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
-<h4>Doc Fixes</h4>
-<ul>
-<li>
-Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
-</li>
-<li>
-Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
-</li>
-<li>
-Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
-</li>
-<li>
-Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
-</li>
-<li>
-Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)
-</li>
-<li>
-Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)
-</li>
-<li>
-Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)
-</li>
-<li>
-Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)
-</li>
-<li>
-Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https://github.com/llvm/llvm-project/pull/168722">#168722</a>)
-</li>
-</ul>
-<p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
-<ul>
-<li>
-Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="github.com/llvm/llvm-project/pull/167126">#167126</a>)
-</li>
-</ul>
-<p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
-<blockquote>
-<p>2025/11/19 Update:</p>
-<p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
-</blockquote>
-<h4>检测脚本</h4>
-<ul>
-<li>
-Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)
-<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，<del>不幸的是没有人 care，所以大概率这个得拖很久...</del></p>
-</li>
-</ul>
-<blockquote>
-<p>2025/11/15 Update:</p>
-<p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
-<p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
-<p>2025/11/19 Update:</p>
-<p>先 Close 了，有空再看。</p>
-</blockquote>
-<ul>
-<li>
-Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
-</li>
-</ul>
-<p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
-<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 <span class="spoiler">(什么猴子马戏团)</span>。 </p>
-<blockquote>
-<p>2025/11/19 Update:</p>
-<p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
-<p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
-</blockquote>
-<ul>
-<li>
-Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://github.com/llvm/llvm-project/pull/168827">#168827</a>)
-</li>
-</ul>
-<p>尝试把 <code>doc8</code> 集成到 LLVM 的 CI 里，一边和 Gemini 吵架一边写代码，开了 PR 以后悲剧地发现 Premerge CI 里不会触发新的 Dockerfile 构建，为了先证明这玩意能跑，于是写出了以下<strong>逆天</strong>内容：</p>
-<pre><code class="language-yml">
-      - name: Install linter dependencies
-        run: |
-          pip install doc8 --break-system-packages
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-</code></pre>
-<p><span class="spoiler">可怕吗，是的很可怕</span> </p>
-<p>事实证明这玩意确实能跑：</p>
-<pre><code class="language-bash">
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:99: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:100: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:105: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:106: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:107: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:111: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:112: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
-</code></pre>
-<p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
-<h1>Clang Static Analyzer</h1>
-<p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
-<ul>
-<li>
-Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https://github.com/llvm/llvm-project/pull/167822">#167822</a>)
-</li>
-</ul>
-<p>@NagyDonat 很贴心地补充了 CSA 中这些 Check 的历史背景：</p>
-<blockquote>
-<p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
-</blockquote>
-<h1>Clang</h1>
-<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完：</p>
-<ul>
-<li>
-Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
-</li>
-</ul>
-<p>做完再写。</p>]]></content:encoded>
     </item>
   </channel>
 </rss>
