@@ -4,13 +4,13 @@
     <title>Mitchell's Homepage</title>
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>Singularity is here</description>
-    <lastBuildDate>Wed, 26 Nov 2025 14:26:47 +0800</lastBuildDate>
+    <description>Nuke it.</description>
+    <lastBuildDate>Fri, 28 Nov 2025 23:40:01 +0800</lastBuildDate>
     <item>
       <title>LLVM 贡献记录</title>
       <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Wed, 26 Nov 2025 14:23:33 +0800</pubDate>
+      <pubDate>Fri, 28 Nov 2025 23:39:42 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -86,6 +86,8 @@ Add options to throw unannotated functions in <code>bugprone-exception-escape</c
 <blockquote>
 <p>2025/11/19 Update:</p>
 <p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+<p>2025/11/28 Update:</p>
+<p>文档风格又出问题，不过其它文档也干了，所以我顺手又水了一个 PR</p>
 </blockquote>
 <ul>
 <li>
@@ -96,6 +98,22 @@ Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href=
 <p>然后找 Bug 加修 Bug 一共半小时，尝试让 Windows 过 CI 测试花了三天还没修出来，原因是 LLVM 的 Windows CI 不知道 UTF-8 是什么，只认自己的编码逻辑，导致测试点里写 UTF-8 字符直接挂。</p>
 <p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span> </p>
 <p>把能用的不能用的方法都试了一遍，还是过不了，人麻了。</p>
+<blockquote>
+<p>2025/11/26 Update:</p>
+<p>开摆了，直接在 Windows 上跳过测试了, We are so done.</p>
+<p>2025/11/28 Update:</p>
+<p>复活！@localspook 提醒了我可以直接指定 python 脚本的输出编码，果然让 Windows CI 过了! We are so back.</p>
+<p>以及进行一些善意引导，我感觉它之前过不了 + 很难复现可能和这个 <a href="https://discourse.llvm.org/t/rfc-drop-support-running-llvm-on-windows-vista-7-8/80619">RFC</a> 有关系，它不会现在还在用 Vista 吧，草。</p>
+</blockquote>
+<ul>
+<li>
+Fix <code>cppcoreguidelines-pro-type-member-init</code> check <a href="https://github.com/llvm/llvm-project/pull/169832">#169832</a>
+</li>
+<li>
+Preserve comments in <code>readability-use-std-min-max</code> <a href="https://github.com/llvm/llvm-project/pull/169908">#169908</a>
+</li>
+</ul>
+<p>Zealot 正好抓到了这个 Issue 的更新，顺手修了。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -140,6 +158,12 @@ Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href
 <p>2025/11/19 Update:</p>
 <p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
 </blockquote>
+<ul>
+<li>
+Fix option highlighting and list style in documentation <a href="https://github.com/llvm/llvm-project/pull/169874">#169874</a>
+</li>
+</ul>
+<p>没什么营养的文档修复，之前对线的时候发现的，顺手的事。</p>
 <h4>检测脚本</h4>
 <ul>
 <li>
@@ -193,6 +217,11 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 ./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
 </code></pre>
 <p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
+<blockquote>
+<p>2025/11/28 Update:</p>
+<p>由于我不会写 Python 导致这个 PATCH 变成了臭不可闻的依托，拼尽全力拆成了两半准备分两次 Review</p>
+<p>我这辈子再也不想写 Python 了。</p>
+</blockquote>
 <h3>Issues</h3>
 <ul>
 <li>
@@ -200,6 +229,13 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 </li>
 </ul>
 <p>没复现出来，但告诉了开 Issue 的人可以用 <code>-extra-arg=-v</code>，放两天看看有没有进展。</p>
+<blockquote>
+<p>2025/11/27 Update:</p>
+<p>复现了，看上去是因为 <code>-Wno-format-security</code> 和 <code>-Wformat</code> 的顺序错了，先 <code>-Wno-format...</code> 再 <code>-Wformat</code> 会重新打开 security warnings，再加上一个 -Werror 直接变 Warning 炸掉</p>
+<p>2025/11/28 Update:</p>
+<p>不对，还有反转。怎么 build 情况不报错啊。</p>
+<p>现在猜测是用户编译拿的是 <code>gcc</code>，因为 GNU 神人班不管什么参数顺序，关了就是关了，所以没 Warning，但 Clang-tidy 底下还是 Clang，所以有 Warning</p>
+</blockquote>
 <ul>
 <li>
 <a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a>
@@ -225,13 +261,111 @@ Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https
 <p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
 </blockquote>
 <h2>Clang</h2>
-<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完：</p>
+<ul>
+<li>
+Fix misleading progress report when files have multiple compile commands <a href="https://github.com/llvm/llvm-project/pull/169640">#169640</a>
+</li>
+</ul>
+<p>投喂可爱 Clang 前端，之前它会输出像 <code>[22/18]</code> 这样的诡异计数，在经过我的修复后，变成了这个更诡异的样子：</p>
+<pre><code>
+[1/9] Processing file ...
+[2/9] (1/2) Processing file ...
+[2/9] (2/2) Processing file ...
+[3/9] Processing file ...
+[4/9] Processing file ...
+</code></pre>
+<p>有点闹麻，也不知道能不能合进去。</p>
 <ul>
 <li>
 Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
 </li>
 </ul>
+<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完</p>
 <p>做完再写。</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>FEX-RV 日志</title>
+      <link>https://zeyi2.github.io/posts/fex-rv.html</link>
+      <guid>https://zeyi2.github.io/posts/fex-rv.html</guid>
+      <pubDate>Fri, 28 Nov 2025 23:19:08 +0800</pubDate>
+      <description> FEX-RV 日志 2025-09 事情的起因是 Infra 的基础要在 box64 和 FEX 中选一个，然后我没听说过后者，遂尝试编译: -- Clang version 18.1.8 CMake Error at CMakeLists.txt:152 (message): FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a su</description>
+      <content:encoded><![CDATA[<h1>FEX-RV 日志</h1>
+<h2>2025-09</h2>
+<p>事情的起因是 Infra 的基础要在 <code>box64</code> 和 <code>FEX</code> 中选一个，然后我没听说过后者，遂尝试编译:</p>
+<pre><code class="language-shell">
+-- Clang version 18.1.8
+CMake Error at CMakeLists.txt:152 (message):
+   FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a supported configuration for FEX CI and nothing else!
+</code></pre>
+<p>很不幸地是实验室的机器还用不了，所以没招了，只能自己拿 QEMU 起发行版装。</p>
+<p>翻出了自己三年前的破烂脚本，改亿改 (45mins of hard debugging) 得到一下能跑的版本:</p>
+<pre><code class="language-shell">
+#!/bin/sh
+
+set -xe
+
+ISO_PATH="$1"
+QCOW2_IMAGE="$2"
+
+qemu-img create -f qcow2 "$QCOW2_IMAGE" 50G
+qemu-system-aarch64 \
+    -cpu cortex-a53 -smp cores=4 \
+    -nographic \
+    -M virt -m 4096 \
+    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
+    -drive format=qcow2,file="$QCOW2_IMAGE" \
+    -device ramfb \
+    -cdrom "$ISO_PATH" \
+    -nic user,model=virtio \
+    -rtc base=utc,clock=host
+</code></pre>
+<pre><code class="language-shell">
+#!/bin/sh
+
+set -xe
+
+QCOW2_IMAGE="$1"
+
+qemu-system-aarch64 \
+    -cpu cortex-a53 -smp cores=10 \
+    -nographic \
+    -M virt -m 4096 \
+    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
+    -drive format=qcow2,file="$QCOW2_IMAGE" \
+    -device ramfb \
+    -nic user,model=virtio \
+    -rtc base=utc,clock=host
+</code></pre>
+<p>然后装系统 + 补依赖 + 编译折腾了一个晚上 + 一个上午，拼尽全力搭出了开发环境。</p>
+<p>以及在阅读 FEX 文档的时候发现了一点小问题，成功在接触这个项目的 30mins 内向上游贡献 PR，20h 后被合并 <del>最速传说（</del></p>
+<p>明天就继续研究 FEX 的源码，看看它是怎么建模 ARM CPU 的，尝试再在 IR 上设计一层 IR 分发到 RISC-V CPU 上。</p>
+<h2>2025-10</h2>
+<h3>01</h3>
+<p>整个国庆的工作效率奇低，产出非常可悲: 没有可见产出。</p>
+<p>今天继续研究 FEX-Emu 的源码，在读前端解析过程中发现自己对不少细节完全陌生 (tl;dr: 菜)，那确实没办法了，只能翻手册了。</p>
+<p>然后就获得了一个 2500 页的 PDF <del>(被水淹没，不知所措)</del></p>
+<p>但考虑到再不干活进度就要彻底完蛋了，所以只能硬着头皮啃。</p>
+<p>然后发现了一些抽象的东西: F2h 这个字节在解码的时候会一鱼三吃，可能是 REPNE、可能是单纯的 BND、也可能是像 BNDCU 这样的前缀，所以必须靠 CPUID/配置位/后续指令类别才能正确判断。</p>
+<p>不过好消息: MPX 已在很多平台上弃用了，Linux 和 glibc 已经没有支持了；坏消息: 解码器仍要兼容旧代码的编码约定。<span class="spoiler">泥头车又把我创似了</span> </p>
+<h3>02</h3>
+<p>把 FEX 的源码拆了下，搓了一个 RISC-V 后端，在荔枝派上编译起来了。</p>
+<p>顺便跑了个 7z bench 和 OpenSSL Benchmark。7z 测试结果能到 75% 左右，很吓人，明明用起来慢得要死但测试结果却没那么烂...</p>
+<h3>03</h3>
+<p>尝试跑了下 hello world，死在寄存器分配里了，看上去是因为 RV 后端初始化时没有提供寄存器信息，所以 RegAllocPass 不知道，直接崩了。</p>
+<p>幸好这个问题比较好理解，修起来没那么麻烦，又水一周。</p>
+<h2>2025-11</h2>
+<h3>01</h3>
+<p>赞美刘阳老师！</p>
+<p><code>biscuit</code> 真是神中神，支持的指令集很全，外加速度很快 <del>不愧是 JIT 仙人（</del></p>
+<p>有了好的 Codegen 工具后终于不用自己拼好宏了，实现 OpCode 方便多了。</p>
+<h3>02</h3>
+<p>加上了 Dispatcher 后，看上去 RV 后端能跑了，但跑程序还是崩溃，PC 居然是 0!</p>
+<p>有脏东西，但它死在了 JIT 里导致异常难抓这个 Bug，拼尽全力发现是 Syscall Handler 上的函数地址传错了，但为什么错？汇编逻辑应该没有问题，Dump 出来的指令也很正常。</p>
+<h3>03</h3>
+<p>由于周报水不出来，所以花了两个小时认真拿 GDB 查了一下，结果是我 Dispatcher 逻辑写错了，进 JIT 执行第一个 CodeBlock 时跳过了第一条指令导致后面全乱了，闹麻了。</p>
+<p>修掉这个问题后果然正常进到 Syscall 逻辑了，补上 write 的映射 Hello World 算是跑起来了。</p>
+<h3>04</h3>
+<p>用伟大的 Gemini 的力量 Vibe 了一个 Git History 改写工具，拿它重写了 FEX-RV 的提交历史，现在可维护性好了不少。</p>]]></content:encoded>
     </item>
     <item>
       <title>学习小组的资料</title>

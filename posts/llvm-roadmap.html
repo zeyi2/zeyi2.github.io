@@ -238,7 +238,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
+    <a href="../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Internet's problem child</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -314,6 +314,7 @@ li.task-list-item input[type="checkbox"] {
 <li><a href="../index.html">&rsaquo; ..</a></li>
 <li><a href="boyuan-roadmap.html">&rsaquo; boyuan-roadmap</a></li>
 <li><a href="coding-standard.html">&rsaquo; coding-standard</a></li>
+<li><a href="fex-rv.html">&rsaquo; fex-rv</a></li>
 <li><a href="llvm-roadmap.html" class="thisPage">&raquo;<i> llvm-roadmap</i></a></li>
 <li><a href="optimizations/index.html">&rsaquo; optimizations</a>
 </li>
@@ -394,6 +395,8 @@ Add options to throw unannotated functions in <code>bugprone-exception-escape</c
 <blockquote>
 <p>2025/11/19 Update:</p>
 <p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+<p>2025/11/28 Update:</p>
+<p>文档风格又出问题，不过其它文档也干了，所以我顺手又水了一个 PR</p>
 </blockquote>
 <ul>
 <li>
@@ -404,6 +407,22 @@ Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href=
 <p>然后找 Bug 加修 Bug 一共半小时，尝试让 Windows 过 CI 测试花了三天还没修出来，原因是 LLVM 的 Windows CI 不知道 UTF-8 是什么，只认自己的编码逻辑，导致测试点里写 UTF-8 字符直接挂。</p>
 <p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span> </p>
 <p>把能用的不能用的方法都试了一遍，还是过不了，人麻了。</p>
+<blockquote>
+<p>2025/11/26 Update:</p>
+<p>开摆了，直接在 Windows 上跳过测试了, We are so done.</p>
+<p>2025/11/28 Update:</p>
+<p>复活！@localspook 提醒了我可以直接指定 python 脚本的输出编码，果然让 Windows CI 过了! We are so back.</p>
+<p>以及进行一些善意引导，我感觉它之前过不了 + 很难复现可能和这个 <a href="https://discourse.llvm.org/t/rfc-drop-support-running-llvm-on-windows-vista-7-8/80619">RFC</a> 有关系，它不会现在还在用 Vista 吧，草。</p>
+</blockquote>
+<ul>
+<li>
+Fix <code>cppcoreguidelines-pro-type-member-init</code> check <a href="https://github.com/llvm/llvm-project/pull/169832">#169832</a>
+</li>
+<li>
+Preserve comments in <code>readability-use-std-min-max</code> <a href="https://github.com/llvm/llvm-project/pull/169908">#169908</a>
+</li>
+</ul>
+<p>Zealot 正好抓到了这个 Issue 的更新，顺手修了。</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -448,6 +467,12 @@ Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href
 <p>2025/11/19 Update:</p>
 <p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
 </blockquote>
+<ul>
+<li>
+Fix option highlighting and list style in documentation <a href="https://github.com/llvm/llvm-project/pull/169874">#169874</a>
+</li>
+</ul>
+<p>没什么营养的文档修复，之前对线的时候发现的，顺手的事。</p>
 <h4>检测脚本</h4>
 <ul>
 <li>
@@ -501,6 +526,11 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 ./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
 </code></pre>
 <p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
+<blockquote>
+<p>2025/11/28 Update:</p>
+<p>由于我不会写 Python 导致这个 PATCH 变成了臭不可闻的依托，拼尽全力拆成了两半准备分两次 Review</p>
+<p>我这辈子再也不想写 Python 了。</p>
+</blockquote>
 <h3>Issues</h3>
 <ul>
 <li>
@@ -508,6 +538,13 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 </li>
 </ul>
 <p>没复现出来，但告诉了开 Issue 的人可以用 <code>-extra-arg=-v</code>，放两天看看有没有进展。</p>
+<blockquote>
+<p>2025/11/27 Update:</p>
+<p>复现了，看上去是因为 <code>-Wno-format-security</code> 和 <code>-Wformat</code> 的顺序错了，先 <code>-Wno-format...</code> 再 <code>-Wformat</code> 会重新打开 security warnings，再加上一个 -Werror 直接变 Warning 炸掉</p>
+<p>2025/11/28 Update:</p>
+<p>不对，还有反转。怎么 build 情况不报错啊。</p>
+<p>现在猜测是用户编译拿的是 <code>gcc</code>，因为 GNU 神人班不管什么参数顺序，关了就是关了，所以没 Warning，但 Clang-tidy 底下还是 Clang，所以有 Warning</p>
+</blockquote>
 <ul>
 <li>
 <a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a>
@@ -533,12 +570,26 @@ Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https
 <p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
 </blockquote>
 <h2>Clang</h2>
-<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完：</p>
+<ul>
+<li>
+Fix misleading progress report when files have multiple compile commands <a href="https://github.com/llvm/llvm-project/pull/169640">#169640</a>
+</li>
+</ul>
+<p>投喂可爱 Clang 前端，之前它会输出像 <code>[22/18]</code> 这样的诡异计数，在经过我的修复后，变成了这个更诡异的样子：</p>
+<pre><code>
+[1/9] Processing file ...
+[2/9] (1/2) Processing file ...
+[2/9] (2/2) Processing file ...
+[3/9] Processing file ...
+[4/9] Processing file ...
+</code></pre>
+<p>有点闹麻，也不知道能不能合进去。</p>
 <ul>
 <li>
 Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
 </li>
 </ul>
+<p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完</p>
 <p>做完再写。</p>
 
 </div>
