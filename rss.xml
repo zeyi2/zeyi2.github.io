@@ -4,13 +4,13 @@
     <title>Mitchell's Homepage</title>
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>Nuke it.</description>
-    <lastBuildDate>Fri, 28 Nov 2025 23:40:01 +0800</lastBuildDate>
+    <description>You're asking the wrong questions.</description>
+    <lastBuildDate>Tue, 09 Dec 2025 21:50:59 +0800</lastBuildDate>
     <item>
       <title>LLVM 贡献记录</title>
       <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
       <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
-      <pubDate>Fri, 28 Nov 2025 23:39:42 +0800</pubDate>
+      <pubDate>Tue, 09 Dec 2025 21:49:35 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -88,6 +88,8 @@ Add options to throw unannotated functions in <code>bugprone-exception-escape</c
 <p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
 <p>2025/11/28 Update:</p>
 <p>文档风格又出问题，不过其它文档也干了，所以我顺手又水了一个 PR</p>
+<p>2025/12/9 Update:</p>
+<p>修完了没有人 Review, 🌿</p>
 </blockquote>
 <ul>
 <li>
@@ -109,11 +111,53 @@ Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href=
 <li>
 Fix <code>cppcoreguidelines-pro-type-member-init</code> check <a href="https://github.com/llvm/llvm-project/pull/169832">#169832</a>
 </li>
+</ul>
+<p>一个没什么营养的 PR.</p>
+<ul>
 <li>
 Preserve comments in <code>readability-use-std-min-max</code> <a href="https://github.com/llvm/llvm-project/pull/169908">#169908</a>
 </li>
 </ul>
 <p>Zealot 正好抓到了这个 Issue 的更新，顺手修了。</p>
+<p>以及感叹 LLVM 里面对 Comments 的处理实在不太友好, 注释解析居然是交给 Checks 自己的? 导致在 Apply Fixes 时很容易就覆盖掉已有的注释.</p>
+<p>比较理想的情况是有专门整一套工具来处理注释问题, 不过可惜没有.</p>
+<ul>
+<li>
+Fix false positive in <code>misc-const-correctness</code> <a href="https://github.com/llvm/llvm-project/pull/170065">#170065</a>
+</li>
+</ul>
+<p>在翻 Issue 列表时发现的陈年老问题, 修起来居然比想象中简单, 因为 Check 里的代码逻辑没问题, 出差错的是 <code>ExprMutationAnalyzer</code>.</p>
+<ul>
+<li>
+Fix false-positive in <code>inconsistent-declaration-parameter-name</code> <a href="https://github.com/llvm/llvm-project/pull/170593">#170593</a>
+</li>
+</ul>
+<p>加一起有效代码只有四行, 闹麻了.</p>
+<ul>
+<li>
+Fix fragile test in <code>read-parameters-from-file</code> <a href="https://github.com/llvm/llvm-project/pull/171033">#171033</a>
+</li>
+</ul>
+<p>Clang 的神人参数处理:</p>
+<blockquote>
+<p>CommandLine.cpp treats single quote as literal characters on Windows, so the argument is parsed as a check named <code>' -*,llvm-namespace-comment '</code>, which matches no existing checks, so no checks are enabled via the command line.</p>
+<p>Previously, the test passed because it fell back to the root .clang-tidy configuration which enables <code>llvm-*.</code></p>
+</blockquote>
+<p>真无敌了, 查这个问题查到头晕结果原因是这个.</p>
+<ul>
+<li>
+Enable <code>bugprone-unchecked-optional-access</code> in clang-tidy config and fix warnings <a href="https://github.com/llvm/llvm-project/pull/170004">#170004</a>
+</li>
+</ul>
+<p>代码重构是大型项目维护不得不品的一环, 这个拖了很久是因为我的电脑跑 <code>clang-tidy</code> 实在太慢了, 周末一定要做完.</p>
+<ul>
+<li>
+Enable C99 in <code>implicit-bool-conversion</code> and avoid FP with bool operands in C23 <a href="https://github.com/llvm/llvm-project/pull/171070">#171070</a>
+发现 Clang-tidy 的行为居然不符合 C23 的规范! <code>bool &amp;&amp; bool</code> 和 <code>bool || bool</code> 都会报 warning! 很明显是不合理的. 
+</li>
+</ul>
+<p>所以修了, 修的时候发现它甚至没法在 C99 上跑, 所以又加上了 C99 的支持.</p>
+<p>唯一的问题是没人 Review.</p>
 <h3>CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
@@ -164,6 +208,12 @@ Fix option highlighting and list style in documentation <a href="https://github.
 </li>
 </ul>
 <p>没什么营养的文档修复，之前对线的时候发现的，顺手的事。</p>
+<ul>
+<li>
+Fix documentation in <code>modernize-avoid-c-style-cast</code> <a href="https://github.com/llvm/llvm-project/pull/171413">#171413</a>
+</li>
+</ul>
+<p>由于我自己帮别人做 Code Review 时不严谨导致一些不那么好的文档被合并了, 自己引入的问题自己修.</p>
 <h4>检测脚本</h4>
 <ul>
 <li>
@@ -191,6 +241,8 @@ Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project
 <p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
 <p>2025/11/26 Update:</p>
 <p>Approve 了，再等一个 Reviewer Approve 后就可以 Merge 了。</p>
+<p>2025/12/09 Update:</p>
+<p>Merged :)</p>
 </blockquote>
 <ul>
 <li>
@@ -221,6 +273,8 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 <p>2025/11/28 Update:</p>
 <p>由于我不会写 Python 导致这个 PATCH 变成了臭不可闻的依托，拼尽全力拆成了两半准备分两次 Review</p>
 <p>我这辈子再也不想写 Python 了。</p>
+<p>2025/12/09 Update:</p>
+<p>原来分两次是分两个 PR 的意思... 前半部分 Merged, 后半部分等我做好心理准备再写.</p>
 </blockquote>
 <h3>Issues</h3>
 <ul>
@@ -249,6 +303,13 @@ Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://
 </li>
 </ul>
 <p>复现不出来，人也不回复，就这样吧。</p>
+<h3>Code Reviewing</h3>
+<p>我从 2025/12/06 开始进行 Code Review 工作</p>
+<ul>
+<li>
+12/06 to 12/09: 共审查了 17 个 PR
+</li>
+</ul>
 <h2>Clang Static Analyzer</h2>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>
@@ -275,13 +336,21 @@ Fix misleading progress report when files have multiple compile commands <a href
 [4/9] Processing file ...
 </code></pre>
 <p>有点闹麻，也不知道能不能合进去。</p>
+<blockquote>
+<p>2025/12/9 Update:</p>
+<p>这个 PR 现在处于一个我做完了但没有人愿意 Review 的阶段, 何意味啊</p>
+</blockquote>
 <ul>
 <li>
 Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
 </li>
 </ul>
 <p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完</p>
-<p>做完再写。</p>]]></content:encoded>
+<p>做完再写。</p>
+<blockquote>
+<p>2025/12/9 Update:</p>
+<p>咕咕咕</p>
+</blockquote>]]></content:encoded>
     </item>
     <item>
       <title>FEX-RV 日志</title>
@@ -366,195 +435,6 @@ qemu-system-aarch64 \
 <p>修掉这个问题后果然正常进到 Syscall 逻辑了，补上 write 的映射 Hello World 算是跑起来了。</p>
 <h3>04</h3>
 <p>用伟大的 Gemini 的力量 Vibe 了一个 Git History 改写工具，拿它重写了 FEX-RV 的提交历史，现在可维护性好了不少。</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>学习小组的资料</title>
-      <link>https://zeyi2.github.io/posts/boyuan-roadmap.html</link>
-      <guid>https://zeyi2.github.io/posts/boyuan-roadmap.html</guid>
-      <pubDate>Tue, 25 Nov 2025 12:31:12 +0800</pubDate>
-      <description> 学习小组的资料 Tips: 这些只是我自己曾经/现在使用的材料，不一定适合所有人 C K&amp;amp;R All-time classic, 练习题建议全做一遍 Learn C the Hard Way 建议完成：练习 0 到练习 18， 练习 32，练习 33，练习 42，练习 44 Beej's Guid</description>
-      <content:encoded><![CDATA[<h1>学习小组的资料</h1>
-<p><strong>Tips: 这些只是我自己曾经/现在使用的材料，不一定适合所有人</strong></p>
-<h2>C</h2>
-<ul>
-<li>
-<a href="https://seriouscomputerist.atariverse.com/media/pdf/book/C%20Programming%20Language%20-%202nd%20Edition%20(OCR).pdf">K&amp;R</a>
-<ul>
-<li>
-All-time classic, 练习题建议全做一遍
-</li>
-</ul>
-</li>
-<li>
-<a href="https://wizardforcel.gitbooks.io/lcthw/content/preface.html">Learn C the Hard Way</a>
-<ul>
-<li>
-建议完成：练习 0 到练习 18， 练习 32，练习 33，练习 42，练习 44
-</li>
-</ul>
-</li>
-<li>
-<a href="https://beej.us/guide/bgc/html/split/">Beej's Guide to C Programming</a>
-<ul>
-<li>
-或许是最新人友好的 C 教程，这本很有名，但我没有读完
-</li>
-</ul>
-</li>
-<li>
-<a href="https://git.kernel.org/">Linux Kernel Source Code</a>
-<ul>
-<li>
-Learn C the <strong>really hard</strong> way
-</li>
-<li>
-建议同时对着 bootlin 和 Kernel Mailing List 食用。
-</li>
-<li>
-(最好的学习方法是找个有内核交 PATCH 经验的带，虽然我自己太菜没有被带起来)
-</li>
-</ul>
-</li>
-<li>
-<a href="https://users.ece.cmu.edu/~eno/coding/CCodingStandard.html">C Coding Standard</a>
-</li>
-<li>
-<a href="https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard">SEI CERT C Coding Standard</a>
-<ul>
-<li>
-这两个 Standard 可以帮助你写出更安全的 C 程序
-</li>
-<li>
-如果你选择了合适的工具 (e.g. <a href="https://clang.llvm.org/extra/clang-tidy/">Clang-tidy</a>)，那么你可以找出你代码中大部分的风格问题
-</li>
-</ul>
-</li>
-<li>
-<a href="https://docs.cpl.icu/#/">南大 C 语言程序设计</a>
-<ul>
-<li>
-我大一的时候蹭了这门课，观感上还行 (但确实有一些我很不喜欢的内容/题目，但无伤大雅)
-</li>
-<li>
-好处是南大的课程质量和清晰程度远超 ECNU <del>(例如我大一的 C 语言课上完全没有提结构体和宏 <span class="spoiler">怎么能有这么逆天的课</span>)</del>，且 OJ 对外开放注册
-</li>
-</ul>
-</li>
-</ul>
-<h2>汇编</h2>
-<ul>
-<li>
-<a href="https://github.com/FFmpeg/asm-lessons">FFmpeg's Assembly Lessons</a>
-<ul>
-<li>
-目前看来还是半成品, but still nice and interesting to read.
-</li>
-</ul>
-</li>
-<li>
-<a href="https://dramforever.github.io/easyriscv/">DRAM 的 RISC-V 汇编教程</a>
-</li>
-<li>
-<a href="https://godbolt.org/">Compiler Explorer</a>
-<ul>
-<li>
-我学习汇编的方式是研究编译器的输出
-</li>
-</ul>
-</li>
-</ul>
-<h2>C++</h2>
-<p>实话实说，我 C++ 写的非常糟糕，所以这一部分可能参考价值不大。</p>
-<ul>
-<li>
-<a href="https://www.stroustrup.com/tour3.html">A Tour of C++</a>
-<ul>
-<li>
-我在两周速成 C++ 时选用的手册
-</li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/llvm/llvm-project">LLVM Project</a>
-<ul>
-<li>
-LLVM 的代码库质量非常的高 <del>(我在 Clang-tidy 里污染的部分除外)</del>，是很好的 C++ 学习资料
-</li>
-<li>
-以及我博客里有一个 LLVM Coding Standard 相关的文章，可以参考
-</li>
-</ul>
-</li>
-</ul>
-<h2>Rust</h2>
-<p>Rust 官方有非常好的学习资料：</p>
-<ul>
-<li>
-<a href="https://rustlings.rust-lang.org/">Rustlings</a>
-</li>
-<li>
-<a href="https://doc.rust-lang.org/stable/book/">The Rust Programming Language</a>
-</li>
-</ul>
-<h2>函数式</h2>
-<h3>Haskell</h3>
-<ul>
-<li>
-<a href="https://silent-piccolo-dd5.notion.site/Haskell-1a491b17d4dd4e49a76b6be96d496600">馒头的 real world haskell</a>
-<ul>
-<li>
-充满了 Learn You a Haskell for Great Good 等书学不到的现代 Haskell 工业界的最佳实践
-</li>
-</ul>
-</li>
-</ul>
-<h3>Lisp</h3>
-<p>Seriously, why would you learn Lisp in 2025?</p>
-<ul>
-<li>
-<a href="http://xahlee.info/emacs/emacs/elisp.html">李杀的 Emacs Lisp 教程</a>
-<ul>
-<li>
-推荐的原因是 ELisp 在血缘上可能和原始的 Lisp 更接近一点，虽然如果不用 Emacs 学 Elisp 完全没用。
-</li>
-<li>
-如果你用 Vim/其它编辑器或 IDE 且还想学 Lisp，直接读 <a href="https://gigamonkeys.com/book/">Practical Common Lisp</a> 吧
-</li>
-</ul>
-</li>
-</ul>
-<h2>工具使用</h2>
-<ul>
-<li>
-Linux: 自己装一个 (Hardware OR WSL) 然后读 <a href="https://man7.org/linux/man-pages/">Manpage</a> 和 <a href="https://wiki.archlinux.org/title/Main_page">ArchWiki</a>
-<ul>
-<li>
-注: Arch Linux 用户会折腾出很多抽象的 Workaround
-</li>
-<li>
-(e.g. 内核的 UAC 问题他们会直接在 pipewire 关硬件音量控制 <span class="spoiler">大脑皮层过于光滑了</span>)，注意辨别
-</li>
-</ul>
-</li>
-<li>
-Git: 读 <a href="https://git-scm.com/book/en/v2">Pro Git</a>，一步到位
-</li>
-<li>
-Bash: Don't. Learn Python instead.
-</li>
-<li>
-AWK: <del>Don't. Learn Python instead.</del> <a href="https://9p.io/cm/cs/awkbook/index.html">The AWK Programming Language</a>
-</li>
-<li>
-Sed: Don't. Learn Vim/Emacs instead.
-</li>
-<li>
-Ed: Don't. Learn Vim/Emacs instead.
-</li>
-<li>
-Grep: <code>man grep</code>, 建议换成 <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>
-</li>
-</ul>]]></content:encoded>
     </item>
     <item>
       <title>LLVM Coding Standard, in a nutshell</title>
