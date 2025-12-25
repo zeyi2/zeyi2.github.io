@@ -5,11 +5,98 @@
     <link>https://zeyi2.github.io</link>
     <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
     <description>You're asking the wrong questions.</description>
-    <lastBuildDate>Tue, 09 Dec 2025 21:50:59 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 25 Dec 2025 15:47:09 +0800</lastBuildDate>
+    <item>
+      <title>FEX-RV 日志</title>
+      <link>https://zeyi2.github.io/posts/dbt/fex-rv.html</link>
+      <guid>https://zeyi2.github.io/posts/dbt/fex-rv.html</guid>
+      <pubDate>Thu, 25 Dec 2025 15:42:01 +0800</pubDate>
+      <description> FEX-RV 日志 2025-09 事情的起因是 Infra 的基础要在 box64 和 FEX 中选一个，然后我没听说过后者，遂尝试编译: -- Clang version 18.1.8 CMake Error at CMakeLists.txt:152 (message): FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a su</description>
+      <content:encoded><![CDATA[<h1>FEX-RV 日志</h1>
+<h2>2025-09</h2>
+<p>事情的起因是 Infra 的基础要在 <code>box64</code> 和 <code>FEX</code> 中选一个，然后我没听说过后者，遂尝试编译:</p>
+<pre><code class="language-shell">
+-- Clang version 18.1.8
+CMake Error at CMakeLists.txt:152 (message):
+   FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a supported configuration for FEX CI and nothing else!
+</code></pre>
+<p>很不幸地是实验室的机器还用不了，所以没招了，只能自己拿 QEMU 起发行版装。</p>
+<p>翻出了自己三年前的破烂脚本，改亿改 (45mins of hard debugging) 得到一下能跑的版本:</p>
+<pre><code class="language-shell">
+#!/bin/sh
+
+set -xe
+
+ISO_PATH="$1"
+QCOW2_IMAGE="$2"
+
+qemu-img create -f qcow2 "$QCOW2_IMAGE" 50G
+qemu-system-aarch64 \
+    -cpu cortex-a53 -smp cores=4 \
+    -nographic \
+    -M virt -m 4096 \
+    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
+    -drive format=qcow2,file="$QCOW2_IMAGE" \
+    -device ramfb \
+    -cdrom "$ISO_PATH" \
+    -nic user,model=virtio \
+    -rtc base=utc,clock=host
+</code></pre>
+<pre><code class="language-shell">
+#!/bin/sh
+
+set -xe
+
+QCOW2_IMAGE="$1"
+
+qemu-system-aarch64 \
+    -cpu cortex-a53 -smp cores=10 \
+    -nographic \
+    -M virt -m 4096 \
+    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
+    -drive format=qcow2,file="$QCOW2_IMAGE" \
+    -device ramfb \
+    -nic user,model=virtio \
+    -rtc base=utc,clock=host
+</code></pre>
+<p>然后装系统 + 补依赖 + 编译折腾了一个晚上 + 一个上午，拼尽全力搭出了开发环境。</p>
+<p>以及在阅读 FEX 文档的时候发现了一点小问题，成功在接触这个项目的 30mins 内向上游贡献 PR，20h 后被合并 <del>最速传说（</del></p>
+<p>明天就继续研究 FEX 的源码，看看它是怎么建模 ARM CPU 的，尝试再在 IR 上设计一层 IR 分发到 RISC-V CPU 上。</p>
+<h2>2025-10</h2>
+<h3>01</h3>
+<p>整个国庆的工作效率奇低，产出非常可悲: 没有可见产出。</p>
+<p>今天继续研究 FEX-Emu 的源码，在读前端解析过程中发现自己对不少细节完全陌生 (tl;dr: 菜)，那确实没办法了，只能翻手册了。</p>
+<p>然后就获得了一个 2500 页的 PDF <del>(被水淹没，不知所措)</del></p>
+<p>但考虑到再不干活进度就要彻底完蛋了，所以只能硬着头皮啃。</p>
+<p>然后发现了一些抽象的东西: F2h 这个字节在解码的时候会一鱼三吃，可能是 REPNE、可能是单纯的 BND、也可能是像 BNDCU 这样的前缀，所以必须靠 CPUID/配置位/后续指令类别才能正确判断。</p>
+<p>不过好消息: MPX 已在很多平台上弃用了，Linux 和 glibc 已经没有支持了；坏消息: 解码器仍要兼容旧代码的编码约定。<span class="spoiler">泥头车又把我创似了</span> </p>
+<h3>02</h3>
+<p>把 FEX 的源码拆了下，搓了一个 RISC-V 后端，在荔枝派上编译起来了。</p>
+<p>顺便跑了个 7z bench 和 OpenSSL Benchmark。7z 测试结果能到 75% 左右，很吓人，明明用起来慢得要死但测试结果却没那么烂...</p>
+<h3>03</h3>
+<p>尝试跑了下 hello world，死在寄存器分配里了，看上去是因为 RV 后端初始化时没有提供寄存器信息，所以 RegAllocPass 不知道，直接崩了。</p>
+<p>幸好这个问题比较好理解，修起来没那么麻烦，又水一周。</p>
+<h2>2025-11</h2>
+<h3>01</h3>
+<p>赞美刘阳老师！</p>
+<p><code>biscuit</code> 真是神中神，支持的指令集很全，外加速度很快 <del>不愧是 JIT 仙人（</del></p>
+<p>有了好的 Codegen 工具后终于不用自己拼好宏了，实现 OpCode 方便多了。</p>
+<h3>02</h3>
+<p>加上了 Dispatcher 后，看上去 RV 后端能跑了，但跑程序还是崩溃，PC 居然是 0!</p>
+<p>有脏东西，但它死在了 JIT 里导致异常难抓这个 Bug，拼尽全力发现是 Syscall Handler 上的函数地址传错了，但为什么错？汇编逻辑应该没有问题，Dump 出来的指令也很正常。</p>
+<h3>03</h3>
+<p>由于周报水不出来，所以花了两个小时认真拿 GDB 查了一下，结果是我 Dispatcher 逻辑写错了，进 JIT 执行第一个 CodeBlock 时跳过了第一条指令导致后面全乱了，闹麻了。</p>
+<p>修掉这个问题后果然正常进到 Syscall 逻辑了，补上 write 的映射 Hello World 算是跑起来了。</p>
+<h3>04</h3>
+<p>用伟大的 Gemini 的力量 Vibe 了一个 Git History 改写工具，拿它重写了 FEX-RV 的提交历史，现在可维护性好了不少。</p>
+<h2>2025-12</h2>
+<h3>01</h3>
+<p>组会上报告了一阶段的工作进展: <a href="../../files/Presentation.pdf">点击查看</a></p>]]></content:encoded>
+    </item>
     <item>
       <title>LLVM 贡献记录</title>
-      <link>https://zeyi2.github.io/posts/llvm-roadmap.html</link>
-      <guid>https://zeyi2.github.io/posts/llvm-roadmap.html</guid>
+      <link>https://zeyi2.github.io/posts/compiler/llvm-roadmap.html</link>
+      <guid>https://zeyi2.github.io/posts/compiler/llvm-roadmap.html</guid>
       <pubDate>Tue, 09 Dec 2025 21:49:35 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
       <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
@@ -353,93 +440,9 @@ Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in conste
 </blockquote>]]></content:encoded>
     </item>
     <item>
-      <title>FEX-RV 日志</title>
-      <link>https://zeyi2.github.io/posts/fex-rv.html</link>
-      <guid>https://zeyi2.github.io/posts/fex-rv.html</guid>
-      <pubDate>Fri, 28 Nov 2025 23:19:08 +0800</pubDate>
-      <description> FEX-RV 日志 2025-09 事情的起因是 Infra 的基础要在 box64 和 FEX 中选一个，然后我没听说过后者，遂尝试编译: -- Clang version 18.1.8 CMake Error at CMakeLists.txt:152 (message): FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a su</description>
-      <content:encoded><![CDATA[<h1>FEX-RV 日志</h1>
-<h2>2025-09</h2>
-<p>事情的起因是 Infra 的基础要在 <code>box64</code> 和 <code>FEX</code> 中选一个，然后我没听说过后者，遂尝试编译:</p>
-<pre><code class="language-shell">
--- Clang version 18.1.8
-CMake Error at CMakeLists.txt:152 (message):
-   FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a supported configuration for FEX CI and nothing else!
-</code></pre>
-<p>很不幸地是实验室的机器还用不了，所以没招了，只能自己拿 QEMU 起发行版装。</p>
-<p>翻出了自己三年前的破烂脚本，改亿改 (45mins of hard debugging) 得到一下能跑的版本:</p>
-<pre><code class="language-shell">
-#!/bin/sh
-
-set -xe
-
-ISO_PATH="$1"
-QCOW2_IMAGE="$2"
-
-qemu-img create -f qcow2 "$QCOW2_IMAGE" 50G
-qemu-system-aarch64 \
-    -cpu cortex-a53 -smp cores=4 \
-    -nographic \
-    -M virt -m 4096 \
-    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
-    -drive format=qcow2,file="$QCOW2_IMAGE" \
-    -device ramfb \
-    -cdrom "$ISO_PATH" \
-    -nic user,model=virtio \
-    -rtc base=utc,clock=host
-</code></pre>
-<pre><code class="language-shell">
-#!/bin/sh
-
-set -xe
-
-QCOW2_IMAGE="$1"
-
-qemu-system-aarch64 \
-    -cpu cortex-a53 -smp cores=10 \
-    -nographic \
-    -M virt -m 4096 \
-    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
-    -drive format=qcow2,file="$QCOW2_IMAGE" \
-    -device ramfb \
-    -nic user,model=virtio \
-    -rtc base=utc,clock=host
-</code></pre>
-<p>然后装系统 + 补依赖 + 编译折腾了一个晚上 + 一个上午，拼尽全力搭出了开发环境。</p>
-<p>以及在阅读 FEX 文档的时候发现了一点小问题，成功在接触这个项目的 30mins 内向上游贡献 PR，20h 后被合并 <del>最速传说（</del></p>
-<p>明天就继续研究 FEX 的源码，看看它是怎么建模 ARM CPU 的，尝试再在 IR 上设计一层 IR 分发到 RISC-V CPU 上。</p>
-<h2>2025-10</h2>
-<h3>01</h3>
-<p>整个国庆的工作效率奇低，产出非常可悲: 没有可见产出。</p>
-<p>今天继续研究 FEX-Emu 的源码，在读前端解析过程中发现自己对不少细节完全陌生 (tl;dr: 菜)，那确实没办法了，只能翻手册了。</p>
-<p>然后就获得了一个 2500 页的 PDF <del>(被水淹没，不知所措)</del></p>
-<p>但考虑到再不干活进度就要彻底完蛋了，所以只能硬着头皮啃。</p>
-<p>然后发现了一些抽象的东西: F2h 这个字节在解码的时候会一鱼三吃，可能是 REPNE、可能是单纯的 BND、也可能是像 BNDCU 这样的前缀，所以必须靠 CPUID/配置位/后续指令类别才能正确判断。</p>
-<p>不过好消息: MPX 已在很多平台上弃用了，Linux 和 glibc 已经没有支持了；坏消息: 解码器仍要兼容旧代码的编码约定。<span class="spoiler">泥头车又把我创似了</span> </p>
-<h3>02</h3>
-<p>把 FEX 的源码拆了下，搓了一个 RISC-V 后端，在荔枝派上编译起来了。</p>
-<p>顺便跑了个 7z bench 和 OpenSSL Benchmark。7z 测试结果能到 75% 左右，很吓人，明明用起来慢得要死但测试结果却没那么烂...</p>
-<h3>03</h3>
-<p>尝试跑了下 hello world，死在寄存器分配里了，看上去是因为 RV 后端初始化时没有提供寄存器信息，所以 RegAllocPass 不知道，直接崩了。</p>
-<p>幸好这个问题比较好理解，修起来没那么麻烦，又水一周。</p>
-<h2>2025-11</h2>
-<h3>01</h3>
-<p>赞美刘阳老师！</p>
-<p><code>biscuit</code> 真是神中神，支持的指令集很全，外加速度很快 <del>不愧是 JIT 仙人（</del></p>
-<p>有了好的 Codegen 工具后终于不用自己拼好宏了，实现 OpCode 方便多了。</p>
-<h3>02</h3>
-<p>加上了 Dispatcher 后，看上去 RV 后端能跑了，但跑程序还是崩溃，PC 居然是 0!</p>
-<p>有脏东西，但它死在了 JIT 里导致异常难抓这个 Bug，拼尽全力发现是 Syscall Handler 上的函数地址传错了，但为什么错？汇编逻辑应该没有问题，Dump 出来的指令也很正常。</p>
-<h3>03</h3>
-<p>由于周报水不出来，所以花了两个小时认真拿 GDB 查了一下，结果是我 Dispatcher 逻辑写错了，进 JIT 执行第一个 CodeBlock 时跳过了第一条指令导致后面全乱了，闹麻了。</p>
-<p>修掉这个问题后果然正常进到 Syscall 逻辑了，补上 write 的映射 Hello World 算是跑起来了。</p>
-<h3>04</h3>
-<p>用伟大的 Gemini 的力量 Vibe 了一个 Git History 改写工具，拿它重写了 FEX-RV 的提交历史，现在可维护性好了不少。</p>]]></content:encoded>
-    </item>
-    <item>
       <title>LLVM Coding Standard, in a nutshell</title>
-      <link>https://zeyi2.github.io/posts/coding-standard.html</link>
-      <guid>https://zeyi2.github.io/posts/coding-standard.html</guid>
+      <link>https://zeyi2.github.io/posts/compiler/coding-standard.html</link>
+      <guid>https://zeyi2.github.io/posts/compiler/coding-standard.html</guid>
       <pubDate>Thu, 20 Nov 2025 19:27:25 +0800</pubDate>
       <description> LLVM Coding Standard, in a nutshell Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节 以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了</description>
       <content:encoded><![CDATA[<h1>LLVM Coding Standard, in a nutshell</h1>

@@ -1,0 +1,75 @@
+# 学习小组的资料
+
+**Tips: 这些只是我自己曾经/现在使用的材料，不一定适合所有人**
+
+## C
+
+* [K&R](https://seriouscomputerist.atariverse.com/media/pdf/book/C%20Programming%20Language%20-%202nd%20Edition%20(OCR).pdf)
+    * All-time classic, 练习题建议全做一遍
+* [Learn C the Hard Way](https://wizardforcel.gitbooks.io/lcthw/content/preface.html)
+    * 建议完成：练习 0 到练习 18， 练习 32，练习 33，练习 42，练习 44
+* [Beej's Guide to C Programming](https://beej.us/guide/bgc/html/split/)
+    * 或许是最新人友好的 C 教程，这本很有名，但我没有读完
+* [Linux Kernel Source Code](https://git.kernel.org/)
+    * Learn C the **really hard** way
+    * 建议同时对着 bootlin 和 Kernel Mailing List 食用。
+    * (最好的学习方法是找个有内核交 PATCH 经验的带，虽然我自己太菜没有被带起来)
+* [C Coding Standard](https://users.ece.cmu.edu/~eno/coding/CCodingStandard.html)
+* [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard)
+    * 这两个 Standard 可以帮助你写出更安全的 C 程序
+    * 如果你选择了合适的工具 (e.g. [Clang-tidy](https://clang.llvm.org/extra/clang-tidy/))，那么你可以找出你代码中大部分的风格问题
+* [南大 C 语言程序设计](https://docs.cpl.icu/#/)
+    * 我大一的时候蹭了这门课，观感上还行 (但确实有一些我很不喜欢的内容/题目，但无伤大雅)
+    * 好处是南大的课程质量和清晰程度远超 ECNU ~~(例如我大一的 C 语言课上完全没有提结构体和宏 ||怎么能有这么逆天的课||)~~，且 OJ 对外开放注册
+
+## 汇编
+
+* [FFmpeg's Assembly Lessons](https://github.com/FFmpeg/asm-lessons)
+    * 目前看来还是半成品, but still nice and interesting to read.
+* [DRAM 的 RISC-V 汇编教程](https://dramforever.github.io/easyriscv/)
+* [Compiler Explorer](https://godbolt.org/)
+    * 我学习汇编的方式是研究编译器的输出
+
+## C++
+
+实话实说，我 C++ 写的非常糟糕，所以这一部分可能参考价值不大。
+
+* [A Tour of C++](https://www.stroustrup.com/tour3.html)
+    * 我在两周速成 C++ 时选用的手册
+* [LLVM Project](https://github.com/llvm/llvm-project)
+    * LLVM 的代码库质量非常的高 ~~(我在 Clang-tidy 里污染的部分除外)~~，是很好的 C++ 学习资料
+    * 以及我博客里有一个 LLVM Coding Standard 相关的文章，可以参考
+
+## Rust
+
+Rust 官方有非常好的学习资料：
+
+* [Rustlings](https://rustlings.rust-lang.org/)
+* [The Rust Programming Language](https://doc.rust-lang.org/stable/book/)
+
+## 函数式
+
+### Haskell
+
+* [馒头的 real world haskell](https://silent-piccolo-dd5.notion.site/Haskell-1a491b17d4dd4e49a76b6be96d496600)
+    * 充满了 Learn You a Haskell for Great Good 等书学不到的现代 Haskell 工业界的最佳实践
+
+### Lisp
+
+Seriously, why would you learn Lisp in 2025?
+
+* [李杀的 Emacs Lisp 教程](http://xahlee.info/emacs/emacs/elisp.html)
+    * 推荐的原因是 ELisp 在血缘上可能和原始的 Lisp 更接近一点，虽然如果不用 Emacs 学 Elisp 完全没用。
+    * 如果你用 Vim/其它编辑器或 IDE 且还想学 Lisp，直接读 [Practical Common Lisp](https://gigamonkeys.com/book/) 吧
+
+## 工具使用
+
+* Linux: 自己装一个 (Hardware OR WSL) 然后读 [Manpage](https://man7.org/linux/man-pages/) 和 [ArchWiki](https://wiki.archlinux.org/title/Main_page)
+    * 注: Arch Linux 用户会折腾出很多抽象的 Workaround
+    * (e.g. 内核的 UAC 问题他们会直接在 pipewire 关硬件音量控制 ||大脑皮层过于光滑了||)，注意辨别
+* Git: 读 [Pro Git](https://git-scm.com/book/en/v2)，一步到位
+* Bash: Don't. Learn Python instead.
+* AWK: ~~Don't. Learn Python instead.~~ [The AWK Programming Language](https://9p.io/cm/cs/awkbook/index.html)
+* Sed: Don't. Learn Vim/Emacs instead.
+* Ed: Don't. Learn Vim/Emacs instead.
+* Grep: `man grep`, 建议换成 [ripgrep](https://github.com/BurntSushi/ripgrep)
