@@ -238,7 +238,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="../../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>the trolling business</em></span>
+    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -311,10 +311,16 @@ li.task-list-item input[type="checkbox"] {
 <div id="side-bar">
 <ul>
 <li><a href="../index.html">&rsaquo; ..</a></li>
-<li><a href="fex-rv.html">&rsaquo; fex-rv</a></li>
 </ul>
 </div>
 <div id="main">
+<h1>从零开始的 Shader hacking</h1>
+<p>一些很有趣的 Shader 实践</p>
+<h2>2026/1/28</h2>
+<p><a href="https://broken.life/shaders/260128.html">Sky 1</a></p>
+<pre><code>
+for(float i,z,d;i++&lt;6e1;o+=vec4(3,.1,1,1)/d/2e2){vec3 p=z*normalize(vec3((FC*2.-r)/r.y,1));p.z+=t;p.xy*=mat2(cos(p.z*.5+vec4(0,33,11,0)));z+=d=abs(dot(sin(p),cos(p.yzx)))+.05;}
+</code></pre>
 
 </div>
 </body>
