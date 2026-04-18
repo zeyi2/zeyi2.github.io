@@ -1,0 +1,486 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitchell's Homepage</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style type="text/css">
+/* Based on werc.cat-v.org, suckless.org and garbe.us */
+
+/* General */
+:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #c7d2fe; --header-h: 56px; }
+body {
+    color: #0f172a;            /* dark slate for readability */
+    background-color: #f7fbff; /* subtle blue-tinted background */
+    font-family: sans-serif;
+    font-size: 80%;
+    margin: 0;
+    padding: 0
+}
+
+/* Plan banner (fixed at bottom) */
+#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #dbeafe; color: #1e40af; font-weight: 600; padding: 0 12px; z-index: 1100; text-align: right; }
+body { padding-bottom: var(--plan-banner-h); }
+/* Full-height vertical divider matching the sidebar edge */
+body::before { content: ""; position: fixed; top: var(--header-h); bottom: var(--plan-banner-h); left: var(--sidebar-w); width: 1px; background: var(--divider-color); pointer-events: none; z-index: 900; }
+
+/* Header */
+.header { background-color: #dbeafe; border: 0; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }        /* blue-100 */
+.header a { border: 0; color: #0f172a; text-decoration: none; }
+.midHeader img { border: 0; }
+
+.headerTitle { font-size: 1.6em; font-weight: bold; margin: 0 0 0 0.5em; padding: 0.5em; }
+.headerTitle a { border: 0; text-decoration: none; }
+
+.headerSubtitle { font-size: 0.6em; font-weight: normal; margin-left: 1em; color: #1e40af; } /* blue-800 for contrast */
+
+/* Side (werc-like) */
+#side-bar {
+    width: var(--sidebar-w);
+    float: left;
+    clear: left;
+    border-right: 1px solid #c7d2fe; /* blue-200 */
+    margin: 0;
+    padding: 0;
+    background-color: #eff6ff; /* blue-50 */
+}
+
+#side-bar div { border-bottom: 1px solid #ddd; }
+
+.sideBarTitle { font-weight: bold; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; }
+
+#side-bar ul {
+	list-style-type: none;
+	list-style-position: outside;
+	margin: 0;
+	padding: 0 0 0.3em 0;
+}
+
+li ul { padding-left: 0.6em !important; }
+
+#side-bar li { margin: 0; padding: 0.1ex 0; }
+
+#side-bar a {
+    color: #2563eb; /* blue-600 */
+    background-color: transparent;
+    margin: 0;
+    padding: 0.25em 1ex 0.25em 2mm;
+    display: block;
+    text-transform: capitalize;
+    font-weight: bold !important;
+    font-size: 102%;
+    border-left: #ffffff solid 0.2em;
+}
+
+.thisPage, .thisPage a {
+    color: #0f172a !important;
+    background-color: #ffffff;
+    padding-left: 5mm;
+}
+
+#side-bar a:hover {
+    color: #ffffff;
+    background-color: #1d4ed8; /* blue-700 */
+    border-left: #1e3a8a solid 0.2em; /* blue-900 */
+    text-decoration: none;
+}
+ 
+/* Main Copy (werc-like) */
+#main {
+    max-width: 70em;
+    color: #0f172a;
+    background-color: transparent;
+    text-align: justify;
+    line-height: 1.5em;
+    margin: 0 0 0 var(--sidebar-w);
+    padding: 0.5em 1.5em 2em 1em;
+    border-left: 1px solid #c7d2fe; /* blue-200 */
+}
+
+#main a { color: #2563eb; text-decoration: none; }
+#main a:hover { color: #1d4ed8; text-decoration: underline; }
+#main h1, #main h2 { color: #2563eb; border-bottom: 1px solid #2563eb; padding-bottom: 0.5ex; }
+#main ul { list-style-type: square; }
+
+/* Responsive media */
+#main img, img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Footer */
+#footer {
+    background-color: #e2e8f0; /* slate-200 */
+    color: #0f172a;
+    font-size: 91%;
+    padding: 2em;
+    clear: both;
+}
+
+#footer .left { text-align: left; float: left; clear: left; }
+#footer .right { text-align: right; }
+#footer a { color: #0f172a; text-decoration: none; }
+#footer a:hover { text-decoration: underline; }
+
+abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
+blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
+hr { border-width: 0 0 0.1em 0; border-color: #666; }
+
+code, pre { font-family: 'Courier New', Courier, monospace; font-size: 1.1em; }
+pre {
+    background-color: #f8fafc; /* slate-50 */
+    border: 1px solid #e2e8f0; /* slate-200 */
+    border-radius: 8px;
+    padding: 1em;
+    overflow-x: auto;
+}
+pre > code {
+    font-size: 1em;
+}
+
+/* Spoiler text */
+.spoiler {
+    background-color: #0f172a;
+    color: #0f172a;
+    padding: 0 3px;
+    border-radius: 3px;
+    transition: color 0.15s ease-in-out;
+}
+.spoiler:hover {
+    color: #f7fbff;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+th, td {
+    border: 1px solid #c7d2fe; /* --divider-color */
+    padding: 0.5em;
+    text-align: left;
+}
+thead {
+    background-color: #eff6ff; /* blue-50 */
+}
+
+/* Task list items */
+li.task-list-item {
+    list-style-type: none; /* Remove default bullet point */
+    margin-left: -20px; /* Adjust as needed to align with other list items */
+}
+
+li.task-list-item input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and text */
+    vertical-align: middle; /* Align checkbox with text baseline */
+}
+
+/* Footnotes */
+.footnotes {
+    font-size: 0.9em;
+    color: #475569; /* slate-600 */
+}
+.footnotes ol {
+    padding-left: 20px;
+}
+.footnotes li {
+    margin-bottom: 0.5em;
+}
+.footnotes a {
+    text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  :root { --sidebar-w: 12em; }
+  #hdr-search input { min-width: auto; width: 18em; }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 0;
+    --plan-banner-h: 32px;
+  }
+  body::before { display: none; }
+  /* Watermark image tuning on small screens */
+  #bg-watermark,
+  body > img[src$="images/bg.png"] {
+    width: 40vw !important;
+    max-width: 220px !important;
+    right: 8px !important;
+    bottom: calc(var(--plan-banner-h) + 8px) !important;
+    opacity: 0.35 !important;
+  }
+  .header { flex-wrap: wrap; }
+  .headerTitle { font-size: 1.3em; padding: 0.5em 0.5em 0.25em; }
+  .headerSubtitle { font-size: 0.7em; }
+  #hdr-search { width: 100%; padding: 0 0.5rem 0.5rem; }
+  #hdr-search input { min-width: 0; width: 100%; }
+
+  #side-bar {
+    float: none;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--divider-color);
+  }
+  #side-bar a { display: inline-block; border-left: 0; padding: 0.5em 0.75em; }
+
+  #main { margin: 0; padding: 1em; border-left: 0; text-align: left; }
+
+  #footer .left, #footer .right { float: none; text-align: left; }
+}
+</style>
+</head>
+<body>
+<img id="bg-watermark" src="../../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; z-index: 1000; opacity: 0.5;"/>
+<div id="plan-banner"><a href="../../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
+<div class="header">
+  <h1 class="headerTitle">
+    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Sorry.</em></span>
+  </h1>
+  <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
+    <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
+  </form>
+</div>
+<script>window.SW_BASE="../../";</script>
+<script>
+(function(){
+  var q = document.getElementById('sw-q');
+  if(!q) return;
+  var panel = document.createElement('div');
+  panel.id = 'sw-search-panel';
+  panel.style.position = 'fixed';
+  panel.style.top = getComputedStyle(document.body).getPropertyValue('--header-h') || '56px';
+  panel.style.left = getComputedStyle(document.body).getPropertyValue('--sidebar-w') || '0';
+  panel.style.right = '12px';
+  panel.style.maxHeight = '40vh';
+  panel.style.overflow = 'auto';
+  panel.style.padding = '10px 12px';
+  panel.style.border = '1px solid var(--divider-color)';
+  panel.style.background = getComputedStyle(document.getElementById('main')||document.body).backgroundColor || '#fff';
+  panel.style.boxShadow = '0 4px 16px rgba(2,6,23,0.15)';
+  panel.style.display = 'none';
+  panel.style.zIndex = 1200;
+  document.body.appendChild(panel);
+
+  function show(){ panel.style.display='block'; }
+  function hide(){ panel.style.display='none'; }
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hide(); });
+  document.addEventListener('click', function(e){ if(panel.style.display==='none') return; if(!panel.contains(e.target) && e.target!==q) hide(); });
+
+  var cache;
+  async function load(){
+    if(cache) return cache;
+    const res = await fetch((window.SW_BASE||'') + 'search-index.json', {cache:'no-store'});
+    const data = await res.json();
+    data.forEach(d=>{ d._text=(d.title+' '+(d.text||'')).toLowerCase(); });
+    cache = data; return data;
+  }
+  function esc(s){ return (s||'').replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+  function snippet(text, q){
+    const t=text||''; const qq = q.trim().toLowerCase();
+    if(!qq) return esc(t.slice(0,160))+'...';
+    const i=t.toLowerCase().indexOf(qq);
+    if(i<0) return esc(t.slice(0,160))+'...';
+    const s=Math.max(0,i-60), e=Math.min(t.length,i+100);
+    return (s>0?'...':'') + esc(t.slice(s,i)) + '<mark>'+esc(t.slice(i,i+qq.length))+'</mark>' + esc(t.slice(i+qq.length,e)) + (e<t.length?'...':'');
+  }
+  function render(list, terms){
+    if(!terms.length){ panel.innerHTML=''; hide(); return; }
+    const html = list.map(function(d){
+      var href = (window.SW_BASE||'') + d.url;
+      var snip = snippet(d.text||'', terms.join(' '));
+      return '<div style="margin-bottom:0.8em"><a href="'+href+'"><strong>'+esc(d.title)+'</strong></a><div style="color:#475569">'+snip+'</div></div>';
+    }).join('');
+    panel.innerHTML = html || '<em>No results</em>';
+    show();
+  }
+  async function search(qv){
+    const idx = await load();
+    var terms = (qv||'').toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if(!terms.length){ render([], terms); return; }
+    const res = idx.filter(function(d){ return terms.every(function(t){ return d._text.indexOf(t) !== -1; }); });
+    render(res.slice(0,100), terms);
+  }
+  q.addEventListener('input', function(e){ search(e.target.value); });
+})();
+</script>
+
+<div id="side-bar">
+<ul>
+<li><a href="index.html">&rsaquo; .</a></li>
+<li><a href="../index.html">&rsaquo; ..</a></li>
+<li><a href="coding-standard.html">&rsaquo; coding-standard</a></li>
+<li><a href="llvm-roadmap-1.html" class="thisPage">&raquo;<i> llvm-roadmap-1</i></a></li>
+<li><a href="llvm-roadmap.html">&rsaquo; llvm-roadmap</a></li>
+</ul>
+</div>
+<div id="main">
+<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
+<p>这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
+<p><del><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></del></p>
+<h2 id="section">2026-01-08</h2>
+<p>clang-22 距离发版还有 5 天，现在手上还有 11 个在做的 PR (💦)，更不幸的是 clang 发版时间和 我期末考试还撞一起了，寄完了 (明天考马原，目前一章没学，等下还得去找 pdf 背)</p>
+<p>但感觉有几个 PR 或许有机会能压着时间点 land:</p>
+<ul>
+<li>一是给 <code>clang-tidy</code> 某个 check 加 C++20 <code>constinit</code> 的支持，这个 PR 目前缺一些测试点和文档上的小修改，感觉今天晚上睡前顺手修掉问题不大</li>
+</ul>
+<p>以及在和 Reviewer 对线的过程中发现了一个很有趣 (创) 的事情：</p>
+<p><a href="https://clang-tidy.godbolt.org/z/qTbvKs69W" class="uri">https://clang-tidy.godbolt.org/z/qTbvKs69W</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constinit</span> <span class="dt">int</span> b <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span></code></pre></div>
+<p>先 <code>extern</code> 声明再 declare <code>constinit</code>, 最开始的 extern 不会拿到 <code>constinit</code> 的属性! (for anyone interested: 本地复现可以拿 <code>clang -Xclang -ast-dump -fsyntax-only</code> 跑出来，不过这种情况一般会用 <code>clang-query</code>..)</p>
+<pre><code>|-VarDecl prev 0x11b00d88 &lt;line:7:1, col:19&gt; col:15 b &#39;int&#39; cinit
+| |-IntegerLiteral &lt;col:19&gt; &#39;int&#39; 42
+| `-ConstInitAttr &lt;col:1&gt; constinit</code></pre>
+<p>另一位 maintainer 找出了 <a href="https://godbolt.org/z/heea3fc8s"><code>constexpr</code> 也适用这个逻辑</a>, 那代表说这个 check 原来的处理逻辑也是有 bug 的…</p>
+<p>不管怎么样能定出来的 bug 都是好 bug，至少修起来会比较简单。</p>
+<ul>
+<li>给一个 check 加新的 option: 这个 PR 被拖了差不多一个月，但隔壁 <code>cppcheck</code> 和 <code>simplecpp</code> 两个项目已经出现了缺这个 option 导致的问题，但没人 Review 我其实也没什么办法，昨天给了一些代码风格和测试点上的意见，感觉全 address 后应该就差不多了？但感觉会很折磨，这个分支有点太老了，切过去大概要从头开始编译.. 准备等下问问伟大的 Gemini 有没有什么好办法。</li>
+</ul>
+<p>一些如果能 land 会很好的 PR:</p>
+<ul>
+<li>CUDA support!!: 上周在尝试给 <code>clang-tidy</code> 加 CUDA 支持时，修了一个 Assert Failure 的问题，但 AaronBallman 在过圣诞假期，所以无人来审。</li>
+</ul>
+<p>然后前两天一个 Google 的工程师说要给 Tooling 加一套编译信息的框架来解决这个问题，我觉得很难评，主要是我确实不知道 Clang Tooling 和 Clang Driver 是怎么交互的，而如果准备现在把这玩意搞清楚，那我概率论就可以重修去了 (　<sup>ω</sup>)</p>
+<ul>
+<li>数据流分析的 Regression: 有人找到了一个 False Positive，看上去是 clang19 到 20 之间引入的 regression, 查了两个小时发现是新引入的缓存机制导致原始代码里 Matcher 的一个未知隐蔽 bug 开始发力 (世界上第三痛苦的事是 debug CI，第二痛苦的事是 bisect，最痛苦的事情是一边 bisect 一边写小作文……)</li>
+</ul>
+<p>很难受的是虽然 bisect 出了 commit 但还是没方法稳定复现问题，我猜测是 range based loops 的问题，但数据流分析的东西太难手动构造出不收敛且好观测的情况了，直接爆炸。</p>
+<h2 id="section-1">2026-01-09</h2>
+<p>考完了马原（烂完），出考场一看昨天修的 PR 被 Approve 了，今天看到了一个关于 private copy constructor 的 False Positive，估算了一下代码量应该很小，打算晚上写个 PATCH 修一下。</p>
+<p>顺手 ping 了一下 Aaron，我真的很想在这周以内把 CUDA 相关的两个 PR 合进去，这样 clang-tidy 的 CUDA module 或许能有点实际推进（圣诞节前给 NVIDIA 法务部发了询问邮件，可惜直接被无视了，LLVM Legal Team 也没消息，也不知道去哪里找相关的人问，就拖到现在还没开始动工）</p>
+<h2 id="section-2">2026-01-13</h2>
+<p>考完概率论继续写点：</p>
+<p>今天理论上就是开 22.x branch 的日子了，总结一下这几天干的事情：</p>
+<ul>
+<li><p>把 CUDA 的修复合进去了，然后 <code>clang-tidy</code> 相关的文档与测试点还在等最后的 Review，猜测今天应该能合进去。</p></li>
+<li><p>修了一个 libc 数学库相关的 Issue，主要的工作量在折腾 bazel 和 CMake <span class="spoiler">天下苦构建系统久矣!</span>，合的很快。</p></li>
+<li><p>上一篇 /dev/log 里提到的修复刚刚被 Approve 了，准备晚上合进去。</p></li>
+<li><p>帮忙做了不少 Code Review</p></li>
+</ul>
+<p>总体上来说效率不是很高，主要是期末周/比赛答辩/项目发版全部撞在一周以内还是太变态了，完全处理不过来，有心无力了属于是。</p>
+<p>同时这几天编译器社区出了不少新闻，来点简单分享：</p>
+<ul>
+<li><p>LLVM Lead Maintainer 炮打 LLVM：<a href="https://www.npopov.com/2026/01/11/LLVM-The-bad-parts.html" class="uri">https://www.npopov.com/2026/01/11/LLVM-The-bad-parts.html</a></p></li>
+<li><p>2026 EuroLLVM 截稿：<a href="https://discourse.llvm.org/t/call-for-proposals-2026-eurollvm-developers-meeting-submit-by-11-january/89336" class="uri">https://discourse.llvm.org/t/call-for-proposals-2026-eurollvm-developers-meeting-submit-by-11-january/89336</a>)</p></li>
+<li><p>GCC 16.0 进 Stage 4 了，距离正式发布越来越近了(・ω・)</p></li>
+<li><p>GCC 发布了 Sourceware infrastructure updates for Q4 2025，分享过去三个月 GCC 在 Infra 上的改进 <span class="spoiler">LLVM 什么时候能学学 GCC，我基本就没怎么见 bazel, openmp, polly 这几个模块的 CI 正常跑通，今天甚至连 ABI 的 CI 都挂了</span></p></li>
+</ul>
+<h2 id="section-3">2026-01-23</h2>
+<p>在折腾完内核开发赛 <del>(并把剩余参赛队当鱼炸)</del> 后进入了摆烂模式，醒着的时候就在 Minecraft 启动，昨天又开始拉电线坐牢，感觉这破游戏玩不下去一点。</p>
+<p>期末周计算机网络和概率论的一天速通非常成功，两门一点都没学的课居然都没挂，喜提 3.3，感谢老师不杀之恩 ( ´∀`)</p>
+<p>LLVM 这里有一点产出，但不多：</p>
+<ul>
+<li><p>修了一个和宏相关的 assertion failure 问题。</p></li>
+<li><p>修了一个 parenthesized functions 的错误 fixits。</p></li>
+<li><p>把之前 Clang-tidy 中 CUDA 相关的文档给合进去了，新的文档可以在这里看：<a href="https://clang.llvm.org/extra/clang-tidy/#running-clang-tidy-on-cuda-files" class="uri">https://clang.llvm.org/extra/clang-tidy/#running-clang-tidy-on-cuda-files</a></p></li>
+<li><p>doc8 配置更新：在 Google 两位工程师 (Florian Mayer 和 Rohan Jacob-Rao) 的清理后，clang-tidy 的 doc8 配置终于不需要各种奇怪的 hack 了，好事。</p></li>
+<li><p>尝试修了下 <code>check_clang_tidy.py</code>，这个 python 脚本居然不支持检查头文件，这个缺失功能就这么放了一年，简直离谱！所以趁有时间就顺手修掉了，不过现在还没有足够的 Reviewer 来审。唉，Reviewing Bandwith.</p></li>
+<li><p>修了一个 21.1.8 下的 False Positive，不过现在还没什么人来审。鬼故事：在修这个 FP 的时候又发现了一个新的 FP：<a href="https://clang-tidy.godbolt.org/z/e8eMav36f" class="uri">https://clang-tidy.godbolt.org/z/e8eMav36f</a></p></li>
+<li><p>有一个没有及时合并的修复需要重新拉进 22.x 的分支里，借这个机会学习了一下怎么给 LLVM 合进主线的 Commits 做 backport，只需要在评论区输入 <code>/cherry-pick &lt;hash&gt;</code> 就可以了，感觉很方便。</p></li>
+<li><p>每日两到三个 Code Review，这个反而成了花力气最少的部分。</p></li>
+</ul>
+<p>这个月其他的也不想干了，剩下时间就继续拉电线了。这辈子彻底有了，哈哈</p>
+<h2 id="section-4">2026-02-04</h2>
+<p>做手术前再来💧一篇开发日志，虽然这十天其实也没干什么|ー` )</p>
+<p>首先，在卡池里经历了漫长的折磨后，我卸载了拉电线神游。</p>
+<p>不打游戏省出来的时间主要在忙着重构博客 <del>抄明日方舟的设计</del>，拼尽全力糊出来一个能跑的玩意: <a href="https://broken.life/" class="uri">https://broken.life/</a> (建议用电脑/平板，我前端能力一坨，手机端不知道怎么做适配直接摆了)</p>
+<p>实验室的项目目前进展也不太良好，上次和导师开完小会给完方案后就躺了，打算手术后看看怎么实现，寄。</p>
+<p>虽然最近疯狂摸鱼，但在 LLVM 里也还是做了一些事情：</p>
+<ul>
+<li>修了下 bugprone-macro-parentheses 的诊断信息</li>
+</ul>
+<p>虽然 clang-tidy 不应该诊断命令行的参数，但这个 check 添加支持很简单，那顺手修了也挺好。</p>
+<ul>
+<li><p>修了下 performance-enum-size 对 extern “C” 的一些错误分析，日常改 Matcher..</p></li>
+<li><p>为 readability-non-const-parameter 加了一些 corner case 的支持</p></li>
+<li><p>修了一个有 bug 的 python 脚本，顺带给文档和 list.rst 打了个补丁</p></li>
+</ul>
+<p>之前在 Review 其他 PR 时，在 list.rst 里时不时就能发现一些很奇怪的修改，原先以为是 PR 作者在 Merging 的时候出了问题，后面发现好像并不是。添加 check 的脚本对代码库做了一些不完全正确的假设，导致重新生成内容的时候搞乱了整个排序。</p>
+<ul>
+<li><p>给 MLIR 修了一个 arith.select 相关的 crash，这个 PATCH 没什么技术含量</p></li>
+<li><p>修了 clang-tidy 代码库里的 unchecked-optional-access 警告，之前已经遇到过因为这些警告而导致程序崩溃的例子了，故干脆一起修了。</p></li>
+<li><p>每日 3-4 个 PR Review，感觉已经快成 daily routine 了</p></li>
+</ul>
+<p>今天凌晨另一位国内的 Contributor 私信我了一个 RFC：<a href="https://discourse.llvm.org/t/rfc-remove-80-column-limit-in-documentation-files/89678" class="uri">https://discourse.llvm.org/t/rfc-remove-80-column-limit-in-documentation-files/89678</a>，很不幸的是 clang-tidy 文档相关的 CI 是我搓的，那后面还得更进一下这个 RFC 的进展，可能还要改配置，但已有的文档怎么处理就不知道了</p>
+<p>以及 GSoC 2026 要开始了，LLVM 相关的 Project 已经可以在 <a href="https://discourse.llvm.org/tag/gsoc2026" class="uri">https://discourse.llvm.org/tag/gsoc2026</a> 看到了，GCC 相关的讨论目前似乎还只是在邮件列表里，三月份应该会公开具体信息。</p>
+<p>完成项目的话应该能拿几千美刀和一个 Google 发的证书，感兴趣可以看看，不一定要有很强的编译器相关背景，例如：<a href="https://discourse.llvm.org/t/gsoc-2026-improving-clang-doc/89662" class="uri">https://discourse.llvm.org/t/gsoc-2026-improving-clang-doc/89662</a> 这个关于文档优化的项目会前端就行。</p>
+<h2 id="section-5">2026-03-07</h2>
+<p>由于寒假忙着做手术和打游戏，导致没有写开发日志，开学了补上。</p>
+<p>最近遇到的一个好事是自己成为了 Clang-tidy 的 Maintainer (<a href="https://clang.llvm.org/extra/Maintainers.html" class="uri">https://clang.llvm.org/extra/Maintainers.html</a>)</p>
+<p>这是我第一次以真实身份在开源社区出道，算是满足了自己的一个小目标。</p>
+<p>同时过去的一个月也做了不少事情：</p>
+<p>首先，我的个人项目 CTIT (<a href="https://github.com/clang-tidy-infra/CTIT" class="uri">https://github.com/clang-tidy-infra/CTIT</a>) 完成了初步的开发，且已经被用上了。</p>
+<p>它的功能是把 PR 的修改自动 apply 到 clang-tidy 的 codebase 上并编译，然后在大型开源项目（如 cppcheck, clang, curl）上运行来检测运行时崩溃、功能退化及误报变化，我还在里面塞了一个小的 AI Agent 来对 Logs 做自动分析。</p>
+<p>LLVM 上的一些 PATCH 总结： - 更新了一下 Clang-tidy 的文档，提醒 check authors 在写测试的时候要指定具体的语言 standards (<a href="https://github.com/llvm/llvm-project/pull/184750" class="uri">https://github.com/llvm/llvm-project/pull/184750</a>)</p>
+<p>简单来说就是没有特殊情况写 <code>-std=c..-or-later</code></p>
+<ul>
+<li>修了 <code>misc-throw-by-value-catch-by-reference</code> 里两个完全失效的 Options (<a href="https://github.com/llvm/llvm-project/pull/184750" class="uri">https://github.com/llvm/llvm-project/pull/184750</a>)</li>
+</ul>
+<p>非常诡异，这种代码是怎么进到仓库里的，之前的 Reviewer 在审什么东西.</p>
+<ul>
+<li><p>两个补测试覆盖率的 NFC Patches (<a href="https://github.com/llvm/llvm-project/pull/184015" class="uri">https://github.com/llvm/llvm-project/pull/184015</a> 和 <a href="https://github.com/llvm/llvm-project/pull/184708" class="uri">https://github.com/llvm/llvm-project/pull/184708</a>)</p></li>
+<li><p>修复了一个和 Attributes 相关的问题 (<a href="https://github.com/llvm/llvm-project/pull/184095" class="uri">https://github.com/llvm/llvm-project/pull/184095</a>)</p></li>
+</ul>
+<p>第一次知道原来 Clang 的 Frontend 会把多个连续的 AttributedStmt 压缩成一个</p>
+<ul>
+<li>给一个 check 加上了部分缺失的重载 (<a href="https://github.com/llvm/llvm-project/pull/183300" class="uri">https://github.com/llvm/llvm-project/pull/183300</a>)</li>
+</ul>
+<p>我感觉 Clang-tidy 有很多类似的问题，不知道有没有办法根据标准库的函数声明来做针对性的自动化测试。</p>
+<ul>
+<li>修了一个 readability-container-size-empty 中的 Assert Crash (<a href="https://github.com/llvm/llvm-project/pull/181557" class="uri">https://github.com/llvm/llvm-project/pull/181557</a>)</li>
+</ul>
+<p>getName() 前不做 Sanity check 是坏文明，虽然我自己有时候也会写出这样不好的代码…</p>
+<ul>
+<li>一个会影响 Clang-tidy 的 Clang Issue: <a href="https://github.com/llvm/llvm-project/pull/181712" class="uri">https://github.com/llvm/llvm-project/pull/181712</a></li>
+</ul>
+<p>Aaron 的评论让我学到了很多架构设计上的新知识:</p>
+<blockquote>
+<p>SDiagsWriter is a subclass of DiagnosticConsumer which defines the contract for finish(). So this means some subclasses will automagically handle finish() while others won’t. WDYT about calling finish() explicitly in tooling? That means any diagnostic consumer will behave correctly, not just serialized diagnostics.</p>
+</blockquote>
+<ul>
+<li>修了一个因为没有测试覆盖而导致的 Crash: <a href="https://github.com/llvm/llvm-project/pull/180351" class="uri">https://github.com/llvm/llvm-project/pull/180351</a></li>
+</ul>
+<p>这个 PR 也是我开始加强 Clang-tidy 测试覆盖率的主要原因。</p>
+<ul>
+<li>更新了失效的 HICPP 文档链接: <a href="https://github.com/llvm/llvm-project/pull/180525" class="uri">https://github.com/llvm/llvm-project/pull/180525</a></li>
+</ul>
+<p>这个 PR 在社区里引起了一些其他讨论: <a href="https://discourse.llvm.org/t/rfc-regarding-the-current-status-of-hicpp-checks/89883/3" class="uri">https://discourse.llvm.org/t/rfc-regarding-the-current-status-of-hicpp-checks/89883/3</a></p>
+<p>目前的共识是：HICPP 的 check 需要先重命名到别的 module 里，然后再考虑要不要直接删掉整个 module.</p>
+<p>自己过去的一个 Commit 莫名其妙上了 LLVM Weekly Report: <a href="https://llvmweekly.org/issue/630" class="uri">https://llvmweekly.org/issue/630</a>，虽然只有一行 (争取以后做出更酷炫的成果)</p>
+<hr />
+<p>编译器社区的一些新闻：</p>
+<ul>
+<li><a href="https://discourse.llvm.org/t/rfc-ai-assisted-bazel-fixer-bot/89178/94" class="uri">https://discourse.llvm.org/t/rfc-ai-assisted-bazel-fixer-bot/89178/94</a></li>
+</ul>
+<p>社区里吵了很久的 AI Bazel Bot 尘埃落定，还是放行了。</p>
+<ul>
+<li><p>Clang 22.1.0 发布： <a href="https://releases.llvm.org/22.1.0/tools/clang/docs/ReleaseNotes.html" class="uri">https://releases.llvm.org/22.1.0/tools/clang/docs/ReleaseNotes.html</a> <a href="https://releases.llvm.org/22.1.0/tools/clang/tools/extra/docs/ReleaseNotes.html" class="uri">https://releases.llvm.org/22.1.0/tools/clang/tools/extra/docs/ReleaseNotes.html</a></p></li>
+<li><p>世界上最流行的 C++ LSP 工具(之一) Clangd 处在爆炸的边缘：<a href="https://discourse.llvm.org/t/help-needed-with-clangd-maintenance/89820" class="uri">https://discourse.llvm.org/t/help-needed-with-clangd-maintenance/89820</a></p></li>
+</ul>
+<p>支持 clice.io 谢谢喵</p>
+<ul>
+<li>GSoC 2026 如火如荼进行中！</li>
+</ul>
+<p>QEMU: 快照快速加载、USB 设备重定向、vhost-user 内存隔离、COCONUT-SVSM 中支持 x86 PCID、SCSI 磁带设备模拟…</p>
+<p>LLVM: <a href="https://discourse.llvm.org/t/gsoc-2026-projects-proposals-and-other-information/89967" class="uri">https://discourse.llvm.org/t/gsoc-2026-projects-proposals-and-other-information/89967</a></p>
+<hr />
+<p>生活琐事：</p>
+<p>之前提到了给 2012 投简历的事情，由于官网那边完全没回复，所以我直接尝试微信私聊他们员工了，在等了两天后：</p>
+<blockquote>
+<p>有的哈，今年岗位三月底开放，流程要届时才能推进了</p>
+</blockquote>
+<p>也许真的有机会？</p>
+<p>以防万一还是投了一些其它的公司，例如阿里平头哥和字节，私下聊天时，朋友给了一个抽象的建议：</p>
+<blockquote>
+<p>去 mihoyo 搞 infra</p>
+</blockquote>
+<p>虽然我既不懂游戏开发，也不会做 Infra，但我觉得这个想法实在太有乐子了。于是发动 Connection 获得了一个内推码直接投了简历，更抽象的是米哈游写简历的网页上还要写自己的游戏经历，于是:</p>
+<p>崩坏星穹铁道 活跃6-12月 已退坑</p>
+<p>现在 HR 初筛，期待开奖 (　<sup>ω</sup>)</p>
+</div>
+</body>
+</html>

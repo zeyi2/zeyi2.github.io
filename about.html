@@ -238,7 +238,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Maybe yes, maybe no.</em></span>
+    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
   </h1>
   <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
     <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
@@ -319,81 +319,73 @@ li.task-list-item input[type="checkbox"] {
 </ul>
 </div>
 <div id="main">
-<h1>关于</h1>
-<h2>网站简介:</h2>
+<h1 id="关于">关于</h1>
+<h2 id="网站简介">网站简介:</h2>
 <p><a href="https://broken.life/">https://broken.life/</a> 是我的个人博客。先前这里用来放社团的学习资料，将来可能会写一些更加私人化的东西，不一定技术相关，但这里主要还是技术文章多些。</p>
-<h2>关于我:</h2>
+<h2 id="关于我">关于我:</h2>
 <p>大二学生，之前在 <a href="http://www.is.cas.cn/">ISCAS</a> 实习了小半年 (调试沙子深加工设备)，现在在 <a href="https://solelab.tech/">SOLELAB</a> 折腾二进制翻译和编译优化。业余时间会维护一些自己在用的开源软件。</p>
-<p>C++ 学习中，但写的还是很烂...</p>
-<p>目前是 Clang-tidy 的活跃贡献者之一，Github 帐号是 <a href="https://github.com/zeyi2">@zeyi2</a>，欢迎一切和 LLVM Project/RISC-V/Emacs/Linux 有关的讨论。</p>
+<p>C++ 学习中，但写的还是很烂…</p>
+<p>目前是 Clang-tidy 的活跃贡献者之一，Github 帐号是 <a href="https://github.com/zeyi2"><span class="citation" data-cites="zeyi2">@zeyi2</span></a>，欢迎一切和 LLVM Project/RISC-V/Emacs/Linux 有关的讨论。</p>
 <blockquote>
 <p>会的东西不太多，学习速度也不快，怎么这么菜。</p>
 </blockquote>
 <p>Preferred language: English &amp; Chinese</p>
-<p>Please send mail to: <a href="mailto:zeyi2@nekoarch.cc">mailto:zeyi2@nekoarch.cc</a></p>
+<p>Please send mail to: <a href="mailto:zeyi2@nekoarch.cc" class="uri">mailto:zeyi2@nekoarch.cc</a></p>
 <p>为防止骚扰，QQ/Wechat/Telegram 联系方式请通过邮件获取。</p>
-<h2>关于网站：</h2>
+<p>我的简历在 <a href="./files/resume_zh.pdf">这里</a>, Open to internships/full time jobs.</p>
+<h2 id="关于网站">关于网站：</h2>
 <p>这次 Blog 翻修参考了 <a href="https://werc.cat-v.org/">werc</a> 的设计，很可惜的是我没时间维护服务器，所以还是用静态页面生成的方式。</p>
 <p>以及 Markdown Parser 怎么这么难写，前前后后折腾了一周才搓出来个勉强能用的。</p>
 <blockquote>
 <p>2025/11/20 Update:</p>
+</blockquote>
+<blockquote>
 <p>在经历了和 AWK 斗智斗勇的两个小时后，现在我的博客总算支持：</p>
 </blockquote>
-<ul>
-<li class="task-list-item"><input type="checkbox" checked disabled>
-<del>删除线</del>
-</li>
-<li class="task-list-item"><input type="checkbox" checked disabled>
-<span class="spoiler">你知道的太多了.jpg</span>
-</li>
-<li class="task-list-item"><input type="checkbox" checked disabled>
-代码块 <sup><a href="#fn-1" id="fnref-1">1</a></sup>
-<pre><code class="language-c">
-#include &lt;stdio.h>
-<strong>int</strong> main() {
-    <strong>return</strong> 0;
-}
-</code></pre>
-</li>
-<li class="task-list-item"><input type="checkbox" checked disabled>
-脚注 <sup><a href="#fn-2" id="fnref-2">2</a></sup>
-</li>
-<li class="task-list-item"><input type="checkbox" checked disabled>
-表格
+<ul class="task-list">
+<li class="task-list-item"><input type="checkbox" disabled> <del>删除线</del></li>
+<li class="task-list-item"><input type="checkbox" disabled> <span class="spoiler">你知道的太多了.jpg</span></li>
+<li class="task-list-item"><input type="checkbox" disabled> 代码块 <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul class="task-list">
+<li class="task-list-item"><input type="checkbox" disabled> 脚注 <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li class="task-list-item"><input type="checkbox" disabled> 表格</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th> Header 1</th>
-<th>Header 2</th>
-<th>Header 3 </th>
+<th>Header 1</th>
+<th style="text-align: center;">Header 2</th>
+<th style="text-align: right;">Header 3</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td> Row 1 Col 1</td>
-<td>Row 1 Col 2</td>
-<td>Row 1 Col 3 </td>
+<td>Row 1 Col 1</td>
+<td style="text-align: center;">Row 1 Col 2</td>
+<td style="text-align: right;">Row 1 Col 3</td>
 </tr>
 <tr>
-<td> Row 2 Col 1</td>
-<td>Row 2 Col 2</td>
-<td>Row 2 Col 3 </td>
+<td>Row 2 Col 1</td>
+<td style="text-align: center;">Row 2 Col 2</td>
+<td style="text-align: right;">Row 2 Col 3</td>
 </tr>
 <tr>
-<td> Row 3 Col 1</td>
-<td>Row 3 Col 2</td>
-<td>Row 3 Col 3 </td>
+<td>Row 3 Col 1</td>
+<td style="text-align: center;">Row 3 Col 2</td>
+<td style="text-align: right;">Row 3 Col 3</td>
 </tr>
 </tbody>
 </table>
-</li>
-</ul>
-
 <div class="footnotes">
-<hr>
+<hr />
 <ol>
-<li id="fn-1">但是高亮没有完整支持，哭 <a href="#fnref-1">↩</a></li>
-<li id="fn-2"><strong><em><a href="https://zeyi2.github.io/">而且支持链接</a></em></strong> <a href="#fnref-2">↩</a></li>
+<li id="fn1"><p>但是高亮没有完整支持，哭<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><strong><em><a href="https://zeyi2.github.io/">而且支持链接</a></em></strong><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div>
 </div>
