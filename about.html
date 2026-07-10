@@ -6,196 +6,456 @@
 <title>Mitchell's Homepage</title>
 <link rel="icon" href="/favicon.png" type="image/png">
 <style type="text/css">
-/* Based on werc.cat-v.org, suckless.org and garbe.us */
+/*
+ * OpenGenera palette for the existing werc-style blog markup.
+ *
+ * This is an additive alternative to style.css. It intentionally keeps the
+ * current document structure intact and does not load or replace font files.
+ */
 
-/* General */
-:root { --plan-banner-h: 40px; --sidebar-w: 16em; --divider-color: #c7d2fe; --header-h: 56px; }
+:root {
+  color-scheme: light;
+
+  /* OpenGenera source palette. */
+  --g-paper: #ffffff;
+  --g-paper-soft: #f9f9f6;
+  --g-ink: #050505;
+  --g-mid: #767676;
+  --g-muted: #b9b9b9;
+  --g-teal: #629a9b;
+  --g-teal-light: #b3c1be;
+  --g-teal-dark: #1f4d4e;
+
+  /* Semantic aliases used by the blog. */
+  --g-canvas: var(--g-paper-soft);
+  --g-surface: var(--g-paper);
+  --g-foreground: var(--g-ink);
+  --g-secondary: var(--g-mid);
+  --g-rule: var(--g-ink);
+  --g-accent: var(--g-teal-dark);
+  --g-accent-surface: var(--g-teal);
+  --g-selection: var(--g-ink);
+  --g-selection-foreground: var(--g-paper);
+  --g-disabled: var(--g-muted);
+  --g-shadow: 4px 4px 0 var(--g-ink);
+
+  --plan-banner-h: 40px;
+  --sidebar-w: 16em;
+  --header-h: 56px;
+  --divider-color: var(--g-rule);
+
+  --g-font-fixed: "CPTFONT Modern", "CPTFONT", Monaco, "Lucida Console", "Courier New", monospace;
+  --g-font-menu: "JESS14 Modern", "JESS14", Geneva, "Trebuchet MS", Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--g-canvas);
+}
+
 body {
-    color: #0f172a;            /* dark slate for readability */
-    background-color: #f7fbff; /* subtle blue-tinted background */
-    font-family: sans-serif;
-    font-size: 80%;
-    margin: 0;
-    padding: 0
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 0 var(--plan-banner-h);
+  color: var(--g-foreground);
+  background-color: var(--g-canvas);
+  background-image: linear-gradient(
+    to right,
+    var(--g-surface) 0,
+    var(--g-surface) var(--sidebar-w),
+    var(--g-canvas) var(--sidebar-w),
+    var(--g-canvas) 100%
+  );
+  background-repeat: no-repeat;
+  font-family: var(--g-font-fixed);
+  font-size: 80%;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Plan banner (fixed at bottom) */
-#plan-banner { position: fixed; bottom: 0; left: 0; right: 0; height: var(--plan-banner-h); line-height: var(--plan-banner-h); background: #dbeafe; color: #1e40af; font-weight: 600; padding: 0 12px; z-index: 1100; text-align: right; }
-body { padding-bottom: var(--plan-banner-h); }
-/* Full-height vertical divider matching the sidebar edge */
-body::before { content: ""; position: fixed; top: var(--header-h); bottom: var(--plan-banner-h); left: var(--sidebar-w); width: 1px; background: var(--divider-color); pointer-events: none; z-index: 900; }
+::selection {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
 
-/* Header */
-.header { background-color: #dbeafe; border: 0; display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }        /* blue-100 */
-.header a { border: 0; color: #0f172a; text-decoration: none; }
-.midHeader img { border: 0; }
+body::before {
+  position: fixed;
+  z-index: 900;
+  top: var(--header-h);
+  bottom: var(--plan-banner-h);
+  left: var(--sidebar-w);
+  width: 1px;
+  background: var(--g-rule);
+  content: "";
+  pointer-events: none;
+}
 
-.headerTitle { font-size: 1.6em; font-weight: bold; margin: 0 0 0 0.5em; padding: 0.5em; }
-.headerTitle a { border: 0; text-decoration: none; }
+a {
+  color: var(--g-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
 
-.headerSubtitle { font-size: 0.6em; font-weight: normal; margin-left: 1em; color: #1e40af; } /* blue-800 for contrast */
+a:hover,
+a:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  outline: 0;
+  text-decoration: none;
+}
 
-/* Side (werc-like) */
+#plan-banner {
+  position: fixed;
+  z-index: 1100;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--plan-banner-h);
+  padding: 0 12px;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border-top: 1px solid var(--g-ink);
+  font-weight: 700;
+  line-height: var(--plan-banner-h);
+  text-align: right;
+}
+
+#plan-banner a {
+  color: inherit;
+}
+
+#plan-banner a:hover,
+#plan-banner a:focus-visible {
+  color: var(--g-ink);
+  background: var(--g-paper);
+}
+
+.header {
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--g-paper);
+  background: var(--g-accent-surface);
+  border: 1px solid var(--g-rule);
+}
+
+.header a {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-decoration: none;
+}
+
+.header a:hover,
+.header a:focus-visible {
+  color: var(--g-paper);
+  background: var(--g-teal-dark);
+}
+
+.midHeader img {
+  border: 0;
+}
+
+.headerTitle {
+  margin: 0 0 0 0.5em;
+  padding: 0.5em;
+  font-family: var(--g-font-menu);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.headerSubtitle {
+  margin-left: 1em;
+  color: var(--g-paper);
+  font-size: 0.6em;
+  font-style: normal;
+  font-weight: 400;
+}
+
 #side-bar {
-    width: var(--sidebar-w);
-    float: left;
-    clear: left;
-    border-right: 1px solid #c7d2fe; /* blue-200 */
-    margin: 0;
-    padding: 0;
-    background-color: #eff6ff; /* blue-50 */
+  width: var(--sidebar-w);
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
+  float: left;
+  clear: left;
+  margin: 0;
+  padding: 0;
+  color: var(--g-foreground);
+  background: var(--g-paper);
+  border-right: 1px solid var(--g-rule);
 }
 
-#side-bar div { border-bottom: 1px solid #ddd; }
+#side-bar div {
+  border-bottom: 1px solid var(--g-rule);
+}
 
-.sideBarTitle { font-weight: bold; margin: 0 0 0.5em 2mm; padding: 1em 0 0 0; }
+.sideBarTitle {
+  margin: 0 0 0.5em 2mm;
+  padding: 1em 0 0;
+  font-family: var(--g-font-menu);
+  font-style: italic;
+  font-weight: 700;
+}
 
 #side-bar ul {
-	list-style-type: none;
-	list-style-position: outside;
-	margin: 0;
-	padding: 0 0 0.3em 0;
+  margin: 0;
+  padding: 0 0 0.3em;
+  list-style: none outside;
 }
 
-li ul { padding-left: 0.6em !important; }
+li ul {
+  padding-left: 0.6em !important;
+}
 
-#side-bar li { margin: 0; padding: 0.1ex 0; }
+#side-bar li {
+  margin: 0;
+  padding: 0.1ex 0;
+}
 
 #side-bar a {
-    color: #2563eb; /* blue-600 */
-    background-color: transparent;
-    margin: 0;
-    padding: 0.25em 1ex 0.25em 2mm;
-    display: block;
-    text-transform: capitalize;
-    font-weight: bold !important;
-    font-size: 102%;
-    border-left: #ffffff solid 0.2em;
+  display: block;
+  margin: 0;
+  padding: 0.25em 1ex 0.25em 2mm;
+  color: var(--g-foreground);
+  background: transparent;
+  border-left: 0.2em solid var(--g-paper);
+  font-weight: 700 !important;
+  font-size: 102%;
+  text-decoration: none;
+  text-transform: capitalize;
 }
 
-.thisPage, .thisPage a {
-    color: #0f172a !important;
-    background-color: #ffffff;
-    padding-left: 5mm;
+#side-bar a:hover,
+#side-bar a:focus-visible {
+  padding-left: 5mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
 }
 
-#side-bar a:hover {
-    color: #ffffff;
-    background-color: #1d4ed8; /* blue-700 */
-    border-left: #1e3a8a solid 0.2em; /* blue-900 */
-    text-decoration: none;
+#side-bar a.thisPage,
+#side-bar li.thisPage > a {
+  padding-left: 5mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
 }
- 
-/* Main Copy (werc-like) */
+
+#side-bar li.thisPage {
+  background: var(--g-selection);
+}
+
 #main {
-    max-width: 70em;
-    color: #0f172a;
-    background-color: transparent;
-    text-align: justify;
-    line-height: 1.5em;
-    margin: 0 0 0 var(--sidebar-w);
-    padding: 0.5em 1.5em 2em 1em;
-    border-left: 1px solid #c7d2fe; /* blue-200 */
+  max-width: 70em;
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
+  margin: 0 0 0 var(--sidebar-w);
+  padding: 0.5em 1.5em 2em 1em;
+  color: var(--g-foreground);
+  background: var(--g-surface);
+  border-left: 1px solid var(--g-rule);
+  line-height: 1.5em;
+  text-align: justify;
 }
 
-#main a { color: #2563eb; text-decoration: none; }
-#main a:hover { color: #1d4ed8; text-decoration: underline; }
-#main h1, #main h2 { color: #2563eb; border-bottom: 1px solid #2563eb; padding-bottom: 0.5ex; }
-#main ul { list-style-type: square; }
-
-/* Responsive media */
-#main img, img {
-    max-width: 100%;
-    height: auto;
+#main a {
+  color: var(--g-accent);
 }
 
-/* Footer */
+#main a:hover,
+#main a:focus-visible {
+  color: var(--g-selection-foreground);
+}
+
+#main h1,
+#main h2 {
+  padding-bottom: 0.5ex;
+  color: var(--g-foreground);
+  border-bottom: 1px solid var(--g-rule);
+  font-family: var(--g-font-menu);
+}
+
+#main h1 {
+  font-style: italic;
+}
+
+#main ul {
+  list-style-type: square;
+}
+
+#main img,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Decorative Don Quixote watermark: keep it out of the reading column. */
+#bg-watermark,
+body > img[src$="images/bg.png"] {
+  position: fixed !important;
+  z-index: 0 !important;
+  right: 10px !important;
+  bottom: calc(var(--plan-banner-h) + 18px) !important;
+  width: clamp(190px, 18vw, 320px) !important;
+  max-width: calc(100vw - var(--sidebar-w) - 32px) !important;
+  height: auto !important;
+  opacity: 0.3 !important;
+  pointer-events: none;
+  user-select: none;
+}
+
 #footer {
-    background-color: #e2e8f0; /* slate-200 */
-    color: #0f172a;
-    font-size: 91%;
-    padding: 2em;
-    clear: both;
+  clear: both;
+  padding: 2em;
+  color: var(--g-foreground);
+  background: var(--g-teal-light);
+  border-top: 1px solid var(--g-rule);
+  font-size: 91%;
 }
 
-#footer .left { text-align: left; float: left; clear: left; }
-#footer .right { text-align: right; }
-#footer a { color: #0f172a; text-decoration: none; }
-#footer a:hover { text-decoration: underline; }
+#footer .left {
+  float: left;
+  clear: left;
+  text-align: left;
+}
 
-abbr, acronym { border-bottom: 1px dotted #333; cursor: help; }
-blockquote { border-left: 1px solid #333; font-style: italic; padding: 1em; }
-hr { border-width: 0 0 0.1em 0; border-color: #666; }
+#footer .right {
+  text-align: right;
+}
 
-code, pre { font-family: 'Courier New', Courier, monospace; font-size: 1.1em; }
+#footer a {
+  color: var(--g-foreground);
+  text-decoration: none;
+}
+
+abbr,
+acronym {
+  border-bottom: 1px dotted var(--g-rule);
+  cursor: help;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 1em;
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-rule);
+  border-left: 8px solid var(--g-teal);
+  font-style: italic;
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid var(--g-rule);
+}
+
+code,
 pre {
-    background-color: #f8fafc; /* slate-50 */
-    border: 1px solid #e2e8f0; /* slate-200 */
-    border-radius: 8px;
-    padding: 1em;
-    overflow-x: auto;
+  font-family: var(--g-font-fixed);
+  font-size: 1.05em;
 }
+
+code {
+  padding: 0 0.2em;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border-bottom: 1px dotted var(--g-mid);
+}
+
+pre {
+  padding: 1em;
+  overflow-x: auto;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border: 1px solid var(--g-rule);
+  border-left: 8px solid var(--g-teal);
+  border-radius: 0;
+  box-shadow: var(--g-shadow);
+}
+
 pre > code {
-    font-size: 1em;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: 1em;
 }
 
-/* Spoiler text */
 .spoiler {
-    background-color: #0f172a;
-    color: #0f172a;
-    padding: 0 3px;
-    border-radius: 3px;
-    transition: color 0.15s ease-in-out;
-}
-.spoiler:hover {
-    color: #f7fbff;
+  padding: 0 3px;
+  color: var(--g-ink);
+  background: var(--g-ink);
+  border-radius: 0;
 }
 
-/* Tables */
+.spoiler:hover,
+.spoiler:focus-visible {
+  color: var(--g-paper);
+}
+
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5em 0;
-}
-th, td {
-    border: 1px solid #c7d2fe; /* --divider-color */
-    padding: 0.5em;
-    text-align: left;
-}
-thead {
-    background-color: #eff6ff; /* blue-50 */
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
 }
 
-/* Task list items */
+th,
+td {
+  padding: 0.5em;
+  border: 1px solid var(--g-rule);
+  text-align: left;
+}
+
+thead {
+  color: var(--g-paper);
+  background: var(--g-ink);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--g-paper-soft);
+}
+
 li.task-list-item {
-    list-style-type: none; /* Remove default bullet point */
-    margin-left: -20px; /* Adjust as needed to align with other list items */
+  margin-left: -20px;
+  list-style-type: none;
 }
 
 li.task-list-item input[type="checkbox"] {
-    margin-right: 5px; /* Space between checkbox and text */
-    vertical-align: middle; /* Align checkbox with text baseline */
+  margin-right: 5px;
+  accent-color: var(--g-teal-dark);
+  vertical-align: middle;
 }
 
-/* Footnotes */
 .footnotes {
-    font-size: 0.9em;
-    color: #475569; /* slate-600 */
-}
-.footnotes ol {
-    padding-left: 20px;
-}
-.footnotes li {
-    margin-bottom: 0.5em;
-}
-.footnotes a {
-    text-decoration: none;
+  color: var(--g-secondary);
+  border-top: 1px solid var(--g-rule);
+  font-size: 0.9em;
 }
 
-/* Responsive adjustments */
+.footnotes ol {
+  padding-left: 20px;
+}
+
+.footnotes li {
+  margin-bottom: 0.5em;
+}
+
+.footnotes a {
+  text-decoration: none;
+}
+
+:disabled,
+[aria-disabled="true"] {
+  color: var(--g-disabled);
+}
+
 @media (max-width: 1024px) {
-  :root { --sidebar-w: 12em; }
-  #hdr-search input { min-width: auto; width: 18em; }
+  :root {
+    --sidebar-w: 12em;
+  }
 }
 
 @media (max-width: 768px) {
@@ -203,33 +463,71 @@ li.task-list-item input[type="checkbox"] {
     --sidebar-w: 0;
     --plan-banner-h: 32px;
   }
-  body::before { display: none; }
-  /* Watermark image tuning on small screens */
+
+  body::before {
+    display: none;
+  }
+
+  body {
+    background: var(--g-canvas);
+  }
+
   #bg-watermark,
   body > img[src$="images/bg.png"] {
-    width: 40vw !important;
-    max-width: 220px !important;
-    right: 8px !important;
-    bottom: calc(var(--plan-banner-h) + 8px) !important;
-    opacity: 0.35 !important;
+    right: 10px !important;
+    bottom: calc(var(--plan-banner-h) + 10px) !important;
+    width: min(42vw, 180px) !important;
+    max-width: calc(100vw - 20px) !important;
+    opacity: 0.22 !important;
   }
-  .header { flex-wrap: wrap; }
-  .headerTitle { font-size: 1.3em; padding: 0.5em 0.5em 0.25em; }
-  .headerSubtitle { font-size: 0.7em; }
-  #hdr-search { width: 100%; padding: 0 0.5rem 0.5rem; }
-  #hdr-search input { min-width: 0; width: 100%; }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .headerTitle {
+    padding: 0.5em 0.5em 0.25em;
+    font-size: 1.3em;
+  }
+
+  .headerSubtitle {
+    font-size: 0.7em;
+  }
 
   #side-bar {
-    float: none;
     width: 100%;
+    min-height: 0;
+    float: none;
     border-right: 0;
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--g-rule);
   }
-  #side-bar a { display: inline-block; border-left: 0; padding: 0.5em 0.75em; }
 
-  #main { margin: 0; padding: 1em; border-left: 0; text-align: left; }
+  #side-bar a {
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    border-left: 0;
+  }
 
-  #footer .left, #footer .right { float: none; text-align: left; }
+  #main {
+    margin: 0;
+    padding: 1em;
+    border-left: 0;
+    text-align: left;
+  }
+
+  #footer .left,
+  #footer .right {
+    float: none;
+    text-align: left;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --g-accent: var(--g-ink);
+    --g-accent-surface: var(--g-teal-dark);
+    --g-teal-light: var(--g-paper);
+  }
 }
 </style>
 </head>
@@ -238,76 +536,9 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>This is idiocy.</em></span>
+    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Maybe yes, maybe no.</em></span>
   </h1>
-  <form id="hdr-search" role="search" onsubmit="event.preventDefault();" style="margin-left:auto; margin-right:1rem; display:flex; gap:8px; align-items:center;">
-    <input id="sw-q" name="q" placeholder="Search..." aria-label="Search" style="padding:6px 8px; min-width:14em;">
-  </form>
 </div>
-<script>window.SW_BASE="";</script>
-<script>
-(function(){
-  var q = document.getElementById('sw-q');
-  if(!q) return;
-  var panel = document.createElement('div');
-  panel.id = 'sw-search-panel';
-  panel.style.position = 'fixed';
-  panel.style.top = getComputedStyle(document.body).getPropertyValue('--header-h') || '56px';
-  panel.style.left = getComputedStyle(document.body).getPropertyValue('--sidebar-w') || '0';
-  panel.style.right = '12px';
-  panel.style.maxHeight = '40vh';
-  panel.style.overflow = 'auto';
-  panel.style.padding = '10px 12px';
-  panel.style.border = '1px solid var(--divider-color)';
-  panel.style.background = getComputedStyle(document.getElementById('main')||document.body).backgroundColor || '#fff';
-  panel.style.boxShadow = '0 4px 16px rgba(2,6,23,0.15)';
-  panel.style.display = 'none';
-  panel.style.zIndex = 1200;
-  document.body.appendChild(panel);
-
-  function show(){ panel.style.display='block'; }
-  function hide(){ panel.style.display='none'; }
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hide(); });
-  document.addEventListener('click', function(e){ if(panel.style.display==='none') return; if(!panel.contains(e.target) && e.target!==q) hide(); });
-
-  var cache;
-  async function load(){
-    if(cache) return cache;
-    const res = await fetch((window.SW_BASE||'') + 'search-index.json', {cache:'no-store'});
-    const data = await res.json();
-    data.forEach(d=>{ d._text=(d.title+' '+(d.text||'')).toLowerCase(); });
-    cache = data; return data;
-  }
-  function esc(s){ return (s||'').replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
-  function snippet(text, q){
-    const t=text||''; const qq = q.trim().toLowerCase();
-    if(!qq) return esc(t.slice(0,160))+'...';
-    const i=t.toLowerCase().indexOf(qq);
-    if(i<0) return esc(t.slice(0,160))+'...';
-    const s=Math.max(0,i-60), e=Math.min(t.length,i+100);
-    return (s>0?'...':'') + esc(t.slice(s,i)) + '<mark>'+esc(t.slice(i,i+qq.length))+'</mark>' + esc(t.slice(i+qq.length,e)) + (e<t.length?'...':'');
-  }
-  function render(list, terms){
-    if(!terms.length){ panel.innerHTML=''; hide(); return; }
-    const html = list.map(function(d){
-      var href = (window.SW_BASE||'') + d.url;
-      var snip = snippet(d.text||'', terms.join(' '));
-      return '<div style="margin-bottom:0.8em"><a href="'+href+'"><strong>'+esc(d.title)+'</strong></a><div style="color:#475569">'+snip+'</div></div>';
-    }).join('');
-    panel.innerHTML = html || '<em>No results</em>';
-    show();
-  }
-  async function search(qv){
-    const idx = await load();
-    var terms = (qv||'').toLowerCase().trim().split(/\s+/).filter(Boolean);
-    if(!terms.length){ render([], terms); return; }
-    const res = idx.filter(function(d){ return terms.every(function(t){ return d._text.indexOf(t) !== -1; }); });
-    render(res.slice(0,100), terms);
-  }
-  q.addEventListener('input', function(e){ search(e.target.value); });
-})();
-</script>
-
 <div id="side-bar">
 <ul>
 <li><a href="index.html">&rsaquo; .</a></li>
@@ -319,41 +550,33 @@ li.task-list-item input[type="checkbox"] {
 </ul>
 </div>
 <div id="main">
-<h1 id="关于">关于</h1>
-<h2 id="网站简介">网站简介:</h2>
-<p><a href="https://broken.life/">https://broken.life/</a> 是我的个人博客。先前这里用来放社团的学习资料，将来可能会写一些更加私人化的东西，不一定技术相关，但这里主要还是技术文章多些。</p>
-<h2 id="关于我">关于我:</h2>
-<p>大二学生，之前在 <a href="http://www.is.cas.cn/">ISCAS</a> 实习了小半年 (调试沙子深加工设备)，现在在 <a href="https://solelab.tech/">SOLELAB</a> 折腾二进制翻译和编译优化。业余时间会维护一些自己在用的开源软件。</p>
-<p>C++ 学习中，但写的还是很烂…</p>
-<p>目前是 Clang-tidy 的活跃贡献者之一，Github 帐号是 <a href="https://github.com/zeyi2"><span class="citation" data-cites="zeyi2">@zeyi2</span></a>，欢迎一切和 LLVM Project/RISC-V/Emacs/Linux 有关的讨论。</p>
-<blockquote>
-<p>会的东西不太多，学习速度也不快，怎么这么菜。</p>
-</blockquote>
+<h1 id="about">About</h1>
+<p><a href="https://broken.life/">https://broken.life/</a> is my personal blog. It was previously used to host materials for a student club, but I may use it for more personal writing in the future. The topics will not necessarily be limited to technology, though technical articles will likely continue to make up most of the content.</p>
+<h2 id="about-me">About me</h2>
+<p>I’m an undergraduate student currently interning at <a href="http://www.is.cas.cn/">ISCAS</a>, where I spent nearly nine months debugging RISC-V development boards and am now contributing fixes and improvements to Clang.</p>
+<p>I’m also part of <a href="https://solelab.tech/">SOLELAB</a>, focusing on binary translation and compiler optimization. Outside of that, I maintain a few open-source projects that I use myself, and I currently serve as one of the maintainers of <a href="https://clang.llvm.org/extra/clang-tidy/">Clang-Tidy</a>.</p>
+<p>You can find me on GitHub at <a href="https://github.com/zeyi2"><span class="citation" data-cites="zeyi2">@zeyi2</span></a>. Feel free to reach out to discuss LLVM, RISC-V, Emacs, or Linux.</p>
+<p>I keep a Telegram channel for dev logs: <a href="https://t.me/zeyi2_dev"><span class="citation" data-cites="zeyi2_dev">@zeyi2_dev</span></a></p>
 <p>Preferred language: English &amp; Chinese</p>
-<p>Please send mail to: <a href="mailto:zeyi2@nekoarch.cc" class="uri">mailto:zeyi2@nekoarch.cc</a></p>
-<p>为防止骚扰，QQ/Wechat/Telegram 联系方式请通过邮件获取。</p>
-<p>我的简历在 <a href="./files/resume_zh.pdf">这里</a>, Open to internships/full time jobs.</p>
-<h2 id="关于网站">关于网站：</h2>
-<p>这次 Blog 翻修参考了 <a href="https://werc.cat-v.org/">werc</a> 的设计，很可惜的是我没时间维护服务器，所以还是用静态页面生成的方式。</p>
-<p>以及 Markdown Parser 怎么这么难写，前前后后折腾了一周才搓出来个勉强能用的。</p>
+<p><em>Not available for hire now</em>.</p>
+<h2 id="about-this-website">About this website</h2>
+<p>This blog redesign takes inspiration from <a href="https://werc.cat-v.org/">werc</a>. Unfortunately, I don’t have time to maintain a server, so I’m still going with static site generation.</p>
+<p>Also, who knew writing a Markdown parser would be this hard - it took a week of struggling to cobble together something barely usable.</p>
 <blockquote>
-<p>2025/11/20 Update:</p>
-</blockquote>
-<blockquote>
-<p>在经历了和 AWK 斗智斗勇的两个小时后，现在我的博客总算支持：</p>
+<p>2025/11/20 Update: After two hours of fighting AWK, my blog now finally supports:</p>
 </blockquote>
 <ul class="task-list">
-<li class="task-list-item"><input type="checkbox" disabled> <del>删除线</del></li>
-<li class="task-list-item"><input type="checkbox" disabled> <span class="spoiler">你知道的太多了.jpg</span></li>
-<li class="task-list-item"><input type="checkbox" disabled> 代码块 <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li class="task-list-item"><input type="checkbox" disabled> <del>strikethrough</del></li>
+<li class="task-list-item"><input type="checkbox" disabled> <span class="spoiler">you_know_too_much.jpg</span></li>
+<li class="task-list-item"><input type="checkbox" disabled> codeblocks <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <ul class="task-list">
-<li class="task-list-item"><input type="checkbox" disabled> 脚注 <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
-<li class="task-list-item"><input type="checkbox" disabled> 表格</li>
+<li class="task-list-item"><input type="checkbox" disabled> footnotes <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li class="task-list-item"><input type="checkbox" disabled> tables</li>
 </ul>
 <table>
 <thead>
@@ -384,8 +607,8 @@ li.task-list-item input[type="checkbox"] {
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>但是高亮没有完整支持，哭<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><strong><em><a href="https://zeyi2.github.io/">而且支持链接</a></em></strong><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>But syntax highlighting isn’t fully supported yet, sad.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><strong><em><a href="https://zeyi2.github.io/">and it supports links too</a></em></strong><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div>
 </div>

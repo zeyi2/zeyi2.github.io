@@ -2,229 +2,251 @@
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mitchell's Homepage</title>
-    <link>https://zeyi2.github.io</link>
-    <atom:link href="https://zeyi2.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>living in a simulation.</description>
-    <lastBuildDate>Wed, 28 Jan 2026 00:35:07 +0800</lastBuildDate>
+    <link>https://broken.life</link>
+    <atom:link href="https://broken.life/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>the trolling business</description>
+    <lastBuildDate>Fri, 10 Jul 2026 20:15:17 +0800</lastBuildDate>
     <item>
-      <title>光阴不再来</title>
-      <link>https://zeyi2.github.io/posts/misc/20yr.html</link>
-      <guid>https://zeyi2.github.io/posts/misc/20yr.html</guid>
-      <pubDate>Sat, 27 Dec 2025 19:38:15 +0800</pubDate>
-      <description> 光阴不再来 2025/12/27, 生日 + 年终总结 一 今天过了自己的二十岁生日, 算是正式告别了青少年时期的自己. 不过其实也没做什么特别的事情, 除了日常给 Clang-tidy 交 PR 与审代码以外就是看书准备期末. 回忆自己的十</description>
-      <content:encoded><![CDATA[<h1>光阴不再来</h1>
+      <title>LLVM Coding Standard, in a nutshell</title>
+      <link>https://broken.life/posts/compiler/coding-standard.html</link>
+      <guid>https://broken.life/posts/compiler/coding-standard.html</guid>
+      <pubDate>Fri, 10 Jul 2026 20:15:17 +0800</pubDate>
+      <description> LLVM Coding Standard, in a nutshell Note: This document was mainly put together to help LLMs review my commits. Agents can read files and are quite smart, so I’m not going into a lot of detail here. Also, I figured this could be tweaked into a general standard for agents working</description>
+      <content:encoded><![CDATA[<h1 id="llvm-coding-standard-in-a-nutshell">LLVM Coding Standard, in a nutshell</h1>
 <blockquote>
-<p>2025/12/27, 生日 + 年终总结</p>
+<p>Note: This document was mainly put together to help LLMs review my commits. Agents can read files and are quite smart, so I’m not going into a lot of detail here.</p>
 </blockquote>
-<h2>一</h2>
-<p>今天过了自己的二十岁生日, 算是正式告别了青少年时期的自己. 不过其实也没做什么特别的事情, 除了日常给 Clang-tidy 交 PR 与审代码以外就是看书准备期末. 回忆自己的十八岁生日, 同样的模糊, 只不过更加遥远, 连那时候自己在做什么都完全想不起来.</p>
-<h2>二</h2>
-<p>今年对我来说是很疲惫的一年, 感觉自己做了好多事情, 一直没怎么休息过:</p>
 <blockquote>
-<p>年初开始在软件所实习, 实习期间去了 AOSCC 顺带打了个编译器比赛写了自己第一个 C++ 项目 (怎么会有这么烂的语言); 比赛结束后做了个手术, 然后从软件所跑路转进到学校实验室打工做项目, 做着老板项目的同时顺带给 LLVM 和 FEX 交 PATCH 提高 C++ 能力, 两个月合并了 40 多个 PR 并混了个 Reviewer, 上周主讲了一次不那么失败的组会, 整年里还有校内课业与社团的招新...</p>
+<p>Also, I figured this could be tweaked into a general standard for agents working on other projects too, so I’m putting it up here.</p>
 </blockquote>
-<p>这种巨大的 workload 导致我逐渐养成了很不健康的生活习惯，晚上三四点才睡觉，睡到早上九点十点又起来干活, 在华师大待了一年来, 除了跑各种地方吃饭以外没有什么娱乐活动, 生活非常贫瘠.</p>
-<p>然后在 twitter 和 telegram 上和朋友们聊天, 看着他们分享出的生活照, 自由又轻松, 这种时候我就看看头上的天空困惑着, 我们真的是生活在同一片蓝天下吗?</p>
-<h2>三</h2>
-<p>十年前是 2015, 我只是个喜欢玩 Minecraft 的笨蛋小学生, 当时应该是我接触 Google 等现代工具不久, 接触到的原因也很奇怪: 我想玩的 Minecraft 服务器需要正版, 但当时 Mojang 并没有国内支付的渠道, 且 165 CNY 对当时的我来说也太贵了. 所以我做了每一个小学生都会去做的事情: 去网上找共享的账户, 之后莫名其妙就翻出去了, 至于怎么翻的我自己都忘了...</p>
-<p>翻看我那时候的邮件 (我居然这么早就开始用 Gmail 了?), 唯一剩下的只有 Facebook/LinkedIn/Twitter 发的一大堆推广信息和几个知乎答题邀请了.</p>
-<p>然后翻了一下自己最近两个月的邮箱:</p>
+<p><strong>References</strong>:</p>
 <ul>
-<li>
-400 多封 Github 的消息邮件
-</li>
-<li>
-一堆没有读的 PDP10 和 GCC 的邮件列表信息
-</li>
-<li>
-20 多封充值邮件, 因为最近重新开始玩明日方舟了
-</li>
-<li>
-一些朋友之间的正常聊天
-</li>
+<li><p><a href="https://llvm.org/docs/ProgrammersManual.html">LLVM Programmer’s Manual</a></p></li>
+<li><p><a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a></p></li>
 </ul>
-<h2>四</h2>
-<p>之前一直在想, 我以后要去世界上的很多地方, 慢慢体验, 如果运气好能找到一个适合我的地方, 就停在那里. 不过上了大学后这种探索欲被极大抑制了, 我不知道为什么, 或许我只是累了, 读大学并没有带来想象中的快乐, 反而导致了我的深深的疲惫, 焦虑和自我怀疑 (e.g. 我大一有一段时间一直在想我的性格和智力是不是不适合写程序, 甚至严肃想过转专业, 因为我看上去完全没法适应学校检验学生能力的方式, 这直到我开始实习才有缓解).</p>
-<p>虽然我觉得这主要是个人问题, 因为我周围同学的生活并没有像我这样纠结, 不过我还是觉得: 一个人总会有累的时候, 累的时候人应该要回家吧, 可是我不知道我的家在哪里, 我找不到安放自己的地方.</p>
-<h2>五</h2>
-<p>我其实也不知道为什么自己对计算机感兴趣, 我很小的时候就隐隐约约觉得我迟早会造点什么来满足个人兴趣, 又因为我父亲是做机械的, 我去过他公司看过他的一堆车床, 然后觉得在这个领域做出些不那么 trivial 的东西太困难了, 光是设备就要花好多钱. 贫穷如我如果要造点什么感觉要从别人那里拿好多好多钱, 我不喜欢这种感觉; 相反计算机看上去就很好, 一台电脑一个键盘装个 Emacs 就可以 blast the market with the beam of your pure autism 了 (这也是我非常喜欢软件开发的原因: Money vs Autism, Autism will always win, 你唯一要做的事情就是往文本编辑器里敲字符)</p>
-<p>在 AI 出现后我的学习速度和生产力更是飞跃, 我的 Codex 和 GEMINI 被我改造成一个往命令行里发字符的工具, 出人意料的是这种用法非常好用! 在我改造 GDB 让 Agents 可以用调试器后更是爽飞.</p>
-<p> 以及 Gemini 3 的能力有点令我惊讶, 它逐渐能写出正确的代码了. 强化学习真的很酷, 而且我猜想目前还没有到 scaling 的边际效应, 所以在肉眼可见的未来这些 agents 的能力会变得更强.</p>
-<h2>六</h2>
-<p>今年换了一台新电脑, 从原来的游戏本变成了 Thinkpad E14, 由于我觉得本地大模型是一个骗局, 所以没有买带独立显卡的电脑, 事实证明这是一个很正确的选择, 我电脑的重量轻了 1kg, 续航时间翻了四倍 (1.5h -> 6h), 系统仍然在使用 Arch Linux, 这真的是一个很棒的系统 (Well, if you understand Linux correctly), 基本上我不需要废什么力气就可以用上最新的软件, 且保持系统稳定不爆炸.</p>
-<p>其它的话, 买了一个 iPad A16, 原意是买回来看论文, 但后面发现我还是更喜欢打印出来看, 所以它目前变成了笔记 + 明日方舟启动器. 不过最近从 X11 切到 Wayland 了, 所以明日方舟启动器变成 Waydroid 了, 平板目前备战终末地.</p>
-<h2>七</h2>
-<p><a href="https://leehenry.top/posts/words_in_wildness/ww-vol04/">问题原链接</a></p>
-<p><strong>Q01. 如果用一个字/词/短语/句子来概括这一年，你会如何描述它？</strong></p>
-<p>恰到好处的疲惫</p>
-<p><strong>Q02. 这一年是否面临了对你而言重要的人生变化？</strong></p>
-<p>是</p>
-<p><strong>Q03. 日常的生活节奏如何？在锻炼、饮食、睡眠方面，有哪些变化与反思？</strong></p>
-<p>很糟糕, 需要调自己的时区</p>
-<p><strong>Q04. 在财务管理和储蓄方面是否有变化，有什么有意思的支出吗？</strong></p>
-<p>没有太多变化, 有意思的支出... 买了台 Switch 玩宝可梦和 P5</p>
-<p><strong>Q05. 工作或学习上，这一年取得了哪些对你而言具有阶段意义的里程碑？</strong></p>
-<p>实习 + 进实验室干活, 初步有了养活自己的能力</p>
-<p><strong>Q06. 是否发展了一些个人副业或长期兴趣项目？目前的进展与收获如何？</strong></p>
-<p>开始自己维护一个和 Emacs 很像的编辑器, 目前距离第一个 Release 遥遥无期..</p>
-<p><strong>Q07. 有哪些让您情绪起伏的瞬间？</strong></p>
-<p>想不到</p>
-<p><strong>Q08. 是否落泪过，为什么？</strong></p>
-<p>不记得.</p>
-<p><strong>Q09. 尝试了哪些未曾体验的事情？</strong></p>
-<p>每周去一家新的饭店</p>
-<p><strong>Q10. 去到了哪些未曾涉足的空间？</strong></p>
-<p>去了武汉, 虽然主要是在华中科大乱逛 + 爬山</p>
-<p><strong>Q11. 有哪些对您产生影响的书籍、影视、音乐或游戏作品？其中是否有特别令您印象深刻的人物、角色或观点？</strong></p>
-<p>NOeSIS</p>
-<p><strong>Q12. 是否进入、发展或结束过一段亲密关系，有什么新的体悟？</strong></p>
-<p>无</p>
-<p><strong>Q13. 哪些朋友对您这一年影响最大？是否结识了新朋友，是如何结识的？</strong></p>
-<p>影响大的人太多了, 数不过来, 我的朋友大部分都比我厉害, 时不时就能从他们身上得到启发.</p>
-<p>(欢迎去友链里读他们的博客!)</p>
-<p><strong>Q14. 有没有参与到一些社区或圈子的建设、维护或互动，对您而言意味着什么？</strong></p>
-<p>参与了 Clang-tidy 和 FEX 的维护, 不意味着什么, 自己开心最重要.</p>
-<p><strong>Q15. 面向 2026 年，您最希望实现的三个目标或愿望是什么？</strong></p>
+<p><strong>This is a living document, it’ll get updated as my own work progresses, and there’s no guarantee the existing content is correct.</strong></p>
+<h2 id="the-golden-rule">The Golden Rule</h2>
+<p><strong>If you are extending, enhancing, or bug fixing already implemented code, use the style that is already being used so that the source is uniform and easy to follow.</strong></p>
+<p>You should refer to typical files in the repo when reviewing user’s code. (e.g. <code>grep -rn *.cpp</code>)</p>
+<h2 id="formatting">Formatting</h2>
+<p>Run these commands after making changes/ before starting code review:</p>
 <ul>
-<li>
-别挂科
-</li>
-<li>
-多睡觉
-</li>
-<li>
-多写代码
-</li>
+<li>Python: <code>darker -r HEAD^ $(git diff --name-only --diff-filter=d HEAD^)</code></li>
+<li>C++: <code>git clang-format HEAD~1</code></li>
+</ul>
+<p>Fix/Report issues if linter failed.</p>
+<h2 id="comments">Comments</h2>
+<ul>
+<li>C++: <code>//</code> for normal comments, <code>///</code> for doxygen</li>
+<li>C: Maintain C89 compatibility</li>
+</ul>
+<h2 id="whitespace">Whitespace</h2>
+<p><strong>No trailing whitespaces</strong></p>
+<h2 id="casts">Casts</h2>
+<ul>
+<li>No <strong>RTTI</strong> or <strong>Exceptions</strong>: <code>dynamic_cast&lt;&gt;</code> not allowed</li>
+<li>Handrolled <code>isa&lt;&gt;, cast&lt;&gt;, and dyn_cast&lt;&gt;</code> is allowed</li>
+<li>Prefer <code>static_cast, reinterpret_cast, const_cast</code></li>
+</ul>
+<h2 id="class-and-struct"><code>class</code> and <code>struct</code></h2>
+<ul>
+<li><code>struct</code> should be used when all members are declared public.</li>
+<li>All declarations and definitions of a given <code>class</code> or <code>struct</code> must use the same keyword.</li>
+</ul>
+<h2 id="auto"><code>auto</code></h2>
+<ul>
+<li>Use <code>auto</code>, but be aware of unnecessary copies (e.g. range-based <code>for</code> loops, use <code>auto &amp;/*</code>)</li>
+</ul>
+<h2 id="include-as-little-as-possible"><code>#include</code> as Little as Possible</h2>
+<ul>
+<li>Less include means less code, means faster compile time/binary size/speed.</li>
+<li>This one is <strong>very very important</strong>, you should <strong>never forget it</strong>.</li>
+<li><strong>Double check when reviewing/writing code.</strong></li>
+</ul>
+<h2 id="continue-and-early-exits"><code>continue</code> and Early Exits</h2>
+<ul>
+<li>To simplify code.</li>
+</ul>
+<h2 id="no-predicate-loops-use-predicate-functions">No Predicate Loops, use Predicate Functions</h2>
+<h2 id="miscs">Miscs</h2>
+<ul>
+<li>No Static Constructors</li>
+<li>Don’t use Braced Initializer Lists to Call a Constructor (C++11)</li>
+<li><strong>Always check if user’s <code>git branch</code> name is ideal, rename when necessary.</strong></li>
+</ul>
+<h2 id="naming">Naming</h2>
+<p>Always check inconsistent naming when reviewing/writing code:</p>
+<ul>
+<li>Type: start with an upper-case letter</li>
+<li>Var: camel case, start with an upper-case letter</li>
+<li>Func: imperative, verb phrases, camel case, start with a lowercase letter</li>
+<li>Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kind</code> Suffix, otherwise align with <code>Type</code></li>
+</ul>
+<p><strong>Exception:</strong> classes that mimic STL classes can have member names in STL’s style of lowercase words separated by underscores.</p>
+<h2 id="assert">Assert</h2>
+<ul>
+<li><strong>Use the “assert” macro to its fullest.</strong></li>
+</ul>
+<p>Also, see <code>llvm_unreachable</code></p>
+<h2 id="forbidden-usage">Forbidden usage</h2>
+<ul>
+<li><code>using namespace std</code></li>
+<li><code>#include &lt;iostream&gt;</code>: use <code>llvm::MemoryBuffer</code></li>
+</ul>
+<h2 id="omit-braces-when-possible">Omit braces when possible</h2>
+<h2 id="check-unix-newline-at-eof">Check UNIX newline at EOF</h2>
+<h2 id="preferred-apis">Preferred APIs</h2>
+<p><strong>Please remember the #include rule</strong></p>
+<ul>
+<li><code>StringRef</code> when handling <code>std::string</code></li>
+<li><code>Error</code> as replacement to <code>Exception</code>/<code>std::error_code</code></li>
+<li><code>llvm::ArrayRef</code>, <code>TinyPtrVector</code>, <code>SmallVector</code> over <code>std::vector/list</code></li>
+<li>Never use <code>&lt;list&gt;</code> to avoid heap allocation (extremely high constant factor).</li>
+<li>Sets: <code>SmallSet</code>, <code>SmallPtrSet</code>, <code>StringSet</code>, <code>DenseSet</code>, <code>RadixTree</code>, <code>SparseSet</code>, <code>FoldingSet</code>..
+<ul>
+<li>Avoid <code>&lt;set&gt;</code>: malloc intensive, large per-element space overhead)</li>
+</ul></li>
+<li>Map: <code>StringMap</code>, <code>IndexedMap</code>, <code>DenseMap</code>, <code>ValueMap</code>
+<ul>
+<li>Avoid <code>&lt;map&gt;</code>: large constant factor</li>
+<li>Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc intensive</li>
+<li>Avoid <code>std::vector&lt;bool&gt;</code>.</li>
+</ul></li>
 </ul>]]></content:encoded>
     </item>
     <item>
-      <title>FEX-RV 日志</title>
-      <link>https://zeyi2.github.io/posts/dbt/fex-rv.html</link>
-      <guid>https://zeyi2.github.io/posts/dbt/fex-rv.html</guid>
-      <pubDate>Thu, 25 Dec 2025 15:42:01 +0800</pubDate>
-      <description> FEX-RV 日志 2025-09 事情的起因是 Infra 的基础要在 box64 和 FEX 中选一个，然后我没听说过后者，遂尝试编译: -- Clang version 18.1.8 CMake Error at CMakeLists.txt:152 (message): FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a su</description>
-      <content:encoded><![CDATA[<h1>FEX-RV 日志</h1>
-<h2>2025-09</h2>
-<p>事情的起因是 Infra 的基础要在 <code>box64</code> 和 <code>FEX</code> 中选一个，然后我没听说过后者，遂尝试编译:</p>
-<pre><code class="language-shell">
--- Clang version 18.1.8
-CMake Error at CMakeLists.txt:152 (message):
-   FEX-Emu doesn't support compiling for x86-64 hosts! This is /only/ a supported configuration for FEX CI and nothing else!
-</code></pre>
-<p>很不幸地是实验室的机器还用不了，所以没招了，只能自己拿 QEMU 起发行版装。</p>
-<p>翻出了自己三年前的破烂脚本，改亿改 (45mins of hard debugging) 得到一下能跑的版本:</p>
-<pre><code class="language-shell">
-#!/bin/sh
-
-set -xe
-
-ISO_PATH="$1"
-QCOW2_IMAGE="$2"
-
-qemu-img create -f qcow2 "$QCOW2_IMAGE" 50G
-qemu-system-aarch64 \
-    -cpu cortex-a53 -smp cores=4 \
-    -nographic \
-    -M virt -m 4096 \
-    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
-    -drive format=qcow2,file="$QCOW2_IMAGE" \
-    -device ramfb \
-    -cdrom "$ISO_PATH" \
-    -nic user,model=virtio \
-    -rtc base=utc,clock=host
-</code></pre>
-<pre><code class="language-shell">
-#!/bin/sh
-
-set -xe
-
-QCOW2_IMAGE="$1"
-
-qemu-system-aarch64 \
-    -cpu cortex-a53 -smp cores=10 \
-    -nographic \
-    -M virt -m 4096 \
-    -bios /usr/share/edk2/aarch64/QEMU_EFI.fd \
-    -drive format=qcow2,file="$QCOW2_IMAGE" \
-    -device ramfb \
-    -nic user,model=virtio \
-    -rtc base=utc,clock=host
-</code></pre>
-<p>然后装系统 + 补依赖 + 编译折腾了一个晚上 + 一个上午，拼尽全力搭出了开发环境。</p>
-<p>以及在阅读 FEX 文档的时候发现了一点小问题，成功在接触这个项目的 30mins 内向上游贡献 PR，20h 后被合并 <del>最速传说（</del></p>
-<p>明天就继续研究 FEX 的源码，看看它是怎么建模 ARM CPU 的，尝试再在 IR 上设计一层 IR 分发到 RISC-V CPU 上。</p>
-<h2>2025-10</h2>
-<h3>01</h3>
-<p>整个国庆的工作效率奇低，产出非常可悲: 没有可见产出。</p>
-<p>今天继续研究 FEX-Emu 的源码，在读前端解析过程中发现自己对不少细节完全陌生 (tl;dr: 菜)，那确实没办法了，只能翻手册了。</p>
-<p>然后就获得了一个 2500 页的 PDF <del>(被水淹没，不知所措)</del></p>
-<p>但考虑到再不干活进度就要彻底完蛋了，所以只能硬着头皮啃。</p>
-<p>然后发现了一些抽象的东西: F2h 这个字节在解码的时候会一鱼三吃，可能是 REPNE、可能是单纯的 BND、也可能是像 BNDCU 这样的前缀，所以必须靠 CPUID/配置位/后续指令类别才能正确判断。</p>
-<p>不过好消息: MPX 已在很多平台上弃用了，Linux 和 glibc 已经没有支持了；坏消息: 解码器仍要兼容旧代码的编码约定。<span class="spoiler">泥头车又把我创似了</span> </p>
-<h3>02</h3>
-<p>把 FEX 的源码拆了下，搓了一个 RISC-V 后端，在荔枝派上编译起来了。</p>
-<p>顺便跑了个 7z bench 和 OpenSSL Benchmark。7z 测试结果能到 75% 左右，很吓人，明明用起来慢得要死但测试结果却没那么烂...</p>
-<h3>03</h3>
-<p>尝试跑了下 hello world，死在寄存器分配里了，看上去是因为 RV 后端初始化时没有提供寄存器信息，所以 RegAllocPass 不知道，直接崩了。</p>
-<p>幸好这个问题比较好理解，修起来没那么麻烦，又水一周。</p>
-<h2>2025-11</h2>
-<h3>01</h3>
-<p>赞美刘阳老师！</p>
-<p><code>biscuit</code> 真是神中神，支持的指令集很全，外加速度很快 <del>不愧是 JIT 仙人（</del></p>
-<p>有了好的 Codegen 工具后终于不用自己拼好宏了，实现 OpCode 方便多了。</p>
-<h3>02</h3>
-<p>加上了 Dispatcher 后，看上去 RV 后端能跑了，但跑程序还是崩溃，PC 居然是 0!</p>
-<p>有脏东西，但它死在了 JIT 里导致异常难抓这个 Bug，拼尽全力发现是 Syscall Handler 上的函数地址传错了，但为什么错？汇编逻辑应该没有问题，Dump 出来的指令也很正常。</p>
-<h3>03</h3>
-<p>由于周报水不出来，所以花了两个小时认真拿 GDB 查了一下，结果是我 Dispatcher 逻辑写错了，进 JIT 执行第一个 CodeBlock 时跳过了第一条指令导致后面全乱了，闹麻了。</p>
-<p>修掉这个问题后果然正常进到 Syscall 逻辑了，补上 write 的映射 Hello World 算是跑起来了。</p>
-<h3>04</h3>
-<p>用伟大的 Gemini 的力量 Vibe 了一个 Git History 改写工具，拿它重写了 FEX-RV 的提交历史，现在可维护性好了不少。</p>
-<h2>2025-12</h2>
-<h3>01</h3>
-<p>组会上报告了一阶段的工作进展: <a href="../../files/Presentation.pdf">点击查看</a></p>]]></content:encoded>
+      <title>Time Doesn't Come Back</title>
+      <link>https://broken.life/posts/misc/20yr.html</link>
+      <guid>https://broken.life/posts/misc/20yr.html</guid>
+      <pubDate>Fri, 10 Jul 2026 20:15:17 +0800</pubDate>
+      <description> Time Doesn’t Come Back I Today I turned twenty, which I suppose is my official farewell to adolescence. Not that anything special happened - aside from the usual routine of sending PRs and reviewing code for Clang-Tidy, I mostly just read and studied for finals. Looking back at </description>
+      <content:encoded><![CDATA[<h1 id="time-doesnt-come-back">Time Doesn’t Come Back</h1>
+<h2 id="i">I</h2>
+<p>Today I turned twenty, which I suppose is my official farewell to adolescence. Not that anything special happened - aside from the usual routine of sending PRs and reviewing code for Clang-Tidy, I mostly just read and studied for finals. Looking back at my eighteenth birthday, it’s just as blurry, only further away - I can’t even remember what I was doing back then.</p>
+<h2 id="ii">II</h2>
+<p>This year has been an exhausting one for me. I feel like I did so much, and never really got to rest:</p>
+<blockquote>
+<p>Started interning at ISCAS at the start of the year. During the internship I went to AOSCC and entered a compiler competition on the side, writing my first C++ project in the process (how does a language get this bad). After the competition ended I had surgery, then left the software institute to work at a lab back at school. While working on my advisor’s project, I also submitted patches to LLVM and FEX on the side to improve my C++ skills, merged over 40 PRs in two months and somehow ended up as a reviewer. Last week I gave a not-too-disastrous presentation at group meeting. And on top of all that, there was still coursework and club recruiting throughout the year…</p>
+</blockquote>
+<p>This enormous workload gradually pushed me into some pretty unhealthy habits - going to bed at three or four in the morning, then getting up at nine or ten to keep working. After a year at university, aside from going around trying different places to eat, I haven’t had much of a life outside of that. It’s been pretty barren.</p>
+<p>Then I’d chat with friends on Twitter and Telegram, scroll through the photos they shared of their lives - free and easy - and I’d look up at the sky, confused, wondering: are we really living under the same blue sky?</p>
+<h2 id="iii">III</h2>
+<p>Ten years ago was 2015. I was just a dumb elementary schooler who liked playing Minecraft. That was around when I first got into tools like Google, and the way it happened was kind of strange: the Minecraft server I wanted to play on required a legit copy, but Mojang didn’t have a payment channel for mainland China at the time, and 165 CNY was way too expensive for me back then. So I did what every elementary schooler does: went online looking for shared accounts, and somehow ended up jumping the firewall in the process. I honestly don’t even remember how I managed that…</p>
+<p>Looking back through my emails from that time (wait, I was already using Gmail that early?), all that’s left is a pile of promotional emails from Facebook/LinkedIn/Twitter and a few Zhihu answer invitations.</p>
+<p>Then I looked through my inbox from the past two months:</p>
+<ul>
+<li>Over 400 GitHub notification emails</li>
+<li>A pile of unread PDP-10 and GCC mailing list messages</li>
+<li>Twenty-something top-up receipts, because I recently got back into Arknights</li>
+<li>Some normal chats with friends</li>
+</ul>
+<h2 id="iv">IV</h2>
+<p>I used to think about how I’d eventually travel to lots of places in the world, take my time experiencing them, and if I got lucky, find somewhere that fit me and just settle there. But after starting college, that urge to explore got heavily suppressed. I don’t know why - maybe I’m just tired. College didn’t bring the happiness I imagined; instead it left me with a deep exhaustion, anxiety, and self-doubt (e.g. there was a stretch in my first year where I kept wondering if my personality and intelligence just weren’t suited for programming, and I seriously considered switching majors, because I seemed completely unable to adapt to how the school tested students’ abilities - that only eased once I started interning).</p>
+<p>I think this is mostly a personal issue, since the people around me don’t seem nearly as tangled up about it as I am. But still, I think: everyone gets tired eventually, and when you’re tired, you should be able to go home. The thing is, I don’t know where my home is. I can’t find a place to put myself down.</p>
+<h2 id="v">V</h2>
+<p>Honestly, I don’t even know why I got into computers. Ever since I was little, I’ve had this vague sense that sooner or later I’d build something just to satisfy my own curiosity. My father works in machining, and I’ve been to his company and seen his lathes - and it made me realize that making anything non-trivial in that field is really hard, since just the equipment alone costs a fortune. Being as poor as I am, if I wanted to build anything like that, I’d basically have to take a ton of money from other people, and I hate that feeling. Computers, on the other hand, seemed perfect: a computer, a keyboard, install Emacs, and you can blast the market with the beam of your pure autism.</p>
+<p>After AI showed up, my learning speed and productivity took off even more. I’ve turned Codex and Gemini into tools that just fire characters into the command line, and surprisingly, this setup works great. After I modified GDB so agents could use a debugger, it got even better.</p>
+<p>Also, Gemini 3’s capabilities genuinely surprised me - it’s gradually starting to write correct code. Reinforcement learning is really cool, and I suspect we haven’t hit diminishing returns on scaling yet, so in the foreseeable future these agents are only going to get stronger.</p>
+<h2 id="vi">VI</h2>
+<p>Got a new laptop this year, went from a gaming laptop to a Thinkpad E14. Since I think local LLMs are basically a scam, I didn’t bother getting a machine with a discrete GPU, and that turned out to be the right call: my laptop got 1kg lighter and battery life quadrupled (from 1.5h to 6h). Still running Arch Linux, it’s genuinely a great system (well, if you actually understand Linux), since I barely have to lift a finger to keep the latest software while the system stays stable and doesn’t blow up.</p>
+<p>Other than that, I bought an iPad A16, originally to read papers on, but it turns out I still prefer printing things out to read. So now it’s basically just a notes device + Arknights launcher. Though I recently switched from X11 to Wayland, so the Arknights launcher is now running through Waydroid. The iPad is currently gearing up for Arknights: Endfield.</p>
+<h2 id="vii">VII</h2>
+<p><a href="https://leehenry.top/posts/words_in_wildness/ww-vol04/">Original questions here</a></p>
+<p><strong>Q01. If you had to sum up this year in one word/phrase/sentence, what would it be?</strong></p>
+<p>A just-right kind of exhaustion.</p>
+<p><strong>Q02. Did you face any major life changes this year that mattered to you?</strong></p>
+<p>Yes.</p>
+<p><strong>Q03. How was your daily rhythm - exercise, diet, sleep? Any changes or reflections?</strong></p>
+<p>Pretty bad. I need to fix my sleep schedule.</p>
+<p><strong>Q04. Any changes in financial management or savings? Any interesting expenses?</strong></p>
+<p>Not much change. Interesting expense… bought a Switch to play Pokémon and Persona 5.</p>
+<p><strong>Q05. What milestones did you hit this year in work or study that felt significant to you?</strong></p>
+<p>Interning, then joining a lab, started being able to support myself, at least in a basic way.</p>
+<p><strong>Q06. Did you develop any personal side projects or long-term interests? How’s progress?</strong></p>
+<p>Started maintaining my own text editor that’s pretty similar to Emacs. The first release is nowhere in sight yet…</p>
+<p><strong>Q07. What moments stirred up strong emotions for you?</strong></p>
+<p>Can’t think of any.</p>
+<p><strong>Q08. Did you cry this year, and why?</strong></p>
+<p>Don’t remember.</p>
+<p><strong>Q09. What new things did you try this year?</strong></p>
+<p>Tried a new restaurant every week.</p>
+<p><strong>Q10. What new places did you go to?</strong></p>
+<p>Went to Wuhan, though mostly just wandered around HUST and did some hiking.</p>
+<p><strong>Q11. Any books, films, music, or games that had an impact on you? Any characters or ideas that stuck with you?</strong></p>
+<p>I found a game called NOeSIS :)</p>
+<p><strong>Q12. Did you enter, develop, or end a relationship this year? Any new realizations?</strong></p>
+<p>None.</p>
+<p><strong>Q13. Which friends had the biggest impact on you this year? Did you make any new ones, and how?</strong></p>
+<p>Too many people to count. Most of my friends are better than me at things, and I get inspired by them all the time.</p>
+<p>(Feel free to check out their blogs in the links page!)</p>
+<p><strong>Q14. Were you involved in building, maintaining, or engaging with any community or circle? What did it mean to you?</strong></p>
+<p>Involved in the development of Clang-Tidy and FEX. It doesn’t really mean anything in particular, being happy doing it is what matters most.</p>
+<p><strong>Q15. Looking ahead to 2026, what are your top three goals or wishes?</strong></p>
+<ul>
+<li>Don’t fail any classes</li>
+<li>Sleep more</li>
+<li>Write more code</li>
+</ul>]]></content:encoded>
+    </item>
+    <item>
+      <title>Microblog</title>
+      <link>https://broken.life/posts/misc/micro.html</link>
+      <guid>https://broken.life/posts/misc/micro.html</guid>
+      <pubDate>Fri, 10 Jul 2026 20:15:18 +0800</pubDate>
+      <description> Microblog rambling incoherently 2026/07/10 On Code Review There’s an existing problem to solve The reviewer has a solution A in mind The PR author has provided a solution B The diff between A and B is where the comments come from 2026/03/28 Turns out the project I worked on duri</description>
+      <content:encoded><![CDATA[<h1 id="microblog">Microblog</h1>
+<blockquote>
+<p>rambling incoherently</p>
+</blockquote>
+<h2 id="section">2026/07/10</h2>
+<p>On Code Review</p>
+<ul>
+<li>There’s an existing problem to solve</li>
+<li>The reviewer has a solution A in mind</li>
+<li>The PR author has provided a solution B</li>
+<li>The diff between A and B is where the comments come from</li>
+</ul>
+<h2 id="section-1">2026/03/28</h2>
+<p>Turns out the project I worked on during my internship at the software institute actually made the news…</p>
+<ul>
+<li><a href="https://www.chinanews.com.cn/cj/2026/03-26/10593360.shtml">China News</a></li>
+<li><a href="https://www.chinadaily.com.cn/a/202603/26/WS69c54702a310d6866eb4016e.html">China Daily</a></li>
+</ul>
+<p>Wild. I hesitated for a long time before putting that internship on my resume. Looking back now, I was hilariously bad at things back then, but it seems like I actually did some small, meaningful work. Good stuff.</p>]]></content:encoded>
     </item>
     <item>
       <title>LLVM 贡献记录</title>
-      <link>https://zeyi2.github.io/posts/compiler/llvm-roadmap.html</link>
-      <guid>https://zeyi2.github.io/posts/compiler/llvm-roadmap.html</guid>
-      <pubDate>Tue, 09 Dec 2025 21:49:35 +0800</pubDate>
-      <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 Clang-tidy cert 重构 Rename cert-flp30</description>
-      <content:encoded><![CDATA[<h1>LLVM 贡献记录</h1>
+      <link>https://broken.life/posts/compiler/llvm-roadmap.html</link>
+      <guid>https://broken.life/posts/compiler/llvm-roadmap.html</guid>
+      <pubDate>Fri, 10 Jul 2026 20:15:18 +0800</pubDate>
+      <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026/01/31 Update 二〇二五年的贡献已归档 Clang-tidy cert 重构 Rename cert-flp30-c to bugprone-float-loop-counter ( #166571 ) Rename cert-dcl58-cpp to bugprone-std-namespace-modification ( #165659 ) Renam</description>
+      <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
-<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
-<h2>Clang-tidy</h2>
-<h3><code>cert</code> 重构</h3>
+<p><del><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></del></p>
+<blockquote>
+<p>2026/01/31 Update</p>
+<p>二〇二五年的贡献已归档</p>
+</blockquote>
+<h2 id="clang-tidy">Clang-tidy</h2>
+<h3 id="cert-重构"><code>cert</code> 重构</h3>
 <ul>
-<li>
-Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)
-</li>
-<li>
-Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)
-</li>
-<li>
-Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)
-</li>
-<li>
-Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)
-</li>
-<li>
-Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)
-</li>
-<li>
-Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)
-</li>
+<li>Rename <code>cert-flp30-c</code> to <code>bugprone-float-loop-counter</code> (<a href="https://github.com/llvm/llvm-project/pull/166571">#166571</a>)</li>
+<li>Rename <code>cert-dcl58-cpp</code> to <code>bugprone-std-namespace-modification</code> (<a href="https://github.com/llvm/llvm-project/pull/165659">#165659</a>)</li>
+<li>Rename <code>cert-mem57-cpp</code> to <code>bugprone-default-operator-new-on-overaligned-type</code> (<a href="https://github.com/llvm/llvm-project/pull/165542">#165542</a>)</li>
+<li>Rename <code>cert-env33-c</code> to <code>bugprone-command-processor</code> (<a href="https://github.com/llvm/llvm-project/pull/160275">#160275</a>)</li>
+<li>Rename <code>cert-err52-cpp</code> to <code>modernize-avoid-setjmp-longjmp</code> (<a href="https://github.com/llvm/llvm-project/pull/159813">#159813</a>)</li>
+<li>Rename <code>cert-msc30-c</code> and <code>cert-msc50-cpp</code> to <code>misc-predictable-rand</code> (<a href="https://github.com/llvm/llvm-project/pull/167689">#167689</a>)</li>
 </ul>
 <p>学到了有关 Clang-tidy Checks 的取名方式：</p>
 <blockquote>
-<p>we never used "dont" in check name (thought we can use verbs like "avoid" (avoid-goto etc..))</p>
-<p><code>avoid</code> is used when check category is generic like "cppcoreguidelines" or "readabilty". "bugprone" category means by default that we should avoid some language construct.</p>
+<p>we never used “dont” in check name (thought we can use verbs like “avoid” (avoid-goto etc..))</p>
 </blockquote>
-<h3>Check Fixes</h3>
+<blockquote>
+<p><code>avoid</code> is used when check category is generic like “cppcoreguidelines” or “readabilty”. “bugprone” category means by default that we should avoid some language construct.</p>
+</blockquote>
+<h3 id="check-fixes">Check Fixes</h3>
 <ul>
-<li>
-Fix <code>readability-container-data-pointer check</code> (<a href="https://github.com/llvm/llvm-project/pull/165636">#165636</a>)
-</li>
+<li>Fix <code>readability-container-data-pointer check</code> (<a href="https://github.com/llvm/llvm-project/pull/165636">#165636</a>)</li>
 </ul>
 <p>学到了关于代码风格的知识：</p>
 <blockquote>
@@ -232,296 +254,293 @@ Fix <code>readability-container-data-pointer check</code> (<a href="https://gith
 </blockquote>
 <p>更完整的代码规范在 <a href="https://llvm.org/docs/CodingStandards.html">官网上</a>，不过太长了还没读完。</p>
 <p>我 C++ 水平实在是有点次，该读书了。</p>
-<p>同时在 Review 过程中，@vbvictor 给了一个我写代码时没想到的 false-positive: <a href="https://github.com/llvm/llvm-project/pull/165636#discussion_r2507197041">link</a>，已严肃学习。</p>
-<p>以及 <code>TK_IgnoreUnlessSpelledInSource</code> 和 <code>TK_AsIs</code> 的区别是，前者会忽略编译器隐式生成的节点 (e.g. 默认构造函数、隐式转换)，后者则不会对 AST 做任何过滤。</p>
+<p>同时在 Review 过程中，<span class="citation" data-cites="vbvictor">@vbvictor</span> 给了一个我写代码时没想到的 false-positive: <a href="https://github.com/llvm/llvm-project/pull/165636#discussion_r2507197041">link</a>，已严肃学习。</p>
+<p>以及 <code>TK_IgnoreUnlessSpelledInSource</code> 和 <code>TK_AsIs</code> 的区别是，前者会忽略编译器隐式生成的节点 (e.g. 默认构造函数、隐式转换)，后者则不会对 AST 做任何过滤。</p>
 <ul>
-<li>
-Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-access</code> (<a href="https://github.com/llvm/llvm-project/pull/167209">#167209</a>)
-</li>
+<li>Add <code>IgnoreValueCalls</code> option to <code>bugprone-unchecked-optional-access</code> (<a href="https://github.com/llvm/llvm-project/pull/167209">#167209</a>)</li>
 </ul>
 <p>学习了怎么给 Clang-tidy 的 Check 添加 Option，以后要改/实现类似功能的时候直接翻这个 PR 作参考就行。</p>
 <ul>
-<li>
-Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include</code> (<a href="https://github.com/llvm/llvm-project/pull/168196#issuecomment-3536324291">#168196</a>)
-</li>
+<li>Add <code>IgnoredFilesList</code> option to <code>readability-duplicate-include</code> (<a href="https://github.com/llvm/llvm-project/pull/168196#issuecomment-3536324291">#168196</a>)</li>
 </ul>
 <p>LLVM 的 Regex 库真的很好用，本来以为这个 Issue 会修很久，结果一个小时就写完了，接下来就是和 Reviewer 对线，好文明。</p>
 <blockquote>
 <p>2025/11/17 Update:</p>
-<p>社区的沟通似乎出现了一些 telemiscommunication, @lakshsidhu04 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+</blockquote>
+<blockquote>
+<p>社区的沟通似乎出现了一些 telemiscommunication, <span class="citation" data-cites="lakshsidhu04">@lakshsidhu04</span> 先前接了这个 Issue 后因为自己的时间问题被 Unassign 了，最后我看没人干就把它做了，但他的 PR 也是开着的，造成了一些 Reviewing 上的阻碍，不过问题不大。</p>
+</blockquote>
+<blockquote>
 <p>2025/11/19 Update:</p>
-<p>感谢 @zwuis (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
+</blockquote>
+<blockquote>
+<p>感谢 <span class="citation" data-cites="zwuis">@zwuis</span> (似乎是南科佬?) 的反复提醒，以后要注意 <code>std</code> 库的规范使用。</p>
+</blockquote>
+<blockquote>
 <p><del>似乎 Ready to merge :)</del> <em><strong>合了</strong></em></p>
 </blockquote>
 <ul>
-<li>
-Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)
-</li>
+<li>Add options to throw unannotated functions in <code>bugprone-exception-escape</code> (<a href="https://github.com/llvm/llvm-project/pull/168324">#168324</a>)</li>
 </ul>
 <p>比较难绷的是在 <a href="https://clang.llvm.org/extra/doxygen/ExceptionAnalyzer_8h_source.html">clang-tools-extra/clang-tidy/utils/ExceptionAnalyzer.h</a> 里有一段神级代码：</p>
 <p><code>static ExceptionInfo createNonThrowing() { return {State::Throwing}; }</code></p>
 <p>有一种左右脑互博的美，遂直接开始<a href="https://github.com/llvm/llvm-project/pull/168324#discussion_r2532996880">对线</a>，不过还没有人回复，静侯结果。</p>
 <blockquote>
 <p>2025/11/19 Update:</p>
+</blockquote>
+<blockquote>
 <p>我又忘记要 Early return 了，看来必须要为 LLM Reviewer 写 Prompt 了，不然以后天天修代码规范就老实了。</p>
+</blockquote>
+<blockquote>
 <p>2025/11/28 Update:</p>
+</blockquote>
+<blockquote>
 <p>文档风格又出问题，不过其它文档也干了，所以我顺手又水了一个 PR</p>
+</blockquote>
+<blockquote>
 <p>2025/12/9 Update:</p>
+</blockquote>
+<blockquote>
 <p>修完了没有人 Review, 🌿</p>
 </blockquote>
 <ul>
-<li>
-Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href="https://github.com/llvm/llvm-project/pull/169215">#169215</a>)
-</li>
+<li>Fix OOB access in <code>FormatStringConverter</code> with signed chars (<a href="https://github.com/llvm/llvm-project/pull/169215">#169215</a>)</li>
 </ul>
 <p>崩溃的原因是 <code>FormatStringConverter::appendFormatText</code> 里用了 <code>signed chars</code>，遇到非 ASCII 字符时就变成负数走到控制字符的路径了，传到 <code>llvm::hexdigit</code>直接 OOB 然后 Crash. 问题简单到没开 GDB 光读代码就理解了。</p>
 <p>然后找 Bug 加修 Bug 一共半小时，尝试让 Windows 过 CI 测试花了三天还没修出来，原因是 LLVM 的 Windows CI 不知道 UTF-8 是什么，只认自己的编码逻辑，导致测试点里写 UTF-8 字符直接挂。</p>
-<p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span> </p>
+<p><span class="spoiler">这 Windows 怎么 NMD 这么创啊</span></p>
 <p>把能用的不能用的方法都试了一遍，还是过不了，人麻了。</p>
 <blockquote>
 <p>2025/11/26 Update:</p>
+</blockquote>
+<blockquote>
 <p>开摆了，直接在 Windows 上跳过测试了, We are so done.</p>
+</blockquote>
+<blockquote>
 <p>2025/11/28 Update:</p>
-<p>复活！@localspook 提醒了我可以直接指定 python 脚本的输出编码，果然让 Windows CI 过了! We are so back.</p>
+</blockquote>
+<blockquote>
+<p>复活！<span class="citation" data-cites="localspook">@localspook</span> 提醒了我可以直接指定 python 脚本的输出编码，果然让 Windows CI 过了! We are so back.</p>
+</blockquote>
+<blockquote>
 <p>以及进行一些善意引导，我感觉它之前过不了 + 很难复现可能和这个 <a href="https://discourse.llvm.org/t/rfc-drop-support-running-llvm-on-windows-vista-7-8/80619">RFC</a> 有关系，它不会现在还在用 Vista 吧，草。</p>
 </blockquote>
 <ul>
-<li>
-Fix <code>cppcoreguidelines-pro-type-member-init</code> check <a href="https://github.com/llvm/llvm-project/pull/169832">#169832</a>
-</li>
+<li>Fix <code>cppcoreguidelines-pro-type-member-init</code> check <a href="https://github.com/llvm/llvm-project/pull/169832">#169832</a></li>
 </ul>
 <p>一个没什么营养的 PR.</p>
 <ul>
-<li>
-Preserve comments in <code>readability-use-std-min-max</code> <a href="https://github.com/llvm/llvm-project/pull/169908">#169908</a>
-</li>
+<li>Preserve comments in <code>readability-use-std-min-max</code> <a href="https://github.com/llvm/llvm-project/pull/169908">#169908</a></li>
 </ul>
 <p>Zealot 正好抓到了这个 Issue 的更新，顺手修了。</p>
 <p>以及感叹 LLVM 里面对 Comments 的处理实在不太友好, 注释解析居然是交给 Checks 自己的? 导致在 Apply Fixes 时很容易就覆盖掉已有的注释.</p>
 <p>比较理想的情况是有专门整一套工具来处理注释问题, 不过可惜没有.</p>
 <ul>
-<li>
-Fix false positive in <code>misc-const-correctness</code> <a href="https://github.com/llvm/llvm-project/pull/170065">#170065</a>
-</li>
+<li>Fix false positive in <code>misc-const-correctness</code> <a href="https://github.com/llvm/llvm-project/pull/170065">#170065</a></li>
 </ul>
 <p>在翻 Issue 列表时发现的陈年老问题, 修起来居然比想象中简单, 因为 Check 里的代码逻辑没问题, 出差错的是 <code>ExprMutationAnalyzer</code>.</p>
 <ul>
-<li>
-Fix false-positive in <code>inconsistent-declaration-parameter-name</code> <a href="https://github.com/llvm/llvm-project/pull/170593">#170593</a>
-</li>
+<li>Fix false-positive in <code>inconsistent-declaration-parameter-name</code> <a href="https://github.com/llvm/llvm-project/pull/170593">#170593</a></li>
 </ul>
 <p>加一起有效代码只有四行, 闹麻了.</p>
 <ul>
-<li>
-Fix fragile test in <code>read-parameters-from-file</code> <a href="https://github.com/llvm/llvm-project/pull/171033">#171033</a>
-</li>
+<li>Fix fragile test in <code>read-parameters-from-file</code> <a href="https://github.com/llvm/llvm-project/pull/171033">#171033</a></li>
 </ul>
 <p>Clang 的神人参数处理:</p>
 <blockquote>
 <p>CommandLine.cpp treats single quote as literal characters on Windows, so the argument is parsed as a check named <code>' -*,llvm-namespace-comment '</code>, which matches no existing checks, so no checks are enabled via the command line.</p>
+</blockquote>
+<blockquote>
 <p>Previously, the test passed because it fell back to the root .clang-tidy configuration which enables <code>llvm-*.</code></p>
+</blockquote>
+<blockquote>
+
 </blockquote>
 <p>真无敌了, 查这个问题查到头晕结果原因是这个.</p>
 <ul>
-<li>
-Enable <code>bugprone-unchecked-optional-access</code> in clang-tidy config and fix warnings <a href="https://github.com/llvm/llvm-project/pull/170004">#170004</a>
-</li>
+<li>Enable <code>bugprone-unchecked-optional-access</code> in clang-tidy config and fix warnings <a href="https://github.com/llvm/llvm-project/pull/170004">#170004</a></li>
 </ul>
 <p>代码重构是大型项目维护不得不品的一环, 这个拖了很久是因为我的电脑跑 <code>clang-tidy</code> 实在太慢了, 周末一定要做完.</p>
 <ul>
-<li>
-Enable C99 in <code>implicit-bool-conversion</code> and avoid FP with bool operands in C23 <a href="https://github.com/llvm/llvm-project/pull/171070">#171070</a>
-发现 Clang-tidy 的行为居然不符合 C23 的规范! <code>bool &amp;&amp; bool</code> 和 <code>bool || bool</code> 都会报 warning! 很明显是不合理的. 
-</li>
+<li>Enable C99 in <code>implicit-bool-conversion</code> and avoid FP with bool operands in C23 <a href="https://github.com/llvm/llvm-project/pull/171070">#171070</a></li>
 </ul>
+<p>发现 Clang-tidy 的行为居然不符合 C23 的规范! <code>bool &amp;&amp; bool</code> 和 <code>bool &lt;span class="spoiler"&gt; bool</code> 都会报 warning! 很明显是不合理的.</p>
 <p>所以修了, 修的时候发现它甚至没法在 C99 上跑, 所以又加上了 C99 的支持.</p>
 <p>唯一的问题是没人 Review.</p>
-<h3>CI 改进</h3>
+<h3 id="ci-改进">CI 改进</h3>
 <p>Clang-tidy 在尝试为文档加更多的检查 (句末空格/缺换行/80字限制等)，这一系列的工作记录在 <a href="https://github.com/llvm/llvm-project/issues/165999">#165999</a>。</p>
 <p>所以分成两个部分，一方面是 CI 的具体实现，另一方面是已有文档的修复。</p>
-<h4>Doc Fixes</h4>
+<h4 id="doc-fixes">Doc Fixes</h4>
 <ul>
-<li>
-Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)
-</li>
-<li>
-Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)
-</li>
-<li>
-Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)
-</li>
-<li>
-Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)
-</li>
-<li>
-Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)
-</li>
-<li>
-Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)
-</li>
-<li>
-Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)
-</li>
-<li>
-Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)
-</li>
-<li>
-Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https://github.com/llvm/llvm-project/pull/168722">#168722</a>)
-</li>
+<li>Fix alphabetical order in <code>ReleaseNotes.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166038">#166038</a>)</li>
+<li>Fix alphabetical order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/166123">#166123</a>)</li>
+<li>Fix order in <code>list.rst</code> (<a href="https://github.com/llvm/llvm-project/pull/168683">#168683</a>)</li>
+<li>Remove trailing whitespaces in documentation (<a href="https://github.com/llvm/llvm-project/pull/167103">#167103</a>)</li>
+<li>Enforce 80 characters limit (1/N) (<a href="https://github.com/llvm/llvm-project/pull/167492">#167492</a>)</li>
+<li>Enforce 80 characters limit (2/N) (<a href="https://github.com/llvm/llvm-project/pull/167632">#167632</a>)</li>
+<li>Enforce 80 characters limit (3/N) (<a href="https://github.com/llvm/llvm-project/pull/167830">#167830</a>)</li>
+<li>Enforce 80 characters limit (4/4) (<a href="https://github.com/llvm/llvm-project/pull/168049">#168049</a>)</li>
+<li>Fix formatting issue in <code>clang-tidy</code> documentations (<a href="https://github.com/llvm/llvm-project/pull/168722">#168722</a>)</li>
 </ul>
 <p>此为写 Python 脚本后白送的免费 PR，不可不水。</p>
 <ul>
-<li>
-Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="https://github.com/llvm/llvm-project/pull/167126">#167126</a>)
-</li>
+<li>Add clang-tidy formatting commit to <code>.git-blame-ignore-revs</code> (<a href="https://github.com/llvm/llvm-project/pull/167126">#167126</a>)</li>
 </ul>
 <p>以及 LLVM 会把一些没什么用的修改加到 <code>.git-blame-ignore-revs</code> 里，这样 <code>git blame</code> 的时候就可以用 <code>--ignore-rev</code> 忽略它们，我之前没有听说过这个技巧 (每日一个 git 小知识了属于是)。</p>
 <blockquote>
 <p>2025/11/19 Update:</p>
+</blockquote>
+<blockquote>
 <p>这个文件上的 Commits 是按照时间排序的，下次改要注意不要弄错顺序，往文档末尾加。</p>
 </blockquote>
 <ul>
-<li>
-Fix option highlighting and list style in documentation <a href="https://github.com/llvm/llvm-project/pull/169874">#169874</a>
-</li>
+<li>Fix option highlighting and list style in documentation <a href="https://github.com/llvm/llvm-project/pull/169874">#169874</a></li>
 </ul>
 <p>没什么营养的文档修复，之前对线的时候发现的，顺手的事。</p>
 <ul>
-<li>
-Fix documentation in <code>modernize-avoid-c-style-cast</code> <a href="https://github.com/llvm/llvm-project/pull/171413">#171413</a>
-</li>
+<li>Fix documentation in <code>modernize-avoid-c-style-cast</code> <a href="https://github.com/llvm/llvm-project/pull/171413">#171413</a></li>
 </ul>
 <p>由于我自己帮别人做 Code Review 时不严谨导致一些不那么好的文档被合并了, 自己引入的问题自己修.</p>
-<h4>检测脚本</h4>
+<h4 id="检测脚本">检测脚本</h4>
 <ul>
-<li>
-Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)
-<p>@vbvictor 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 @EugeneZelenko 真的很想要这个检查，且 @LegalizeAdulthood 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，<del>不幸的是没有人 care，所以大概率这个得拖很久...</del></p>
-</li>
+<li><p>Add <code>.editorconfig</code> for <code>.rst</code> files (<a href="https://github.com/llvm/llvm-project/pull/167269">#167269</a>)</p>
+<p><span class="citation" data-cites="vbvictor">@vbvictor</span> 的忧虑在我看来是十分合理的，我也觉得 3rd-party configs 就不应该引入到 Repo 里，不过看上去 <span class="citation" data-cites="EugeneZelenko">@EugeneZelenko</span> 真的很想要这个检查，且 <span class="citation" data-cites="LegalizeAdulthood">@LegalizeAdulthood</span> 也给出了 LLVM 代码库里存在 <code>.editorconfig</code> 的例子，让整个 PR 有了一些“政治”上的基础；不过想要靠这达到共识还是不太够，所以我去论坛上开了一个 <a href="https://discourse.llvm.org/t/rfc-adding-editorconfig-for-clang-tidy-documentation/88849">RFC</a> (Request For Comments)，<del>不幸的是没有人 care，所以大概率这个得拖很久…</del></p></li>
 </ul>
 <blockquote>
 <p>2025/11/15 Update:</p>
-<p>@vbvictor 和 @LegalizeAdulthood 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
+</blockquote>
+<blockquote>
+<p><span class="citation" data-cites="vbvictor">@vbvictor</span> 和 <span class="citation" data-cites="LegalizeAdulthood">@LegalizeAdulthood</span> 回复了，目前差不多确定了这个 RFC 的实现方式：在 LLVM 官网上加一段话（</p>
+</blockquote>
+<blockquote>
 <p>不过最近没太多时间忙这个，现在当务之急是学 LLVM CI Container 是怎么写的。</p>
+</blockquote>
+<blockquote>
 <p>2025/11/19 Update:</p>
+</blockquote>
+<blockquote>
 <p>先 Close 了，有空再看。</p>
 </blockquote>
 <ul>
-<li>
-Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)
-</li>
+<li>Implement alphabetical order test (<a href="https://github.com/llvm/llvm-project/pull/166072">#166072</a>)</li>
 </ul>
 <p>通过这个 PR 我才知道 LLVM 的 Python 脚本必须为 3.8 提供支持 (然而这个版本已经 EOL 了)，离了个大谱。</p>
-<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 <span class="spoiler">(什么猴子马戏团)</span>。 </p>
+<p>搜了下论坛，发现时不时就有人吵要不要把 Python 版本拉高，例如 <a href="https://discourse.llvm.org/t/rfc-upgrading-llvm-s-minimum-required-python-version/88605">Upgrading LLVM’s minimum required Python version</a> 和 <a href="https://discourse.llvm.org/t/rfc-adopt-regularly-scheduled-python-minimum-version-bumps/88841/9">RFC: adopt regularly scheduled Python minimum version bumps</a>，好消息是最近他们吵完了，决定拉到 3.10 了，从已经 EOL 到明年 EOL，明年的架明年再吵 </span>(什么猴子马戏团)<span class="spoiler">。</p>
 <blockquote>
 <p>2025/11/19 Update:</p>
+</blockquote>
+<blockquote>
 <p>这个脚本找出了我自己引入的问题，融入马戏团了属于是。</p>
+</blockquote>
+<blockquote>
 <p>以及由于我不知道怎么写 Python 代码导致整出了 <code>Tuple[List[str], List[Tuple[str, List[str]]], List[str]]</code> 这种逆天活，从 Review Messages 里学到了用 <code>NamedTuple</code> 和 <code>@dataclass</code>，我唐完了。</p>
+</blockquote>
+<blockquote>
 <p>2025/11/26 Update:</p>
+</blockquote>
+<blockquote>
 <p>Approve 了，再等一个 Reviewer Approve 后就可以 Merge 了。</p>
+</blockquote>
+<blockquote>
 <p>2025/12/09 Update:</p>
+</blockquote>
+<blockquote>
 <p>Merged :)</p>
 </blockquote>
 <ul>
-<li>
-Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://github.com/llvm/llvm-project/pull/168827">#168827</a>)
-</li>
+<li>Add <code>doc8</code> for clang-tidy documentation formatting (<a href="https://github.com/llvm/llvm-project/pull/168827">#168827</a>)</li>
 </ul>
 <p>尝试把 <code>doc8</code> 集成到 LLVM 的 CI 里，一边和 Gemini 吵架一边写代码，开了 PR 以后悲剧地发现 Premerge CI 里不会触发新的 Dockerfile 构建，为了先证明这玩意能跑，于是写出了以下<strong>逆天</strong>内容：</p>
-<pre><code class="language-yml">
-      - name: Install linter dependencies
-        run: |
-          pip install doc8 --break-system-packages
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-</code></pre>
-<p><span class="spoiler">可怕吗，是的很可怕</span> </p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install linter dependencies</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">  run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    pip install doc8 --break-system-packages</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    echo &quot;$HOME/.local/bin&quot; &gt;&gt; $GITHUB_PATH</span></code></pre></div>
+<p></span>可怕吗，是的很可怕||</p>
 <p>事实证明这玩意确实能跑：</p>
-<pre><code class="language-bash">
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:99: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:100: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:105: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:106: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:107: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:111: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:112: D001 Line too long
-./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126: D001 Line too long
-</code></pre>
-<p>接下来大概是等 @vbvictor 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:99:</span> D001 Line too long</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:100:</span> D001 Line too long</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:105:</span> D001 Line too long</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:106:</span> D001 Line too long</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:107:</span> D001 Line too long</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:111:</span> D001 Line too long</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:112:</span> D001 Line too long</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./clang-tools-extra/docs/clang-tidy/checks/bugprone/unsafe-functions.rst:126:</span> D001 Line too long</span></code></pre></div>
+<p>接下来大概是等 <span class="citation" data-cites="vbvictor">@vbvictor</span> 回复，然后把 <code>git diff</code> 也集成进 <code>doc8</code> 的测试，这样就不用每次都检测所有文件了。</p>
 <blockquote>
 <p>2025/11/28 Update:</p>
-<p>由于我不会写 Python 导致这个 PATCH 变成了臭不可闻的依托，拼尽全力拆成了两半准备分两次 Review</p>
-<p>我这辈子再也不想写 Python 了。</p>
-<p>2025/12/09 Update:</p>
-<p>原来分两次是分两个 PR 的意思... 前半部分 Merged, 后半部分等我做好心理准备再写.</p>
 </blockquote>
-<h3>Issues</h3>
+<blockquote>
+<p>由于我不会写 Python 导致这个 PATCH 变成了臭不可闻的依托，拼尽全力拆成了两半准备分两次 Review</p>
+</blockquote>
+<blockquote>
+<p>我这辈子再也不想写 Python 了。</p>
+</blockquote>
+<blockquote>
+<p>2025/12/09 Update:</p>
+</blockquote>
+<blockquote>
+<p>原来分两次是分两个 PR 的意思… 前半部分 Merged, 后半部分等我做好心理准备再写.</p>
+</blockquote>
+<h3 id="issues">Issues</h3>
 <ul>
-<li>
-<a href="https://github.com/llvm/llvm-project/issues/169602">clang-tidy ignoring compilation database compiler options when single check specified</a>
-</li>
+<li><a href="https://github.com/llvm/llvm-project/issues/169602">clang-tidy ignoring compilation database compiler options when single check specified</a></li>
 </ul>
 <p>没复现出来，但告诉了开 Issue 的人可以用 <code>-extra-arg=-v</code>，放两天看看有没有进展。</p>
 <blockquote>
 <p>2025/11/27 Update:</p>
+</blockquote>
+<blockquote>
 <p>复现了，看上去是因为 <code>-Wno-format-security</code> 和 <code>-Wformat</code> 的顺序错了，先 <code>-Wno-format...</code> 再 <code>-Wformat</code> 会重新打开 security warnings，再加上一个 -Werror 直接变 Warning 炸掉</p>
+</blockquote>
+<blockquote>
 <p>2025/11/28 Update:</p>
+</blockquote>
+<blockquote>
 <p>不对，还有反转。怎么 build 情况不报错啊。</p>
+</blockquote>
+<blockquote>
 <p>现在猜测是用户编译拿的是 <code>gcc</code>，因为 GNU 神人班不管什么参数顺序，关了就是关了，所以没 Warning，但 Clang-tidy 底下还是 Clang，所以有 Warning</p>
 </blockquote>
 <ul>
-<li>
-<a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a>
-</li>
+<li><a href="https://github.com/llvm/llvm-project/issues/165210">Extend modernize-use-designated-initializers to cover per-member initialization</a></li>
 </ul>
 <p>考虑了几个很常见的控制/信息流相关的情况，感觉 Clang Tidy 其实不太好做这个 Check (AST 信息很有限)</p>
-<p>@vbvictor 提到了一个 <a href="https://github.com/llvm/llvm-project/pull/158462">PR</a> 实现了相关的一部分逻辑，一看 <code>+ 1246  -0</code> 立刻失去了 Review 的动力，等我做好心理准备再去看。</p>
+<p><span class="citation" data-cites="vbvictor">@vbvictor</span> 提到了一个 <a href="https://github.com/llvm/llvm-project/pull/158462">PR</a> 实现了相关的一部分逻辑，一看 <code>+ 1246  -0</code> 立刻失去了 Review 的动力，等我做好心理准备再去看。</p>
 <ul>
-<li>
-<a href="https://github.com/llvm/llvm-project/issues/168310">Clang-tidy bugprone-unchecked-optional-access doesn't work when #including <a href="iox/optional.hpp">iox/optional.hpp</a></a>
-</li>
+<li><a href="https://github.com/llvm/llvm-project/issues/168310">Clang-tidy bugprone-unchecked-optional-access doesn’t work when #including &lt;iox/optional.hpp&gt;</a></li>
 </ul>
 <p>复现不出来，人也不回复，就这样吧。</p>
-<h3>Code Reviewing</h3>
+<h3 id="code-reviewing">Code Reviewing</h3>
 <p>我从 2025/12/06 开始进行 Code Review 工作</p>
 <ul>
-<li>
-12/06 to 12/09: 共审查了 17 个 PR
-</li>
+<li>12/06 to 12/09: 共审查了 17 个 PR</li>
 </ul>
-<h2>Clang Static Analyzer</h2>
+<h2 id="clang-static-analyzer">Clang Static Analyzer</h2>
 <p>目前只修了一个文档问题，是改 Clang-tidy 那里时发现的：</p>
 <ul>
-<li>
-Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https://github.com/llvm/llvm-project/pull/167822">#167822</a>)
-</li>
+<li>Add missing documentation for <code>decodeValueOfObjCType</code> (<a href="https://github.com/llvm/llvm-project/pull/167822">#167822</a>)</li>
 </ul>
-<p>@NagyDonat 很贴心地补充了 CSA 中这些 Check 的历史背景：</p>
+<p><span class="citation" data-cites="NagyDonat">@NagyDonat</span> 很贴心地补充了 CSA 中这些 Check 的历史背景：</p>
 <blockquote>
-<p>By the way, note that these <code>security.insecureAPI</code> checkers are "out of place" in the analyzer. These were developed a long time ago and they are "grandfathered in" because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy &#8212; which is a more lightweight tool and is more accessible for the users. However, this doesn't detract from the value of this documentation patch &#8212; documentation is equally valuable for all checkers that we provide.</p>
+<p>By the way, note that these <code>security.insecureAPI</code> checkers are “out of place” in the analyzer. These were developed a long time ago and they are “grandfathered in” because they are used by the users, but freshly developed simple AST-based checks like this would belong to Clang-Tidy – which is a more lightweight tool and is more accessible for the users. However, this doesn’t detract from the value of this documentation patch – documentation is equally valuable for all checkers that we provide.</p>
 </blockquote>
-<h2>Clang</h2>
+<h2 id="clang">Clang</h2>
 <ul>
-<li>
-Fix misleading progress report when files have multiple compile commands <a href="https://github.com/llvm/llvm-project/pull/169640">#169640</a>
-</li>
+<li>Fix misleading progress report when files have multiple compile commands <a href="https://github.com/llvm/llvm-project/pull/169640">#169640</a></li>
 </ul>
 <p>投喂可爱 Clang 前端，之前它会输出像 <code>[22/18]</code> 这样的诡异计数，在经过我的修复后，变成了这个更诡异的样子：</p>
-<pre><code>
-[1/9] Processing file ...
+<pre><code>[1/9] Processing file ...
 [2/9] (1/2) Processing file ...
 [2/9] (2/2) Processing file ...
 [3/9] Processing file ...
-[4/9] Processing file ...
-</code></pre>
+[4/9] Processing file ...</code></pre>
 <p>有点闹麻，也不知道能不能合进去。</p>
 <blockquote>
 <p>2025/12/9 Update:</p>
 <p>这个 PR 现在处于一个我做完了但没有人愿意 Review 的阶段, 何意味啊</p>
 </blockquote>
 <ul>
-<li>
-Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)
-</li>
+<li>Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in constexpr (<a href="https://github.com/llvm/llvm-project/pull/160876">#160876</a>)</li>
 </ul>
 <p>尝试为 Clang 的新 <code>constexpr</code> 虚拟机和 Legacy 解释器添加一些向量指令的支持，不过还没做完</p>
 <p>做完再写。</p>
@@ -531,178 +550,174 @@ Allow SSE/AVX COMI/UCOMI/CMPS/CMPP fp comparison intrinsics to be used in conste
 </blockquote>]]></content:encoded>
     </item>
     <item>
-      <title>LLVM Coding Standard, in a nutshell</title>
-      <link>https://zeyi2.github.io/posts/compiler/coding-standard.html</link>
-      <guid>https://zeyi2.github.io/posts/compiler/coding-standard.html</guid>
-      <pubDate>Thu, 20 Nov 2025 19:27:25 +0800</pubDate>
-      <description> LLVM Coding Standard, in a nutshell Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节 以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了</description>
-      <content:encoded><![CDATA[<h1>LLVM Coding Standard, in a nutshell</h1>
+      <title>LLVM 贡献记录</title>
+      <link>https://broken.life/posts/compiler/llvm-roadmap-1.html</link>
+      <guid>https://broken.life/posts/compiler/llvm-roadmap-1.html</guid>
+      <pubDate>Fri, 10 Jul 2026 20:15:18 +0800</pubDate>
+      <description> LLVM 贡献记录 这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026-01-08 clang-22 距离发版还有 5 天，现在手上还有 11 个在做的 PR (💦)，更不幸的是 clang 发版时间和 我期末考试还撞一起了，寄完了 (明天考马原，目前一章没学，等下还得去找 pdf 背) 但感觉有几个 PR 或许有机会能压着时间点 land: 一是给 clang-tidy 某个 check 加 C++20 constinit </description>
+      <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
+<p>这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
+<p><del><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></del></p>
+<h2 id="section">2026-01-08</h2>
+<p>clang-22 距离发版还有 5 天，现在手上还有 11 个在做的 PR (💦)，更不幸的是 clang 发版时间和 我期末考试还撞一起了，寄完了 (明天考马原，目前一章没学，等下还得去找 pdf 背)</p>
+<p>但感觉有几个 PR 或许有机会能压着时间点 land:</p>
+<ul>
+<li>一是给 <code>clang-tidy</code> 某个 check 加 C++20 <code>constinit</code> 的支持，这个 PR 目前缺一些测试点和文档上的小修改，感觉今天晚上睡前顺手修掉问题不大</li>
+</ul>
+<p>以及在和 Reviewer 对线的过程中发现了一个很有趣 (创) 的事情：</p>
+<p><a href="https://clang-tidy.godbolt.org/z/qTbvKs69W" class="uri">https://clang-tidy.godbolt.org/z/qTbvKs69W</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constinit</span> <span class="dt">int</span> b <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span></code></pre></div>
+<p>先 <code>extern</code> 声明再 declare <code>constinit</code>, 最开始的 extern 不会拿到 <code>constinit</code> 的属性! (for anyone interested: 本地复现可以拿 <code>clang -Xclang -ast-dump -fsyntax-only</code> 跑出来，不过这种情况一般会用 <code>clang-query</code>..)</p>
+<pre><code>|-VarDecl prev 0x11b00d88 &lt;line:7:1, col:19&gt; col:15 b &#39;int&#39; cinit
+| |-IntegerLiteral &lt;col:19&gt; &#39;int&#39; 42
+| `-ConstInitAttr &lt;col:1&gt; constinit</code></pre>
+<p>另一位 maintainer 找出了 <a href="https://godbolt.org/z/heea3fc8s"><code>constexpr</code> 也适用这个逻辑</a>, 那代表说这个 check 原来的处理逻辑也是有 bug 的…</p>
+<p>不管怎么样能定出来的 bug 都是好 bug，至少修起来会比较简单。</p>
+<ul>
+<li>给一个 check 加新的 option: 这个 PR 被拖了差不多一个月，但隔壁 <code>cppcheck</code> 和 <code>simplecpp</code> 两个项目已经出现了缺这个 option 导致的问题，但没人 Review 我其实也没什么办法，昨天给了一些代码风格和测试点上的意见，感觉全 address 后应该就差不多了？但感觉会很折磨，这个分支有点太老了，切过去大概要从头开始编译.. 准备等下问问伟大的 Gemini 有没有什么好办法。</li>
+</ul>
+<p>一些如果能 land 会很好的 PR:</p>
+<ul>
+<li>CUDA support!!: 上周在尝试给 <code>clang-tidy</code> 加 CUDA 支持时，修了一个 Assert Failure 的问题，但 AaronBallman 在过圣诞假期，所以无人来审。</li>
+</ul>
+<p>然后前两天一个 Google 的工程师说要给 Tooling 加一套编译信息的框架来解决这个问题，我觉得很难评，主要是我确实不知道 Clang Tooling 和 Clang Driver 是怎么交互的，而如果准备现在把这玩意搞清楚，那我概率论就可以重修去了 (　<sup>ω</sup>)</p>
+<ul>
+<li>数据流分析的 Regression: 有人找到了一个 False Positive，看上去是 clang19 到 20 之间引入的 regression, 查了两个小时发现是新引入的缓存机制导致原始代码里 Matcher 的一个未知隐蔽 bug 开始发力 (世界上第三痛苦的事是 debug CI，第二痛苦的事是 bisect，最痛苦的事情是一边 bisect 一边写小作文……)</li>
+</ul>
+<p>很难受的是虽然 bisect 出了 commit 但还是没方法稳定复现问题，我猜测是 range based loops 的问题，但数据流分析的东西太难手动构造出不收敛且好观测的情况了，直接爆炸。</p>
+<h2 id="section-1">2026-01-09</h2>
+<p>考完了马原（烂完），出考场一看昨天修的 PR 被 Approve 了，今天看到了一个关于 private copy constructor 的 False Positive，估算了一下代码量应该很小，打算晚上写个 PATCH 修一下。</p>
+<p>顺手 ping 了一下 Aaron，我真的很想在这周以内把 CUDA 相关的两个 PR 合进去，这样 clang-tidy 的 CUDA module 或许能有点实际推进（圣诞节前给 NVIDIA 法务部发了询问邮件，可惜直接被无视了，LLVM Legal Team 也没消息，也不知道去哪里找相关的人问，就拖到现在还没开始动工）</p>
+<h2 id="section-2">2026-01-13</h2>
+<p>考完概率论继续写点：</p>
+<p>今天理论上就是开 22.x branch 的日子了，总结一下这几天干的事情：</p>
+<ul>
+<li><p>把 CUDA 的修复合进去了，然后 <code>clang-tidy</code> 相关的文档与测试点还在等最后的 Review，猜测今天应该能合进去。</p></li>
+<li><p>修了一个 libc 数学库相关的 Issue，主要的工作量在折腾 bazel 和 CMake <span class="spoiler">天下苦构建系统久矣!</span>，合的很快。</p></li>
+<li><p>上一篇 /dev/log 里提到的修复刚刚被 Approve 了，准备晚上合进去。</p></li>
+<li><p>帮忙做了不少 Code Review</p></li>
+</ul>
+<p>总体上来说效率不是很高，主要是期末周/比赛答辩/项目发版全部撞在一周以内还是太变态了，完全处理不过来，有心无力了属于是。</p>
+<p>同时这几天编译器社区出了不少新闻，来点简单分享：</p>
+<ul>
+<li><p>LLVM Lead Maintainer 炮打 LLVM：<a href="https://www.npopov.com/2026/01/11/LLVM-The-bad-parts.html" class="uri">https://www.npopov.com/2026/01/11/LLVM-The-bad-parts.html</a></p></li>
+<li><p>2026 EuroLLVM 截稿：<a href="https://discourse.llvm.org/t/call-for-proposals-2026-eurollvm-developers-meeting-submit-by-11-january/89336" class="uri">https://discourse.llvm.org/t/call-for-proposals-2026-eurollvm-developers-meeting-submit-by-11-january/89336</a>)</p></li>
+<li><p>GCC 16.0 进 Stage 4 了，距离正式发布越来越近了(・ω・)</p></li>
+<li><p>GCC 发布了 Sourceware infrastructure updates for Q4 2025，分享过去三个月 GCC 在 Infra 上的改进 <span class="spoiler">LLVM 什么时候能学学 GCC，我基本就没怎么见 bazel, openmp, polly 这几个模块的 CI 正常跑通，今天甚至连 ABI 的 CI 都挂了</span></p></li>
+</ul>
+<h2 id="section-3">2026-01-23</h2>
+<p>在折腾完内核开发赛 <del>(并把剩余参赛队当鱼炸)</del> 后进入了摆烂模式，醒着的时候就在 Minecraft 启动，昨天又开始拉电线坐牢，感觉这破游戏玩不下去一点。</p>
+<p>期末周计算机网络和概率论的一天速通非常成功，两门一点都没学的课居然都没挂，喜提 3.3，感谢老师不杀之恩 ( ´∀`)</p>
+<p>LLVM 这里有一点产出，但不多：</p>
+<ul>
+<li><p>修了一个和宏相关的 assertion failure 问题。</p></li>
+<li><p>修了一个 parenthesized functions 的错误 fixits。</p></li>
+<li><p>把之前 Clang-tidy 中 CUDA 相关的文档给合进去了，新的文档可以在这里看：<a href="https://clang.llvm.org/extra/clang-tidy/#running-clang-tidy-on-cuda-files" class="uri">https://clang.llvm.org/extra/clang-tidy/#running-clang-tidy-on-cuda-files</a></p></li>
+<li><p>doc8 配置更新：在 Google 两位工程师 (Florian Mayer 和 Rohan Jacob-Rao) 的清理后，clang-tidy 的 doc8 配置终于不需要各种奇怪的 hack 了，好事。</p></li>
+<li><p>尝试修了下 <code>check_clang_tidy.py</code>，这个 python 脚本居然不支持检查头文件，这个缺失功能就这么放了一年，简直离谱！所以趁有时间就顺手修掉了，不过现在还没有足够的 Reviewer 来审。唉，Reviewing Bandwith.</p></li>
+<li><p>修了一个 21.1.8 下的 False Positive，不过现在还没什么人来审。鬼故事：在修这个 FP 的时候又发现了一个新的 FP：<a href="https://clang-tidy.godbolt.org/z/e8eMav36f" class="uri">https://clang-tidy.godbolt.org/z/e8eMav36f</a></p></li>
+<li><p>有一个没有及时合并的修复需要重新拉进 22.x 的分支里，借这个机会学习了一下怎么给 LLVM 合进主线的 Commits 做 backport，只需要在评论区输入 <code>/cherry-pick &lt;hash&gt;</code> 就可以了，感觉很方便。</p></li>
+<li><p>每日两到三个 Code Review，这个反而成了花力气最少的部分。</p></li>
+</ul>
+<p>这个月其他的也不想干了，剩下时间就继续拉电线了。这辈子彻底有了，哈哈</p>
+<h2 id="section-4">2026-02-04</h2>
+<p>做手术前再来💧一篇开发日志，虽然这十天其实也没干什么|ー` )</p>
+<p>首先，在卡池里经历了漫长的折磨后，我卸载了拉电线神游。</p>
+<p>不打游戏省出来的时间主要在忙着重构博客 <del>抄明日方舟的设计</del>，拼尽全力糊出来一个能跑的玩意: <a href="https://broken.life/" class="uri">https://broken.life/</a> (建议用电脑/平板，我前端能力一坨，手机端不知道怎么做适配直接摆了)</p>
+<p>实验室的项目目前进展也不太良好，上次和导师开完小会给完方案后就躺了，打算手术后看看怎么实现，寄。</p>
+<p>虽然最近疯狂摸鱼，但在 LLVM 里也还是做了一些事情：</p>
+<ul>
+<li>修了下 bugprone-macro-parentheses 的诊断信息</li>
+</ul>
+<p>虽然 clang-tidy 不应该诊断命令行的参数，但这个 check 添加支持很简单，那顺手修了也挺好。</p>
+<ul>
+<li><p>修了下 performance-enum-size 对 extern “C” 的一些错误分析，日常改 Matcher..</p></li>
+<li><p>为 readability-non-const-parameter 加了一些 corner case 的支持</p></li>
+<li><p>修了一个有 bug 的 python 脚本，顺带给文档和 list.rst 打了个补丁</p></li>
+</ul>
+<p>之前在 Review 其他 PR 时，在 list.rst 里时不时就能发现一些很奇怪的修改，原先以为是 PR 作者在 Merging 的时候出了问题，后面发现好像并不是。添加 check 的脚本对代码库做了一些不完全正确的假设，导致重新生成内容的时候搞乱了整个排序。</p>
+<ul>
+<li><p>给 MLIR 修了一个 arith.select 相关的 crash，这个 PATCH 没什么技术含量</p></li>
+<li><p>修了 clang-tidy 代码库里的 unchecked-optional-access 警告，之前已经遇到过因为这些警告而导致程序崩溃的例子了，故干脆一起修了。</p></li>
+<li><p>每日 3-4 个 PR Review，感觉已经快成 daily routine 了</p></li>
+</ul>
+<p>今天凌晨另一位国内的 Contributor 私信我了一个 RFC：<a href="https://discourse.llvm.org/t/rfc-remove-80-column-limit-in-documentation-files/89678" class="uri">https://discourse.llvm.org/t/rfc-remove-80-column-limit-in-documentation-files/89678</a>，很不幸的是 clang-tidy 文档相关的 CI 是我搓的，那后面还得更进一下这个 RFC 的进展，可能还要改配置，但已有的文档怎么处理就不知道了</p>
+<p>以及 GSoC 2026 要开始了，LLVM 相关的 Project 已经可以在 <a href="https://discourse.llvm.org/tag/gsoc2026" class="uri">https://discourse.llvm.org/tag/gsoc2026</a> 看到了，GCC 相关的讨论目前似乎还只是在邮件列表里，三月份应该会公开具体信息。</p>
+<p>完成项目的话应该能拿几千美刀和一个 Google 发的证书，感兴趣可以看看，不一定要有很强的编译器相关背景，例如：<a href="https://discourse.llvm.org/t/gsoc-2026-improving-clang-doc/89662" class="uri">https://discourse.llvm.org/t/gsoc-2026-improving-clang-doc/89662</a> 这个关于文档优化的项目会前端就行。</p>
+<h2 id="section-5">2026-03-07</h2>
+<p>由于寒假忙着做手术和打游戏，导致没有写开发日志，开学了补上。</p>
+<p>最近遇到的一个好事是自己成为了 Clang-tidy 的 Maintainer (<a href="https://clang.llvm.org/extra/Maintainers.html" class="uri">https://clang.llvm.org/extra/Maintainers.html</a>)</p>
+<p>这是我第一次以真实身份在开源社区出道，算是满足了自己的一个小目标。</p>
+<p>同时过去的一个月也做了不少事情：</p>
+<p>首先，我的个人项目 CTIT (<a href="https://github.com/clang-tidy-infra/CTIT" class="uri">https://github.com/clang-tidy-infra/CTIT</a>) 完成了初步的开发，且已经被用上了。</p>
+<p>它的功能是把 PR 的修改自动 apply 到 clang-tidy 的 codebase 上并编译，然后在大型开源项目（如 cppcheck, clang, curl）上运行来检测运行时崩溃、功能退化及误报变化，我还在里面塞了一个小的 AI Agent 来对 Logs 做自动分析。</p>
+<p>LLVM 上的一些 PATCH 总结： - 更新了一下 Clang-tidy 的文档，提醒 check authors 在写测试的时候要指定具体的语言 standards (<a href="https://github.com/llvm/llvm-project/pull/184750" class="uri">https://github.com/llvm/llvm-project/pull/184750</a>)</p>
+<p>简单来说就是没有特殊情况写 <code>-std=c..-or-later</code></p>
+<ul>
+<li>修了 <code>misc-throw-by-value-catch-by-reference</code> 里两个完全失效的 Options (<a href="https://github.com/llvm/llvm-project/pull/184750" class="uri">https://github.com/llvm/llvm-project/pull/184750</a>)</li>
+</ul>
+<p>非常诡异，这种代码是怎么进到仓库里的，之前的 Reviewer 在审什么东西.</p>
+<ul>
+<li><p>两个补测试覆盖率的 NFC Patches (<a href="https://github.com/llvm/llvm-project/pull/184015" class="uri">https://github.com/llvm/llvm-project/pull/184015</a> 和 <a href="https://github.com/llvm/llvm-project/pull/184708" class="uri">https://github.com/llvm/llvm-project/pull/184708</a>)</p></li>
+<li><p>修复了一个和 Attributes 相关的问题 (<a href="https://github.com/llvm/llvm-project/pull/184095" class="uri">https://github.com/llvm/llvm-project/pull/184095</a>)</p></li>
+</ul>
+<p>第一次知道原来 Clang 的 Frontend 会把多个连续的 AttributedStmt 压缩成一个</p>
+<ul>
+<li>给一个 check 加上了部分缺失的重载 (<a href="https://github.com/llvm/llvm-project/pull/183300" class="uri">https://github.com/llvm/llvm-project/pull/183300</a>)</li>
+</ul>
+<p>我感觉 Clang-tidy 有很多类似的问题，不知道有没有办法根据标准库的函数声明来做针对性的自动化测试。</p>
+<ul>
+<li>修了一个 readability-container-size-empty 中的 Assert Crash (<a href="https://github.com/llvm/llvm-project/pull/181557" class="uri">https://github.com/llvm/llvm-project/pull/181557</a>)</li>
+</ul>
+<p>getName() 前不做 Sanity check 是坏文明，虽然我自己有时候也会写出这样不好的代码…</p>
+<ul>
+<li>一个会影响 Clang-tidy 的 Clang Issue: <a href="https://github.com/llvm/llvm-project/pull/181712" class="uri">https://github.com/llvm/llvm-project/pull/181712</a></li>
+</ul>
+<p>Aaron 的评论让我学到了很多架构设计上的新知识:</p>
 <blockquote>
-<p>Note: 这份文件主要是为大模型 Review 我的提交时准备的，Agents 可以读取文件且非常聪明，所以不会深入细节</p>
-<p>以及我觉得这个改一改就可以当 Agents 做其他项目时的规范，所以就放上来了。</p>
+<p>SDiagsWriter is a subclass of DiagnosticConsumer which defines the contract for finish(). So this means some subclasses will automagically handle finish() while others won’t. WDYT about calling finish() explicitly in tooling? That means any diagnostic consumer will behave correctly, not just serialized diagnostics.</p>
 </blockquote>
-<p><strong>References</strong>:</p>
 <ul>
-<li>
-<a href="https://llvm.org/docs/ProgrammersManual.html">LLVM Programmer's Manual</a>
-</li>
-<li>
-<a href="https://llvm.org/docs/CodingStandards.html">LLVM Coding Standards</a>
-</li>
+<li>修了一个因为没有测试覆盖而导致的 Crash: <a href="https://github.com/llvm/llvm-project/pull/180351" class="uri">https://github.com/llvm/llvm-project/pull/180351</a></li>
 </ul>
-<p><strong>本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。</strong></p>
-<h2>The Golden Rule</h2>
-<p><strong>If you are extending, enhancing, or bug fixing already implemented code, use the style that is already being used so that the source is uniform and easy to follow.</strong></p>
-<p>You should refer to typical files in the repo when reviewing user's code. (e.g. <code>grep -rn *.cpp</code>)</p>
-<h2>Formatting</h2>
-<p>Run these commands after making changes/ before starting code review:</p>
+<p>这个 PR 也是我开始加强 Clang-tidy 测试覆盖率的主要原因。</p>
 <ul>
-<li>
-Python: <code>darker -r HEAD^ $(git diff --name-only --diff-filter=d HEAD^)</code>
-</li>
-<li>
-C++: <code>git clang-format HEAD~1</code>
-</li>
+<li>更新了失效的 HICPP 文档链接: <a href="https://github.com/llvm/llvm-project/pull/180525" class="uri">https://github.com/llvm/llvm-project/pull/180525</a></li>
 </ul>
-<p>Fix/Report issues if linter failed.</p>
-<h2>Comments</h2>
+<p>这个 PR 在社区里引起了一些其他讨论: <a href="https://discourse.llvm.org/t/rfc-regarding-the-current-status-of-hicpp-checks/89883/3" class="uri">https://discourse.llvm.org/t/rfc-regarding-the-current-status-of-hicpp-checks/89883/3</a></p>
+<p>目前的共识是：HICPP 的 check 需要先重命名到别的 module 里，然后再考虑要不要直接删掉整个 module.</p>
+<p>自己过去的一个 Commit 莫名其妙上了 LLVM Weekly Report: <a href="https://llvmweekly.org/issue/630" class="uri">https://llvmweekly.org/issue/630</a>，虽然只有一行 (争取以后做出更酷炫的成果)</p>
+<hr />
+<p>编译器社区的一些新闻：</p>
 <ul>
-<li>
-C++: <code>//</code> for normal comments, <code>///</code> for doxygen
-</li>
-<li>
-C: Maintain C89 compatibility
-</li>
+<li><a href="https://discourse.llvm.org/t/rfc-ai-assisted-bazel-fixer-bot/89178/94" class="uri">https://discourse.llvm.org/t/rfc-ai-assisted-bazel-fixer-bot/89178/94</a></li>
 </ul>
-<h2>Whitespace</h2>
-<p><strong>No trailing whitespaces</strong></p>
-<h2>Casts</h2>
+<p>社区里吵了很久的 AI Bazel Bot 尘埃落定，还是放行了。</p>
 <ul>
-<li>
-No <strong>RTTI</strong> or <strong>Exceptions</strong>: <code>dynamic_cast&lt;></code> not allowed
-</li>
-<li>
-Handrolled <code>isa&lt;>, cast&lt;>, and dyn_cast&lt;></code> is allowed
-</li>
-<li>
-Prefer <code>static_cast, reinterpret_cast, const_cast</code>
-</li>
+<li><p>Clang 22.1.0 发布： <a href="https://releases.llvm.org/22.1.0/tools/clang/docs/ReleaseNotes.html" class="uri">https://releases.llvm.org/22.1.0/tools/clang/docs/ReleaseNotes.html</a> <a href="https://releases.llvm.org/22.1.0/tools/clang/tools/extra/docs/ReleaseNotes.html" class="uri">https://releases.llvm.org/22.1.0/tools/clang/tools/extra/docs/ReleaseNotes.html</a></p></li>
+<li><p>世界上最流行的 C++ LSP 工具(之一) Clangd 处在爆炸的边缘：<a href="https://discourse.llvm.org/t/help-needed-with-clangd-maintenance/89820" class="uri">https://discourse.llvm.org/t/help-needed-with-clangd-maintenance/89820</a></p></li>
 </ul>
-<h2><code>class</code> and <code>struct</code></h2>
+<p>支持 clice.io 谢谢喵</p>
 <ul>
-<li>
-<code>struct</code> should be used when all members are declared public.
-</li>
-<li>
-All declarations and definitions of a given <code>class</code> or <code>struct</code> must use the same keyword.
-</li>
+<li>GSoC 2026 如火如荼进行中！</li>
 </ul>
-<h2><code>auto</code></h2>
-<ul>
-<li>
-Use <code>auto</code>, but be aware of unnecessary copies (e.g. range-based <code>for</code> loops, use <code>auto &amp;/*</code>)
-</li>
-</ul>
-<h2><code>#include</code> as Little as Possible</h2>
-<ul>
-<li>
-Less include means less code, means faster compile time/binary size/speed.
-</li>
-<li>
-This one is <strong>very very important</strong>, you should <strong>never forget it</strong>.
-</li>
-<li>
-<strong>Double check when reviewing/writing code.</strong>
-</li>
-</ul>
-<h2><code>continue</code> and Early Exits</h2>
-<ul>
-<li>
-To simplify code.
-</li>
-</ul>
-<h2>No Predicate Loops, use Predicate Functions</h2>
-<h2>Miscs</h2>
-<ul>
-<li>
-No Static Constructors
-</li>
-<li>
-Don't use Braced Initializer Lists to Call a Constructor (C++11)
-</li>
-<li>
-<strong>Always check if user's <code>git branch</code> name is ideal, rename when necessary.</strong>
-</li>
-</ul>
-<h2>Naming</h2>
-<p>Always check inconsistent naming when reviewing/writing code:</p>
-<ul>
-<li>
-Type: start with an upper-case letter
-</li>
-<li>
-Var: camel case, start with an upper-case letter
-</li>
-<li>
-Func: imperative, verb phrases, camel case, start with a lowercase letter
-</li>
-<li>
-Enum: If discriminator for a union, or an indicator of a subclass, add <code>Kind</code> Suffix, otherwise align with <code>Type</code>
-</li>
-</ul>
-<p><strong>Exception:</strong> classes that mimic STL classes can have member names in STL’s style of lowercase words separated by underscores.</p>
-<h2>Assert</h2>
-<ul>
-<li>
-<strong>Use the "assert" macro to its fullest.</strong>
-</li>
-</ul>
-<p>Also, see <code>llvm_unreachable</code></p>
-<h2>Forbidden usage</h2>
-<ul>
-<li>
-<code>using namespace std</code>
-</li>
-<li>
-<code>#include &lt;iostream></code>: use <code>llvm::MemoryBuffer</code>
-</li>
-</ul>
-<h2>Omit braces when possible</h2>
-<h2>Check UNIX newline at EOF</h2>
-<h2>Preferred APIs</h2>
-<p><strong>Please remember the #include rule</strong></p>
-<ul>
-<li>
-<code>StringRef</code> when handling <code>std::string</code>
-</li>
-<li>
-<code>Error</code> as replacement to <code>Exception</code>/<code>std::error_code</code>
-</li>
-<li>
-<code>llvm::ArrayRef</code>, <code>TinyPtrVector</code>, <code>SmallVector</code> over <code>std::vector/list</code>
-</li>
-<li>
-Never use <code>&lt;list></code> to avoid heap allocation (extremely high constant factor).
-</li>
-<li>
-Sets: <code>SmallSet</code>, <code>SmallPtrSet</code>, <code>StringSet</code>, <code>DenseSet</code>, <code>RadixTree</code>, <code>SparseSet</code>, <code>FoldingSet</code>..
-</li>
-<li>
-Avoid <code>&lt;set></code>: malloc intensive, large per-element space overhead)
-</li>
-<li>
-Map: <code>StringMap</code>, <code>IndexedMap</code>, <code>DenseMap</code>, <code>ValueMap</code>
-</li>
-<li>
-Avoid <code>&lt;map></code>: large constant factor
-</li>
-<li>
-Avoid <code>std::multimap</code> and <code>std::unordered_map</code>: malloc intensive
-</li>
-<li>
-Avoid <code>std::vector&lt;bool></code>.
-</li>
-</ul>]]></content:encoded>
+<p>QEMU: 快照快速加载、USB 设备重定向、vhost-user 内存隔离、COCONUT-SVSM 中支持 x86 PCID、SCSI 磁带设备模拟…</p>
+<p>LLVM: <a href="https://discourse.llvm.org/t/gsoc-2026-projects-proposals-and-other-information/89967" class="uri">https://discourse.llvm.org/t/gsoc-2026-projects-proposals-and-other-information/89967</a></p>
+<hr />
+<p>生活琐事：</p>
+<p>之前提到了给 2012 投简历的事情，由于官网那边完全没回复，所以我直接尝试微信私聊他们员工了，在等了两天后：</p>
+<blockquote>
+<p>有的哈，今年岗位三月底开放，流程要届时才能推进了</p>
+</blockquote>
+<p>也许真的有机会？</p>
+<p>以防万一还是投了一些其它的公司，例如阿里平头哥和字节，私下聊天时，朋友给了一个抽象的建议：</p>
+<blockquote>
+<p>去 mihoyo 搞 infra</p>
+</blockquote>
+<p>虽然我既不懂游戏开发，也不会做 Infra，但我觉得这个想法实在太有乐子了。于是发动 Connection 获得了一个内推码直接投了简历，更抽象的是米哈游写简历的网页上还要写自己的游戏经历，于是:</p>
+<p>崩坏星穹铁道 活跃6-12月 已退坑</p>
+<p>现在 HR 初筛，期待开奖 (　<sup>ω</sup>)</p>]]></content:encoded>
     </item>
   </channel>
 </rss>
