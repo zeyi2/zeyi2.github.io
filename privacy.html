@@ -42,6 +42,7 @@
   --plan-banner-h: 40px;
   --sidebar-w: 16em;
   --header-h: 56px;
+  --divider-width: 2px;
   --divider-color: var(--g-rule);
 
   --g-font-fixed: "CPTFONT Modern", "CPTFONT", Monaco, "Lucida Console", "Courier New", monospace;
@@ -82,14 +83,15 @@ body {
   background: var(--g-selection);
 }
 
+/* Keep the sidebar rule on one fixed layer so its width cannot change while scrolling. */
 body::before {
   position: fixed;
   z-index: 900;
   top: var(--header-h);
   bottom: var(--plan-banner-h);
-  left: var(--sidebar-w);
-  width: 1px;
-  background: var(--g-rule);
+  left: calc(var(--sidebar-w) - 1px);
+  width: var(--divider-width);
+  background: var(--divider-color);
   content: "";
   pointer-events: none;
 }
@@ -187,7 +189,7 @@ a:focus-visible {
   padding: 0;
   color: var(--g-foreground);
   background: var(--g-paper);
-  border-right: 1px solid var(--g-rule);
+  border-right: 0;
 }
 
 #side-bar div {
@@ -257,7 +259,7 @@ li ul {
   padding: 0.5em 1.5em 2em 1em;
   color: var(--g-foreground);
   background: var(--g-surface);
-  border-left: 1px solid var(--g-rule);
+  border-left: 0;
   line-height: 1.5em;
   text-align: justify;
 }
@@ -382,6 +384,12 @@ pre > code {
   background: transparent;
   border: 0;
   font-size: 1em;
+}
+
+pre::selection,
+pre *::selection {
+  color: var(--g-ink);
+  background: var(--g-paper);
 }
 
 .spoiler {
@@ -536,7 +544,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>No we can't.</em></span>
+    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>living in a simulation.</em></span>
   </h1>
 </div>
 <div id="side-bar">
