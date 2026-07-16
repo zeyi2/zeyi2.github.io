@@ -83,11 +83,11 @@ body {
   background: var(--g-selection);
 }
 
-/* Keep the sidebar rule on one fixed layer so its width cannot change while scrolling. */
+/* Keep the sidebar rule on one fixed layer so scrolling cannot change its width or reach. */
 body::before {
   position: fixed;
   z-index: 900;
-  top: var(--header-h);
+  top: 0;
   bottom: var(--plan-banner-h);
   left: calc(var(--sidebar-w) - 1px);
   width: var(--divider-width);
@@ -137,6 +137,8 @@ a:focus-visible {
 }
 
 .header {
+  position: relative;
+  z-index: 901;
   min-height: var(--header-h);
   display: flex;
   align-items: center;
@@ -460,6 +462,57 @@ li.task-list-item input[type="checkbox"] {
   color: var(--g-disabled);
 }
 
+.read-entry {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.5em;
+  align-items: start;
+  margin: 2em 0;
+}
+
+#main .read-entry__media {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  background: transparent;
+}
+
+#main .read-entry__media img {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border: 1px solid var(--g-teal);
+}
+
+#main .read-entry__media--link {
+  display: flex;
+  min-height: 160px;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-teal);
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#main .read-entry__media--link:hover,
+#main .read-entry__media--link:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+.read-entry__link-mark {
+  margin-left: 0.45em;
+}
+
+.read-entry__body > :first-child {
+  margin-top: 0;
+}
+
 @media (max-width: 1024px) {
   :root {
     --sidebar-w: 12em;
@@ -527,6 +580,12 @@ li.task-list-item input[type="checkbox"] {
   #footer .right {
     float: none;
     text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .read-entry {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

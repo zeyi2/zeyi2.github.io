@@ -83,11 +83,11 @@ body {
   background: var(--g-selection);
 }
 
-/* Keep the sidebar rule on one fixed layer so its width cannot change while scrolling. */
+/* Keep the sidebar rule on one fixed layer so scrolling cannot change its width or reach. */
 body::before {
   position: fixed;
   z-index: 900;
-  top: var(--header-h);
+  top: 0;
   bottom: var(--plan-banner-h);
   left: calc(var(--sidebar-w) - 1px);
   width: var(--divider-width);
@@ -137,6 +137,8 @@ a:focus-visible {
 }
 
 .header {
+  position: relative;
+  z-index: 901;
   min-height: var(--header-h);
   display: flex;
   align-items: center;
@@ -460,6 +462,57 @@ li.task-list-item input[type="checkbox"] {
   color: var(--g-disabled);
 }
 
+.read-entry {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.5em;
+  align-items: start;
+  margin: 2em 0;
+}
+
+#main .read-entry__media {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  background: transparent;
+}
+
+#main .read-entry__media img {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border: 1px solid var(--g-teal);
+}
+
+#main .read-entry__media--link {
+  display: flex;
+  min-height: 160px;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-teal);
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#main .read-entry__media--link:hover,
+#main .read-entry__media--link:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+.read-entry__link-mark {
+  margin-left: 0.45em;
+}
+
+.read-entry__body > :first-child {
+  margin-top: 0;
+}
+
 @media (max-width: 1024px) {
   :root {
     --sidebar-w: 12em;
@@ -530,6 +583,12 @@ li.task-list-item input[type="checkbox"] {
   }
 }
 
+@media (max-width: 640px) {
+  .read-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (prefers-contrast: more) {
   :root {
     --g-accent: var(--g-ink);
@@ -544,13 +603,14 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>You're asking the wrong questions.</em></span>
+    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>The Internet is not for sissies.</em></span>
   </h1>
 </div>
 <div id="side-bar">
 <ul>
 <li><a href="index.html">&rsaquo; .</a></li>
 <li><a href="about.html" class="thisPage">&raquo;<i> about</i></a></li>
+<li><a href="donate.html">&rsaquo; donate</a></li>
 <li><a href="friends.html">&rsaquo; friends</a></li>
 <li><a href="posts/index.html">&rsaquo; posts</a>
 </li>
@@ -567,6 +627,154 @@ li.task-list-item input[type="checkbox"] {
 <p>I keep a Telegram channel for dev logs: <a href="https://t.me/zeyi2_dev"><span class="citation" data-cites="zeyi2_dev">@zeyi2_dev</span></a></p>
 <p>Preferred language: English &amp; Chinese</p>
 <p><em>Not available for hire now</em>.</p>
+<style>
+.about-image {
+  --about-image-scale: 0.35669;
+  width: min(100%, 320px);
+  margin: 1.5em 0;
+  color: #111;
+  text-align: left;
+}
+
+.about-image__viewport {
+  width: 100%;
+  height: 348px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.about-image__art {
+  display: inline-block;
+  margin: 0;
+  color: inherit;
+  background: transparent;
+  font-family: Consolas, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  font-size: 12px;
+  font-variant-ligatures: none;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: left;
+  white-space: pre;
+  transform: scale(var(--about-image-scale));
+  transform-origin: top left;
+}
+
+.about-image__caption {
+  margin-top: 0.6em;
+  color: #666;
+  font-size: 0.85em;
+  line-height: 1.4;
+  text-align: center;
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .about-image__art {
+    color: transparent;
+    background-image: url("data:image/jpeg;base64,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");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@media (max-width: 340px) {
+  .about-image {
+    --about-image-scale: 0.32102;
+    width: 288px;
+  }
+
+  .about-image__viewport {
+    height: 313px;
+  }
+}
+</style>
+<figure class="about-image" role="img" aria-label="Me beside a dragon lantern. 2025.">
+<div class="about-image__viewport">
+<pre class="about-image__art" aria-hidden="true">*= .+*+++++*+++++====-------:.:::::::::::-:::::::----------------=======-::-=+++=+===+++***++=-==++##=  ................
+:#*.-*+++++++=====-----------:::::::::-::--------::-------------========::. .:=+=++++*#**##*+++===+*#= .................
+**%*=*+++++++====------------:::::::::-:::::::::-::::---------========+++++.   -+++==*%%*%%%%#*#####%*:.................
+%%##**++++++=========---------:::::::::::::::::::::::::--------=======+++++-    =++--*##**%##*-+%*: -*:.................
+%%#***++++++=====-----------:::::::::::::::::--------------=---======+++++=-    :+=*++**-+%#+----  -+=..................
+%%#*+++++++======------------:::::::::::::-------:-----------=======+++++=.-.   .==+*+===*%= :=:  -%%*..................
+%%#*+++++=====-=---------::-------::::::::::::----------=-=========++:=-+- :.    .-==+==+=- :--   +%#*...............   
+%%#++++++========----:::------------:::::::::-:------==---=-=========..:-:.-.     .:-=--=..:--.   *%%*...:.........     
+%%#++++==========----------------------:::-------------========+++-:+:.:::::.       -=---  :-..   *#%#. .:......        
+%%#++++==========--=--------::----:---------------===========+++++=-=-..:::::.  .  ..:-..-:-:..  .##%#:.:::...::..      
+%%#+*+++++++=====--==----------::---:-----------===========+=+=+=:.  ...:-:-=:  . .. :.-::-:..   -+#%#==--::--:-:.      
+@%*++++++++++===----=--=------------------=-----=========+++++++=..    .:=-::     .. :.:---: .  :=+*++==--+*=::::::     
+@%%%#+++++++++=+=-----==----:--------------===========+++++++++=+.    ...-.          .::-::.  ...-**+*+=-+##+:..:*+     
+@@@@%*+++++++++++=======+#**++++=------------==========++++++++:==     ==:  ...-:   ....:.        :+**+==*##+-===*+.    
+@@@@@#**++++++++====+==#@@@@%%%#+=++---------====++++++++++++++--=-::. .=-. : -##=::-:::::..  .. .*#+++==+***#####+. . :
+@@@@@%@%*****+++++++++%@@@@@%%%%#+**=-===========++++++++++*++++--:---- .    .-+=-=--::---:::*- -*#***++**###*#***=++*#%
+=+#%@@@@#####*****+*+*@@%@@@@%%%%#*+=+**+=======+++++++++******++-:::-:.::.    ..:-=-----:--:+:.+++**#*+*###*+#+*##%%###
+---=+*#@@%@%%%%%%%%%%%@@@@@@@@@@%%#*#####*+++++++++++++**+****+===-:... .:: ..:::::....:-:::.  :#=*##%#***##*#%%%%%###%%
+========+*#%%%#%#*#%%#%@@@@@@@@@@@%%%%%#%############%+-###***#*===---.:.:........   .  :-     .:+%%%@%%%%%%%%%%#*+#%@@#
+============+*##%%%%%%@@@@@@@@@@@@%%%#%#*******###*####:.:.. .-====+++=....=:::........:-:..   .+#****%%%%#*+**-:.-*%#*%
+===============+*#%%%@@@%@@@@@@@@@@@@@%##*####*#*####*##+-  -:..:======:::.:------:::--==::.  :+**+===+#%%%##*#%*+**%#*%
+=======+=====+++++#*++++++++++++++++++++**++*****##*###+*=.=%#. .::======:.....::-:::::---=---+++=:===-=+*#%###%#+*%%##%
+=+==+=======++++++#*+=======----------------------=====-:..:=-   -:.+======--::---:....:...::==--. -===---*%%##%%%%%####
++==++========+++++#+======---------------::::::---------:.:...    ..:==++==---:..:::::::::.:===.:  -=---=-+%%%%%####****
+++=++=========++++*+=====--------------=+*+**+=-::-------==-:-+=:.::.:==--:::::. .  .::.::--+++.: .:-=----+%%######*****
++++++=++=======+++*+====--------------*%@@@@@@@%#=-----=++=+==+++=-:::.::-::-:.:-::.....:::+++-:::. :-----=%############
+++++++++====+==+++*+====-----------+#%@@@@@@@@@@@@#=-=====-==--==-:.......::-:  :-. .....:=++=:-==-:------=%%%%%%%%%%###
+++++++++=++==+++++*+====--------:-*%@@@@@@@@@@@@@@@#+-----::-:    :-.:.. .---:.          -+==:.::..:=-----=%%%%%%#=+###%
+++++++++++++++++++*====---------*%@@@@@@@@@@@@@@@@@@%*-=+=-:.      ....:..:---           .==-.:==. .-------%%%%%%#=*%%%%
+++++++++++++++++++*===---------+@@@@@%%#%%%%%%%%%%%%%@%+-===:..:. .:-.::-:.--=.           ---:::-. :-------#%%%%%%@%%##*
+++++++++++++++++++*====--------#@@@%*+=====+++**##%%%%%+.-::: ..:..:=..::-:--=::... .     -----:-..:-------#%%%%%%%%#+==
+++++++++++=+++++++*=====-------%@@%+==---------=++#%%%%* :.:.  .-. ::-::::==--.     .     :==---=. :-------*@%%%%%%#+=--
+++++++++++=+++++++*====--------*@@#===-::--::::--==*%%%- ..:.  . .::--::::==:-...         --=--:-: :=------*%%%%%%%#+===
+++++++++++++++++++*====---------%#=***#*+=--=+####*+*%%=   .:  .  --:-::-:----      .     -.==:--- -=-==-==*%%%%%%%#*+++
++++++++++++++++++**=====--------#*+*+*#%%####%%###*#*+#=:.  .::-. .:----------.          .-------..========+%%%%%%%%%%%%
++++++++++++++++++**====-------=*=##+##%#*%%*%###%#**#=**+:.  :::  .:--=-=====. ..        --:--===-:========+%%%%%%%%%%%%
++++++++++++++++++**====-------=**=+==+**+#-:*#+***+===*#+:.  ..   .:-=-===-==           .-:-----==.========+%%%%%%%%%%%%
++++++++++++++++++**====--------=*=====+==-..:++=++++=-*+::.   :.  .-------=--          .-:-=-==-==-========+#%%%%%%%%%%%
++++++++++++++++++*+====-----::::-==---==-===+=*===++=-=:::    :--::------===-     .    ..:=-================#%%%%%%%%%%%
++++++++++++++++++*+==---==-=*****+==---:-==+**====++-:::::    :-::-----======          ..:-=================#%%%%%%%%%%#
++++++++=++=++++++*+=-+%%%@%%@@@@@%===-++-===++++++++:==:... .:-:-::=-======++:        .-. ::-===++=-----====+****######*
++++++++======++++*+-=%@%@@@@@@@@@@#===++=++******++=+##*=:..:::::.:--------==: .......::: .:-=====-...:::.......::::::::
++=++=++=+==+=++++*=-+%%%%@@@%@@@@@@%++=--=++++++**+*%####**+=-::::.::::::::::...........................................
+++++++=======+++=*=-*@%%%@@@%@@@@@@%=++=---==++****#%%###*###*+=-:::.::.................................................
+++++=+==+====+=+=*=-#@%@@@@@@@@@@@@#=-=+++**###***+*%%%#########*+-..::.................................................
++++++==========+=*=-#@@@@@@@@@@@@@%#+=-===+********+#%%%###########=:...................................................
++++=++===========*-=%@@@@@@@@@@@@@@##+====+****+++*+#%%%########*###*-.:::::..:::::::::::::::::.........................
++++==============+=%@@@@@@@@@@@@@@@%**+====++++++*++#%%%%%#####%#####*:--::::::::::::::::::::...........................
+==+==============*%@@@@@@@@@@@@@@@@%#+*+====+++++++*#%%%%%%##########*-::::::::::::::::::...............................
+===============+*@@@@@@@@@@@@@@@@@@%#*===========+*+#%%%%%%%#%########+:::::::::::::.....::::::::.......................
+=============+*%@@@@@@@@@@@@@@@@@@@%##*+=----==+++=+#%%%%%%%%%%%######+.::..............................................
+============*%@%%%@@@%%@@@@@@@@@@@@%**++====+++====+%%%%%%%%%%%%######+...........................................::::::
+==========+%@%%%%@##@%%@@@@@@@@@@@@@#++======-----=%%%%%%%%%%%%%#####**-.................:::::::::::::::::::::----------
+=========*%@%@@@@@%%@@@@@@@@@@@@@@@@@*+==---:::-==#%%%%%%%%%%%#########+::::::::::::::::::::::::::::::::::::::::::::::::
+========*@@%@@@@@@@@@@%@@@@@@@@@@@@@@%*+=-::::-+=#@%%%%%%%%%%%%%%#####*#=:::::::::::::::::::::::::::::::::::::::::::::::
+=======+@%@%@@@@@@@@@@@@@@@@@@@@@@@@@@%*+=--::=+#@%%%%%%%%%%%%%%%######*=:::::::::::::::::::::::::::::::::::::..........
+=======%@@@@@@@@@@@@@@@@@@@@@@%#@@@@@@@@#+=---+*%%%%%%%%%%%%%%%%%######*:.:::::.....:::::::::::::............::::::::::-
+======*@@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@@@%*+--*%@%@@@@%%%%%%%%%%%%######=............................:.:---=====++++++**
+====:+%@@@@@%@@@@@@@@@@@%@@@@@@@@%@@@@@@@@@#+=#@@@@%%%%%%%%%%%%%%%%#####+..:::::...............:--===+==+++++++********#
+=+=.=%@@@@@@*#@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@%#%@%%@%%%%%#%%%%%%%%#%%#####=======--::::-........:++++++++++++***********#
+*=:=#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%@@@%%%%%###***#**%%#####*+++++++++++++=====-..:=++++++++++++++++******#
+=:=+%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%#@@@%@@@@@%###########%%%#####****++++++++++#***+.:==+++++++++++++++++*****#
+===*@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@%%%%%%%%%%%%####*****+++++++++=--=+.===++++++++++++++++++++*++
+-:=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%%%%%%%%####******+++++++::::+-+==+++++++++++++++++++++++
++*%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@%%%%%%%%%%%%####**********++-:-:+=++=++++++++++++**+++++*+++
+#%@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@%@@@@@@@@@@@%@@@@@@@%%%%%%%%%%%%####***********===-+++*++++++++++*********+++++
+#@@@@@@##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@%%%%%%%%%%%%%%##***********+*##*++*++++++++++**************
+%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@%%@%%%%%%%%%%#*#**********====--+*++++++++***********#****
+@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@%@@@@@@@@@@%%%%%%%%%#********++=....:+*++++++++**********#####*
+@@@@@@@@%%@@@@@@@@@@@@@@@@@@@@@@@%#@@@@@@@@@@@@@@@@@@@@@@@#%@@@@@@@@@@%%%%%%%##********+=....:+**+++++++****#*=*########
+@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@#%@@@@@@@@@@@@%%%%%####******+=....:=**+++++++******+*+#####%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%#####****+=....:=**+++++++****+*+*+##%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%#####***++:....=**++******###****#%%%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%######***+:....=*#+*******#####%%%%%%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%#####***-:---+*#+*******###%%%%%%%%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%#####**-:::+*##*******##%%%%%%%%%%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@%@%%%%#####**-...+###**######%%%%%%%%%%%%%%%
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@%%%%%######=...*%#%#*######%%%%%%@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%#####+...+%#%#*######%%%@@@@@@@@@@@@</pre>
+</div>
+<figcaption class="about-image__caption">Me beside a dragon lantern. 2025.</figcaption>
+</figure>
+
 <h2 id="about-this-website">About this website</h2>
 <p>This blog redesign takes inspiration from <a href="https://werc.cat-v.org/">werc</a>. Unfortunately, I don’t have time to maintain a server, so I’m still going with static site generation.</p>
 <p>Also, who knew writing a Markdown parser would be this hard - it took a week of struggling to cobble together something barely usable.</p>
