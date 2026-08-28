@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="Decode RISC-V binaries locally with Mach.">
+    <title>Mach - online RISC-V decoder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="page">
+      <h1>Mach</h1>
+      <p>
+        Mach is a fast RISC-V instruction encoder and decoder written in
+        portable C. This page runs the decoder entirely in your browser through
+        WebAssembly, so uploaded binaries never leave your device. The following
+        ISA bases and extensions are implemented:
+      </p>
+
+      <details>
+        <summary>View all 52 supported ISA features</summary>
+        <table class="metrics">
+        <thead>
+          <tr>
+            <th>feature</th>
+            <th>version</th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>RV32I</td><td>2.1</td><td>complete</td></tr>
+          <tr><td>RV64I</td><td>2.1</td><td>complete</td></tr>
+          <tr><td>A</td><td>2.1</td><td>complete</td></tr>
+          <tr><td>Zalrsc</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zaamo</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>B</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>C</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>D</td><td>2.2</td><td>complete</td></tr>
+          <tr><td>F</td><td>2.2</td><td>complete</td></tr>
+          <tr><td>H</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>K</td><td>1.0.1</td><td>complete</td></tr>
+          <tr><td>M</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>N</td><td>1.1</td><td>legacy<sup><a href="#legacy-n">1</a></sup></td></tr>
+          <tr><td>Q</td><td>2.2</td><td>complete</td></tr>
+          <tr><td>S</td><td>1.13</td><td>complete</td></tr>
+          <tr><td>V</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Ssctr</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Sstc</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>XTheadBa</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>XTheadCondMov</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zabha</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zacas</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zalasr</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zawrs</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zcb</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zclsd</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zcmop</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zcmp</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zcmt</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zfa</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zfbfmin</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zfh</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zfhmin</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicbom</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicbop</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicboz</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicfilp</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicfiss</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicntr</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>Zicond</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zicsr</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>Zifencei</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>Zihintntl</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zihintpause</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>Zihpm</td><td>2.0</td><td>complete</td></tr>
+          <tr><td>Zilsd</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zimop</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zvbb</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zvbc</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zvfbfmin</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zvfbfwma</td><td>1.0</td><td>complete</td></tr>
+          <tr><td>Zvkn</td><td>1.0</td><td>complete</td></tr>
+        </tbody>
+        </table>
+        <p id="legacy-n">
+          <small><sup>1</sup> N 1.1 is the legacy user-level interrupt
+          extension, retained for compatibility.</small>
+        </p>
+      </details>
+
+      <hr>
+
+      <form class="controls" onsubmit="return false">
+        <label id="open-button" class="button disabled" for="file-input"
+               aria-disabled="true">open binary</label>
+        <input id="file-input" type="file" hidden disabled>
+        <label>example
+          <select id="examples-select" disabled></select>
+        </label>
+        <label>XLEN
+          <select id="xlen-select" aria-label="RISC-V XLEN" disabled>
+            <option value="64" selected>RV64</option>
+            <option value="32">RV32</option>
+          </select>
+        </label>
+        <span class="status">
+          <span id="runtime-dot" class="runtime-dot"></span><span id="runtime-label">loading wasm</span>
+        </span>
+      </form>
+
+      <table class="metrics">
+        <tr>
+          <th>instructions</th>
+          <th>decode time</th>
+          <th>throughput</th>
+          <th>decoded</th>
+        </tr>
+        <tr>
+          <td id="metric-total">-</td>
+          <td id="metric-time">-</td>
+          <td id="metric-rate">-</td>
+          <td id="metric-ok">-</td>
+        </tr>
+      </table>
+
+      <p class="fileline">
+        <b id="file-name">loading examples...</b>
+        <span id="file-detail">waiting for Mach...</Span>
+        <span id="decode-summary">-</span>
+      </p>
+
+      <div id="drop-zone" class="listing">
+        <div class="column-headings" aria-hidden="true">
+          <span>encoded instruction</span>
+          <span>MachRV decode</span>
+        </div>
+        <div id="instruction-viewport" tabindex="0">
+          <div id="instruction-spacer"></div>
+          <div id="instruction-rows"></div>
+          <div id="empty-state">
+            <p>
+              drop a RISC-V binary here<br>
+              ELF32, ELF64, or a raw little-endian instruction stream
+            </p>
+          </div>
+        </div>
+        <div id="drop-overlay" aria-hidden="true">drop to decode with MachRV</div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>
+          Benchmarks:
+          <a href="https://sqlite.org/download.html">SQLite 3.53.4</a>
+          (<a href="https://sqlite.org/copyright.html">public domain</a>);
+          <a href="https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_canneal">canneal</a>
+          (<a href="https://raw.githubusercontent.com/RALC88/riscv-vectorized-benchmark-suite/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_canneal/LICENSE">license</a>);
+          <a href="https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_jacobi-2d">jacobi-2d</a>
+          (<a href="https://raw.githubusercontent.com/RALC88/riscv-vectorized-benchmark-suite/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_jacobi-2d/LICENSE.txt">license</a>);
+          <a href="https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_pathfinder">pathfinder</a>
+          (<a href="https://raw.githubusercontent.com/RALC88/riscv-vectorized-benchmark-suite/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_pathfinder/LICENSE">license</a>);
+          <a href="https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_streamcluster">streamcluster</a>
+          (<a href="https://raw.githubusercontent.com/RALC88/riscv-vectorized-benchmark-suite/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/_streamcluster/LICENSE">license</a>);
+          <a href="https://raw.githubusercontent.com/RALC88/riscv-vectorized-benchmark-suite/32a14ddfb9acaeb677800e8d2e18a45d9421d4cc/LICENSE">RiVEC license</a>.
+        </p>
+      </footer>
+    </div>
+    <noscript>This page needs JavaScript to load the MachRV WebAssembly module.</noscript>
+  </body>
+</html>

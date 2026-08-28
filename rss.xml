@@ -4,13 +4,13 @@
     <title>Mitchell's Homepage</title>
     <link>https://broken.life</link>
     <atom:link href="https://broken.life/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>considered harmful</description>
-    <lastBuildDate>Thu, 16 Jul 2026 20:51:14 +0800</lastBuildDate>
+    <description>the trolling business</description>
+    <lastBuildDate>Fri, 28 Aug 2026 15:08:18 +0800</lastBuildDate>
     <item>
       <title>LLVM Coding Standard, in a nutshell</title>
       <link>https://broken.life/posts/compiler/coding-standard.html</link>
       <guid>https://broken.life/posts/compiler/coding-standard.html</guid>
-      <pubDate>Thu, 16 Jul 2026 20:51:15 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
       <description> LLVM Coding Standard, in a nutshell Note: This document was mainly put together to help LLMs review my commits. Agents can read files and are quite smart, so I’m not going into a lot of detail here. Also, I figured this could be tweaked into a general standard for agents working</description>
       <content:encoded><![CDATA[<h1 id="llvm-coding-standard-in-a-nutshell">LLVM Coding Standard, in a nutshell</h1>
 <blockquote>
@@ -118,7 +118,7 @@
       <title>Time Doesn't Come Back</title>
       <link>https://broken.life/posts/misc/20yr.html</link>
       <guid>https://broken.life/posts/misc/20yr.html</guid>
-      <pubDate>Thu, 16 Jul 2026 20:51:15 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
       <description> Time Doesn’t Come Back I Today I turned twenty, which I suppose is my official farewell to adolescence. Not that anything special happened - aside from the usual routine of sending PRs and reviewing code for Clang-Tidy, I mostly just read and studied for finals. Looking back at </description>
       <content:encoded><![CDATA[<h1 id="time-doesnt-come-back">Time Doesn’t Come Back</h1>
 <h2 id="i">I</h2>
@@ -192,7 +192,7 @@
       <title>Microblog</title>
       <link>https://broken.life/posts/misc/micro.html</link>
       <guid>https://broken.life/posts/misc/micro.html</guid>
-      <pubDate>Thu, 16 Jul 2026 20:51:15 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
       <description> Microblog rambling incoherently 2026/07/10 On Code Review There’s an existing problem to solve The reviewer has a solution A in mind The PR author has provided a solution B The diff between A and B is where the comments come from 2026/03/28 Turns out the project I worked on duri</description>
       <content:encoded><![CDATA[<h1 id="microblog">Microblog</h1>
 <blockquote>
@@ -218,7 +218,7 @@
       <title>LLVM 贡献记录</title>
       <link>https://broken.life/posts/compiler/llvm-roadmap.html</link>
       <guid>https://broken.life/posts/compiler/llvm-roadmap.html</guid>
-      <pubDate>Thu, 16 Jul 2026 20:51:15 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026/01/31 Update 二〇二五年的贡献已归档 Clang-tidy cert 重构 Rename cert-flp30-c to bugprone-float-loop-counter ( #166571 ) Rename cert-dcl58-cpp to bugprone-std-namespace-modification ( #165659 ) Renam</description>
       <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -553,7 +553,7 @@
       <title>LLVM 贡献记录</title>
       <link>https://broken.life/posts/compiler/llvm-roadmap-1.html</link>
       <guid>https://broken.life/posts/compiler/llvm-roadmap-1.html</guid>
-      <pubDate>Thu, 16 Jul 2026 20:51:15 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026-01-08 clang-22 距离发版还有 5 天，现在手上还有 11 个在做的 PR (💦)，更不幸的是 clang 发版时间和 我期末考试还撞一起了，寄完了 (明天考马原，目前一章没学，等下还得去找 pdf 背) 但感觉有几个 PR 或许有机会能压着时间点 land: 一是给 clang-tidy 某个 check 加 C++20 constinit </description>
       <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
 <p>这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>

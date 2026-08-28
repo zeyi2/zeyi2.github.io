@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sqlite-rv64gcv",
+    "title": "SQLite 3.53.4",
+    "architecture": "RV64GCV",
+    "detail": "complete .text, 287,540 instructions, QEMU guest build",
+    "fileName": "sqlite-3.53.4-rv64gcv.text.bin",
+    "dataUrl": "examples/sqlite-3.53.4-rv64gcv.text.b64",
+    "encoding": "base64",
+    "xlen": 64,
+    "byteLength": 841456,
+    "instructionCount": 287540,
+    "sha256": "d9febfdada5de0885627970ad0fe02d8333bb48800f39e30af4d72e8aa6b07f7",
+    "provenance": "SQLite amalgamation 3.53.4; Debian clang 19.1.7 -march=rv64gcv -O3; native QEMU riscv64 guest build"
+  },
+  {
+    "id": "canneal-rv64gcv",
+    "title": "PARSEC canneal",
+    "architecture": "RV64GCV",
+    "detail": "complete .text, 144,140 instructions, RiVEC corpus",
+    "fileName": "canneal-rv64gcv.text.bin",
+    "dataUrl": "examples/canneal-rv64gcv.text.b64",
+    "encoding": "base64",
+    "xlen": 64,
+    "byteLength": 391466,
+    "instructionCount": 144140,
+    "sha256": "c00e1a8ca4a9b359b7ed4f0f01060be0ea7c507d33172344d5f47fd5e521283a",
+    "provenance": "RiVEC vectorized benchmark suite revision 32a14ddfb9acaeb677800e8d2e18a45d9421d4cc"
+  },
+  {
+    "id": "jacobi-2d-rv64gcv",
+    "title": "PolyBench jacobi-2d",
+    "architecture": "RV64GCV",
+    "detail": "complete .text, 137,477 instructions, RiVEC corpus",
+    "fileName": "jacobi-2d-rv64gcv.text.bin",
+    "dataUrl": "examples/jacobi-2d-rv64gcv.text.b64",
+    "encoding": "base64",
+    "xlen": 64,
+    "byteLength": 372932,
+    "instructionCount": 137477,
+    "sha256": "19c6aa6da8fc4571108dbf957a82c58d466c4f09923547cbf648d3afb885f0a3",
+    "provenance": "RiVEC vectorized benchmark suite revision 32a14ddfb9acaeb677800e8d2e18a45d9421d4cc"
+  },
+  {
+    "id": "pathfinder-rv64gcv",
+    "title": "Rodinia pathfinder",
+    "architecture": "RV64GCV",
+    "detail": "complete .text, 52,525 instructions, RiVEC corpus",
+    "fileName": "pathfinder-rv64gcv.text.bin",
+    "dataUrl": "examples/pathfinder-rv64gcv.text.b64",
+    "encoding": "base64",
+    "xlen": 64,
+    "byteLength": 147770,
+    "instructionCount": 52525,
+    "sha256": "688f4bf53c4f963982bf88b39248ab7592bb922842c58d508264310231447153",
+    "provenance": "RiVEC vectorized benchmark suite revision 32a14ddfb9acaeb677800e8d2e18a45d9421d4cc"
+  },
+  {
+    "id": "streamcluster-rv64gcv",
+    "title": "PARSEC streamcluster",
+    "architecture": "RV64GCV",
+    "detail": "complete .text, 40,855 instructions, RiVEC corpus",
+    "fileName": "streamcluster-rv64gcv.text.bin",
+    "dataUrl": "examples/streamcluster-rv64gcv.text.b64",
+    "encoding": "base64",
+    "xlen": 64,
+    "byteLength": 113146,
+    "instructionCount": 40855,
+    "sha256": "fa1adf9d792093d3fd70e2910fcbc662b3f7a97e4f914e463d005e14ef15aa1e",
+    "provenance": "RiVEC vectorized benchmark suite revision 32a14ddfb9acaeb677800e8d2e18a45d9421d4cc"
+  }
+]
