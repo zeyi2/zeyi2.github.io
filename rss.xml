@@ -5,12 +5,244 @@
     <link>https://broken.life</link>
     <atom:link href="https://broken.life/rss.xml" rel="self" type="application/rss+xml"/>
     <description>the trolling business</description>
-    <lastBuildDate>Fri, 28 Aug 2026 15:08:18 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Oct 2026 02:27:03 +0800</lastBuildDate>
+    <item>
+      <title>CTIT: Integration Testing for Clang-Tidy</title>
+      <link>https://broken.life/posts/compiler/CTIT.html</link>
+      <guid>https://broken.life/posts/compiler/CTIT.html</guid>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
+      <description> CTIT: Integration Testing for Clang-Tidy Zeyi Xu, Victor Baranov Slides (PDF) · Source code · Run results Pages: 1 · 2 · 3 · 4 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 20 Page 1 · CTIT: Integration Testing for Clang-Tidy Sorry if my spoken English </description>
+      <content:encoded><![CDATA[<h1 id="ctit-integration-testing-for-clang-tidy">CTIT: Integration Testing for Clang-Tidy</h1>
+<p>Zeyi Xu, Victor Baranov</p>
+<p><a href="../../files/ctit/CTIT-Report.pdf">Slides (PDF)</a> · <a href="https://github.com/clang-tidy-infra/CTIT">Source code</a> · <a href="https://github.com/clang-tidy-infra/CTIT-results">Run results</a></p>
+<p>Pages: <a href="#slide-1">1</a> · <a href="#slide-2">2</a> · <a href="#slide-3">3</a> · <a href="#slide-4">4</a> · <a href="#slide-5">5</a> · <a href="#slide-6">6</a> · <a href="#slide-7">7</a> · <a href="#slide-8">8</a> · <a href="#slide-9">9</a> · <a href="#slide-10">10</a> · <a href="#slide-11">11</a> · <a href="#slide-12">12</a> · <a href="#slide-13">13</a> · <a href="#slide-14">14</a> · <a href="#slide-15">15</a> · <a href="#slide-16">16</a> · <a href="#slide-17">17</a> · <a href="#slide-18">18</a> · <a href="#slide-19">19</a> · <a href="#slide-20">20</a></p>
+<article class="pres-entry" id="slide-1">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-01.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-01.png" alt="CTIT: Integration Testing for Clang-Tidy" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-1">Page 1</a> · CTIT: Integration Testing for Clang-Tidy</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Sorry if my spoken English is a bit lacking, so the presentation is a bit difficult to follow. If anything isn’t clear, please feel free to jump in and ask.</p>
+<p>Hi everyone, and thank you for having me. I’m Zeyi Xu, and this is joint work with Victor Baranov. Today I’d like to introduce CTIT, the Clang-Tidy Integration Tester. CTIT is a public service that takes a proposed clang-tidy change and runs it on real-world C and C++ projects while the pull request is still in review. So far it serves clang-tidy, but at the end I’d like your opinion on whether it could also help the Static Analyzer or other tools.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-2">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-02.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-02.png" alt="Background" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-2">Page 2</a> · Background</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Let me start with the problem. A clang-tidy change can break three things. Accuracy, which consists of false positives, false negatives, and fix-its that produce invalid code. Robustness is a check crashing on perfectly valid code. Performance is analysis time that explodes once you run on a whole project. Until now we relied on three defenses: the PR author checking their own patch, reviewers reading the code, and users filing bug reports after a release. The last one works, but it is the slowest and most expensive place to find a bug.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-3">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-03.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-03.png" alt="In Reality…" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-3">Page 3</a> · In Reality…</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>The clang-tidy contributing guide already says: “To test a check, it’s best to try it out on a larger code base.” In reality, some authors don’t do it, partly because it is real work: you need to build LLVM, set up several projects, and generate compilation databases. This screenshot is a real review comment by Victor on the new performance-use-std-move check. The PR’s own tests passed. The crash was found only because a reviewer took the time to run the check on real code by hand.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-4">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-04.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-04.png" alt="Lit Tests" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-4">Page 4</a> · Lit Tests</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Why can tests pass while real code crashes? Our main regression tool is the lit test. These tests are small, fast, deterministic, and portable, and that is exactly why we use them. But they only cover what authors and reviewers anticipate, and mock headers are only as accurate as the real headers they imitate. Even check options have gaps: as of February, 92 of 611 clang-tidy checks still lacked comprehensive test coverage for their configuration options.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-5">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-05.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-05.png" alt="On Clang-Tidy Issues" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-5">Page 5</a> · On Clang-Tidy Issues</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>To measure how often this gap matters, we traced LLVM issues filed from January 2021 to September 2026 that carry the clang-tidy label plus false-positive, false-negative, crash, or invalid-code-generation. That gives 673 reports. In 507 of them, about 75%, the issue showed a valid failure caused by a condition the focused tests did not represent. We see three mechanisms. Ecosystem drift: new language standards and library versions. Unanticipated context, 493 reports and by far the largest: language features, macros, and build setups nobody tested. Project-scale amplification, 6 reports: small defects multiplied by project size. One report can show more than one mechanism, so the rows add up to more than 507.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-6">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-06.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-06.png" alt="Examples: Ecosystem Drift" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-6">Page 6</a> · Examples: Ecosystem Drift</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Here is an ecosystem-drift example. For this issue, nothing changed in clang-tidy. The trigger is a glibc commit. The lit tests use a mock assert.h, so they keep passing. Only a current, real glibc shows the problem.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-7">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-07.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-07.png" alt="Example: Unanticipated Context" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-7">Page 7</a> · Example: Unanticipated Context</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Next is an unanticipated-context example. readability-non-const-parameter crashed on this tiny piece of legacy C. It is a K&amp;R-style definition, where the parameter type is declared after the parameter list. It is valid C and it still exists in real code, but no test covered it. We see this pattern again and again: once someone hits the case, adding a test is easy. The hard part is knowing the case exists. Real projects give us those cases for free.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-8">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-08.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-08.png" alt="Existing Tools?" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-8">Page 8</a> · Existing Tools?</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Do existing tools already solve this? Two come close. Clippy’s lintcheck is almost exactly what we want: it builds the current Clippy, runs it on a corpus of Rust crates, and compares diagnostics between revisions. But it relies on Cargo, and C and C++ have no common build abstraction, so each project must be configured separately to get faithful compile commands. CodeChecker does use real compilation databases, but its goal is to test the projects themselves. We need the opposite: the linter is the system under test, and the projects are the test corpus.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-9">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-09.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-09.png" alt="So we need a new tool that:" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-9">Page 9</a> · So we need a new tool that:</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>So we need a new tool with three properties. First, it tests clang-tidy on diverse real-world projects in their native configurations. Second, it is easy to use and maintain, and open to every contributor. Third, it is review-native: everything happens on GitHub, where LLVM review already takes place, and every input, log, and result is public.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-10">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-10.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-10.png" alt="Architecture (in a simple way)" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-10">Page 10</a> · Architecture (in a simple way)</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Here is the architecture in a simple form. A request names an LLVM PR, a check, and its options. GitHub Actions parses the request and selects a runner. In the middle is the integration test. The LLVM revision and every test project are pinned to exact commits, so runs are reproducible. On the PR path, we apply the PR’s source changes without its tests and docs, build clang-tidy, and analyze every project with only the requested check enabled. If the check already exists, we can first run the same steps on unpatched LLVM as a baseline. Containers and the sccache build cache are shared to keep builds cheap. On the right is triage and reporting. We summarize the logs into warnings, errors, crashes with stack excerpts, and analysis time. The results are uploaded to a public results repository and posted as an issue comment. An optional LLM step suggests false-positive verdicts.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-11">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-11.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-11.png" alt="Usage" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-11">Page 11</a> · Usage</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Using it is simple. Open an issue in the CTIT repository with the template. The first line is the PR URL and the check name. Then add one option per line, and optionally /baseline to compare with unpatched LLVM. The cpp label starts the run. CTIT posts a “Run started” comment with a link to the workflow, then replaces it with the report. To protect shared runners, runs start only for people with commit access to llvm-project. Without access, you can still open the issue and ask a reviewer to comment /redo. Because the issue links the PR, it also appears in the PR timeline.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-12">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-12.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-12.png" alt="The projects we currently test" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-12">Page 12</a> · The projects we currently test</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Currently we test against 13 projects. Nine are C++. Four are C. We picked them for diversity: analysis tools, a compiler, frameworks, template-heavy libraries, networking, and so on. Each one is pinned to a commit and configured with CMake and Ninja in its native setup. CTIT can also run with three standard-library profiles: libstdc++ from GCC 14 and 15, and libc++ 21. This targets the ecosystem-drift problem directly.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-13">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-13.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-13.png" alt="Is it useful?" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-13">Page 13</a> · Is it useful?</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Is it useful? Here are two real cases. CTIT issue 183 tested bugprone-macro-condition, PR 210768. The first run, on the seven projects we had then, produced more than 3,100 warnings. Most of them are FPs. The focused tests had passed. No reviewer can catch a warning flood like this by reading the diff. The author revised the check, and the later run on all 13 projects reports 98 warnings in total, with five projects clean.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-14">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-14.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-14.png" alt="Is it useful?" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-14">Page 14</a> · Is it useful?</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>Second, crashes. bugprone-smart-ptr-initialization. The PR’s regression tests passed, but CTIT crashed on six of the seven projects. The author added a regression test and separate fixes, and triggered a rerun. The table on the right is a later run on all 13 projects, and every project passes. That is the full detect, fix, and verify loop inside one review.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-15">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-15.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-15.png" alt="Performance: a dataflow solver regression" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-15">Page 15</a> · Performance: a dataflow solver regression</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>CTIT also finds performance problems. Victor found this one while building the daily check-timing workflow, which enables a broad set of checks and records time per check. Two LLVM files, RISCVVEmitter.cpp and Multilib.cpp, each took more than two hours with an assertions-enabled clang-tidy. The problem was bugprone-unchecked-optional-access, which is built on Clang’s dataflow framework. The check logic was fine. Three invariant checks in the watched-literal solver ran on every iteration and rebuilt solver state each time. A fix moved them to expensive-checks builds, and the time dropped to 12 to 14 seconds. LLVM’s own pre-merge CI used the same configuration, so this affected LLVM’s infrastructure too.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-16">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-16.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-16.png" alt="Replay Experiment" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-16">Page 16</a> · Replay Experiment</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>But would CTIT have caught bugs that actually reached users? To answer that, I replayed two release cycles, LLVM 20 to 21 and 21 to 22. I built the exact trees at each cycle boundary and ran every new or behavior-changing check of that cycle on all 13 projects. Out of 307 candidate PRs, 163 were in scope, covering 121 new or modified checks. I diffed the results, grouped the new diagnostics by root cause, and reviewed each group by hand. CTIT surfaced 15 false-positive regressions, all confirmed. Users later reported 11 of them, 2 were fixed without an issue, and 2 are still unreported. For the 11 reported ones, CTIT would have flagged them at the introducing PR, a median of 6.2 months before the first user report.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-17">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-17.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-17.png" alt="Operational cost" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-17">Page 17</a> · Operational cost</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>What does it cost? Across 69 successful runs on 33 reviewer-selected PRs, a typical run takes around 20 minutes from start to report. Slow checks take longer, up to about 90 minutes in most cases. For comparison, LFX Insights reports an average merge time of 7 days for LLVM pull requests. Mean feedback time is about 0.3% of that, and about 0.6% even when we count reruns. So CTIT costs less than 1% of the whole review process, and it runs alongside review instead of blocking it.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-18">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-18.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-18.png" alt="Repo" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-18">Page 18</a> · Repo</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>If you are interested in CTIT, you can find the source code in the main repository and the test results in the CTIT-results repository. The links to both repositories are on this slide.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-19">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-19.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-19.png" alt="Future works" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-19">Page 19</a> · Future works</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>There is still a lot to do. First, false negatives: diffing cannot tell a removed false positive from a new false negative, so we want real-world cases with known expected diagnostics. Second, LLM triage: we want to test more models against manually reviewed reports, for speed and accuracy. Third, a wider corpus and more configurations: more standard libraries, platforms, and build systems beyond CMake. Fourth, applying fix-its and rebuilding the projects, to catch invalid fixes, which we don’t do yet. And finally, a website to display and compare results.</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-20">
+<figure class="pres-entry__slide">
+<a href="../../files/ctit/slide-20.png" target="_blank" rel="noopener">
+<img src="../../files/ctit/slide-20.png" alt="Concerns so far…" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-20">Page 20</a> · Concerns so far…</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>I’d like to end with three questions for this group. First, would the Clang Static Analyzer be interested in using this tool? The pipeline is not specific to clang-tidy: build a patched tool, run it over real compilation databases, and collect diagnostics, crashes, and timing. I’d like to know what CSA would need from it. Second, which new features should we add first? Third, are there projects you would like us to test, especially ones that stress the analyzer differently from our current corpus? Thank you, and I’m happy to take questions.</p>
+</div>
+</article>]]></content:encoded>
+    </item>
     <item>
       <title>LLVM Coding Standard, in a nutshell</title>
       <link>https://broken.life/posts/compiler/coding-standard.html</link>
       <guid>https://broken.life/posts/compiler/coding-standard.html</guid>
-      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
       <description> LLVM Coding Standard, in a nutshell Note: This document was mainly put together to help LLMs review my commits. Agents can read files and are quite smart, so I’m not going into a lot of detail here. Also, I figured this could be tweaked into a general standard for agents working</description>
       <content:encoded><![CDATA[<h1 id="llvm-coding-standard-in-a-nutshell">LLVM Coding Standard, in a nutshell</h1>
 <blockquote>
@@ -118,7 +350,7 @@
       <title>Time Doesn't Come Back</title>
       <link>https://broken.life/posts/misc/20yr.html</link>
       <guid>https://broken.life/posts/misc/20yr.html</guid>
-      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
       <description> Time Doesn’t Come Back I Today I turned twenty, which I suppose is my official farewell to adolescence. Not that anything special happened - aside from the usual routine of sending PRs and reviewing code for Clang-Tidy, I mostly just read and studied for finals. Looking back at </description>
       <content:encoded><![CDATA[<h1 id="time-doesnt-come-back">Time Doesn’t Come Back</h1>
 <h2 id="i">I</h2>
@@ -192,7 +424,7 @@
       <title>Microblog</title>
       <link>https://broken.life/posts/misc/micro.html</link>
       <guid>https://broken.life/posts/misc/micro.html</guid>
-      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
       <description> Microblog rambling incoherently 2026/07/10 On Code Review There’s an existing problem to solve The reviewer has a solution A in mind The PR author has provided a solution B The diff between A and B is where the comments come from 2026/03/28 Turns out the project I worked on duri</description>
       <content:encoded><![CDATA[<h1 id="microblog">Microblog</h1>
 <blockquote>
@@ -218,7 +450,7 @@
       <title>LLVM 贡献记录</title>
       <link>https://broken.life/posts/compiler/llvm-roadmap.html</link>
       <guid>https://broken.life/posts/compiler/llvm-roadmap.html</guid>
-      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026/01/31 Update 二〇二五年的贡献已归档 Clang-tidy cert 重构 Rename cert-flp30-c to bugprone-float-loop-counter ( #166571 ) Rename cert-dcl58-cpp to bugprone-std-namespace-modification ( #165659 ) Renam</description>
       <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
 <p>这个文档用来记录我的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
@@ -553,7 +785,7 @@
       <title>LLVM 贡献记录</title>
       <link>https://broken.life/posts/compiler/llvm-roadmap-1.html</link>
       <guid>https://broken.life/posts/compiler/llvm-roadmap-1.html</guid>
-      <pubDate>Fri, 28 Aug 2026 15:08:18 +0800</pubDate>
+      <pubDate>Wed, 07 Oct 2026 02:27:03 +0800</pubDate>
       <description> LLVM 贡献记录 这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。 本文档是活的文档，会随着我自己的工作进展而更新内容，且不保证已有内容的正确性。 2026-01-08 clang-22 距离发版还有 5 天，现在手上还有 11 个在做的 PR (💦)，更不幸的是 clang 发版时间和 我期末考试还撞一起了，寄完了 (明天考马原，目前一章没学，等下还得去找 pdf 背) 但感觉有几个 PR 或许有机会能压着时间点 land: 一是给 clang-tidy 某个 check 加 C++20 constinit </description>
       <content:encoded><![CDATA[<h1 id="llvm-贡献记录">LLVM 贡献记录</h1>
 <p>这个文档用来记录我在二〇二六年的 LLVM 贡献记录和笔记，大概没什么用，主要是自己看。</p>
