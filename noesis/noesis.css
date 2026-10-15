@@ -1,0 +1,289 @@
+/*
+ * OpenGenera look, shared with the broken.life blog (style.genera.css):
+ * paper and ink, teal accents, square corners, hard offset shadows.
+ */
+:root {
+  --g-paper: #ffffff;
+  --g-paper-soft: #f9f9f6;
+  --g-ink: #050505;
+  --g-mid: #767676;
+  --g-teal: #629a9b;
+  --g-teal-light: #b3c1be;
+  --g-teal-dark: #1f4d4e;
+  --g-shadow: 4px 4px 0 var(--g-ink);
+  --g-font-fixed: "CPTFONT Modern", "CPTFONT", Monaco, "Lucida Console", "Courier New", "PingFang SC", "Microsoft YaHei", monospace;
+  --g-font-menu: "JESS14 Modern", "JESS14", Geneva, "Trebuchet MS", Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  color: var(--g-ink);
+  background: var(--g-ink);
+  font-family: var(--g-font-fixed);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+::selection { color: var(--g-paper); background: var(--g-ink); }
+
+#stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#canvas {
+  display: block;
+  outline: none;
+  touch-action: none;
+  image-rendering: auto;
+}
+
+/* ----------------------------------------------------------------- splash */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background-color: var(--g-paper-soft);
+  background-image: radial-gradient(var(--g-teal-light) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+#splash .card {
+  width: min(420px, 100%);
+  background: var(--g-paper);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+#splash .card-title {
+  margin: 0;
+  padding: 0.45em 0.7em;
+  color: var(--g-paper);
+  background: var(--g-teal);
+  border-bottom: 1px solid var(--g-ink);
+  font-family: var(--g-font-menu);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 700;
+}
+
+#splash .card-title span {
+  margin-left: 0.6em;
+  font-size: 0.55em;
+  font-style: normal;
+  font-weight: 400;
+}
+
+#splash .card-body { padding: 1em 1.1em 1.1em; }
+
+#splash .sub {
+  margin: 0 0 1em;
+  padding-bottom: 0.4ex;
+  border-bottom: 1px solid var(--g-ink);
+  font-family: var(--g-font-menu);
+  font-size: 1.15em;
+  font-weight: 700;
+}
+
+.bar {
+  height: 10px;
+  padding: 1px;
+  background: var(--g-paper);
+  border: 1px solid var(--g-ink);
+}
+
+#load-bar {
+  width: 0;
+  height: 100%;
+  background: var(--g-teal-dark);
+  transition: width 0.2s;
+}
+
+#load-text { min-height: 1.5em; margin: 0.5em 0 1em; color: var(--g-mid); }
+
+#start-btn {
+  display: block;
+  width: 100%;
+  padding: 0.6em 1em;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border: 1px solid var(--g-ink);
+  border-radius: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#start-btn:hover:not(:disabled),
+#start-btn:focus-visible {
+  color: var(--g-ink);
+  background: var(--g-paper);
+  outline: 0;
+  box-shadow: inset 0.3em 0 0 var(--g-teal);
+}
+
+#start-btn:disabled { color: var(--g-mid); background: var(--g-paper-soft); border-color: var(--g-teal-light); cursor: default; }
+
+@media (max-height: 360px) {
+  #splash .card-title { font-size: 1.25em; }
+  #splash .card-body { padding: 0.7em 0.9em 0.8em; }
+  #load-text { margin: 0.35em 0 0.6em; }
+}
+
+/* ---------------------------------------------------------------- toolbar */
+#toolbar {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+#toolbar[hidden] { display: none; }
+
+#toolbar.awake, #toolbar:hover, #toolbar:focus-within, #toolbar.menu-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+#toolbar .pill {
+  display: flex;
+  background: var(--g-paper);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+#toolbar .pill > button {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--g-ink);
+  background: var(--g-paper);
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+#toolbar .pill > button + button { border-left: 1px solid var(--g-ink); }
+
+#toolbar .pill > button:hover,
+#toolbar .pill > button:focus-visible,
+#toolbar.menu-open [data-act="more"] {
+  color: var(--g-paper);
+  background: var(--g-ink);
+  outline: 0;
+}
+
+#toolbar svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+#toolbar svg .fill { fill: currentColor; stroke: none; }
+
+[data-act="fullscreen"] .exit, .is-fullscreen [data-act="fullscreen"] .enter { display: none; }
+.is-fullscreen [data-act="fullscreen"] .exit { display: block; }
+
+@media (hover: hover) {
+  #toolbar .pill > button::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    padding: 2px 6px;
+    color: var(--g-paper);
+    background: var(--g-ink);
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s 0.35s;
+  }
+  #toolbar .pill > button:hover::after { opacity: 1; }
+  #toolbar.menu-open .pill > button::after { display: none; }
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 160px;
+  background: var(--g-paper);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+.popover[hidden] { display: none; }
+
+.popover .item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0.45em 0.7em;
+  color: var(--g-ink);
+  background: transparent;
+  border: 0;
+  border-left: 0.25em solid var(--g-paper);
+  border-radius: 0;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.popover .item + .item { border-top: 1px solid var(--g-teal-light); }
+
+.popover .item:hover,
+.popover .item:focus-visible {
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border-left-color: var(--g-teal);
+  outline: 0;
+}
+
+.popover .item svg { width: 14px; height: 14px; }
+
+@media (hover: none) {
+  #toolbar .pill > button { width: 40px; height: 40px; }
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 20;
+  max-width: calc(100% - 24px);
+  transform: translateX(-50%);
+  padding: 0.4em 0.9em;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border: 1px solid var(--g-paper);
+  box-shadow: 4px 4px 0 var(--g-teal);
+  font-weight: 700;
+}

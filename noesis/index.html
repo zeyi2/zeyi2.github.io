@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>NOeSIS01 - 诉说谎言的记忆之物语 | Web</title>
+  <link rel="stylesheet" href="noesis.css">
+</head>
+<body>
+  <main id="stage">
+    <canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+  </main>
+
+  <section id="splash">
+    <div class="card">
+      <h1 class="card-title">NOeSIS01 <span>15th anniversary</span></h1>
+      <div class="card-body">
+        <p class="sub">诉说谎言的记忆之物语</p>
+        <div class="bar"><div id="load-bar"></div></div>
+        <p id="load-text">正在准备…</p>
+        <button id="start-btn" disabled>开始游戏</button>
+      </div>
+    </div>
+  </section>
+
+  <nav id="toolbar" hidden aria-label="游戏工具栏">
+    <div class="pill">
+      <button data-act="menu" aria-label="系统菜单" data-tip="系统菜单 · Esc">
+        <svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg>
+      </button>
+      <button data-act="fullscreen" aria-label="全屏" data-tip="全屏 · F11">
+        <svg viewBox="0 0 24 24" class="enter"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+        <svg viewBox="0 0 24 24" class="exit"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg>
+      </button>
+      <button data-act="more" aria-label="更多" aria-haspopup="true" data-tip="更多">
+        <svg viewBox="0 0 24 24"><circle class="fill" cx="6" cy="12" r="1.6"/><circle class="fill" cx="12" cy="12" r="1.6"/><circle class="fill" cx="18" cy="12" r="1.6"/></svg>
+      </button>
+    </div>
+    <div id="more-menu" class="popover" role="menu" hidden>
+      <button class="item" data-act="export" role="menuitem">
+        <svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>导出存档
+      </button>
+      <button class="item" data-act="import" role="menuitem">
+        <svg viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 19h14"/></svg>导入存档
+      </button>
+    </div>
+  </nav>
+  <input id="import-input" type="file" multiple accept=".zip,.dat,.sav,.bmp" hidden>
+  <div id="toast" hidden></div>
+
+  <script src="noesis-audio.js"></script>
+  <script src="noesis.js"></script>
+</body>
+</html>

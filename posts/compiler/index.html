@@ -641,6 +641,37 @@ li.task-list-item input[type="checkbox"] {
     --g-teal-light: var(--g-paper);
   }
 }
+
+.embed-entry {
+  position: relative;
+  z-index: 1;
+  margin: 1.5em 0 2em;
+  text-align: left;
+}
+
+.embed-entry__frame {
+  width: 100%;
+  /* Keep the whole frame on screen: cap the width by the viewport height. */
+  max-width: calc((100vh - var(--header-h) - var(--plan-banner-h) - 6em) * (var(--embed-ratio)));
+  aspect-ratio: var(--embed-ratio);
+  background: var(--g-ink);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+.embed-entry__frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-entry figcaption {
+  padding: 0.65em 0;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-teal-light);
+  font-family: var(--g-font-menu);
+}
 </style>
 </head>
 <body>
@@ -648,7 +679,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="../../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>here's how to do it but don't do it.</em></span>
+    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>improving the ladder.</em></span>
   </h1>
 </div>
 <div id="side-bar">

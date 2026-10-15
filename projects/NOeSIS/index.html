@@ -1,0 +1,708 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitchell's Homepage</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style type="text/css">
+/*
+ * OpenGenera palette for the existing werc-style blog markup.
+ *
+ * This is an additive alternative to style.css. It intentionally keeps the
+ * current document structure intact and does not load or replace font files.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* OpenGenera source palette. */
+  --g-paper: #ffffff;
+  --g-paper-soft: #f9f9f6;
+  --g-ink: #050505;
+  --g-mid: #767676;
+  --g-muted: #b9b9b9;
+  --g-teal: #629a9b;
+  --g-teal-light: #b3c1be;
+  --g-teal-dark: #1f4d4e;
+
+  /* Semantic aliases used by the blog. */
+  --g-canvas: var(--g-paper-soft);
+  --g-surface: var(--g-paper);
+  --g-foreground: var(--g-ink);
+  --g-secondary: var(--g-mid);
+  --g-rule: var(--g-ink);
+  --g-accent: var(--g-teal-dark);
+  --g-accent-surface: var(--g-teal);
+  --g-selection: var(--g-ink);
+  --g-selection-foreground: var(--g-paper);
+  --g-disabled: var(--g-muted);
+  --g-shadow: 4px 4px 0 var(--g-ink);
+
+  --plan-banner-h: 40px;
+  --sidebar-w: 16em;
+  --header-h: 56px;
+  --divider-width: 2px;
+  --divider-color: var(--g-rule);
+
+  --g-font-fixed: "CPTFONT Modern", "CPTFONT", Monaco, "Lucida Console", "Courier New", monospace;
+  --g-font-menu: "JESS14 Modern", "JESS14", Geneva, "Trebuchet MS", Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--g-canvas);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 0 var(--plan-banner-h);
+  color: var(--g-foreground);
+  background-color: var(--g-canvas);
+  background-image: linear-gradient(
+    to right,
+    var(--g-surface) 0,
+    var(--g-surface) var(--sidebar-w),
+    var(--g-canvas) var(--sidebar-w),
+    var(--g-canvas) 100%
+  );
+  background-repeat: no-repeat;
+  font-family: var(--g-font-fixed);
+  font-size: 80%;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+/* Keep the sidebar rule on one fixed layer so scrolling cannot change its width or reach. */
+body::before {
+  position: fixed;
+  z-index: 900;
+  top: 0;
+  bottom: var(--plan-banner-h);
+  left: calc(var(--sidebar-w) - 1px);
+  width: var(--divider-width);
+  background: var(--divider-color);
+  content: "";
+  pointer-events: none;
+}
+
+a {
+  color: var(--g-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  outline: 0;
+  text-decoration: none;
+}
+
+#plan-banner {
+  position: fixed;
+  z-index: 1100;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--plan-banner-h);
+  padding: 0 12px;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border-top: 1px solid var(--g-ink);
+  font-weight: 700;
+  line-height: var(--plan-banner-h);
+  text-align: right;
+}
+
+#plan-banner a {
+  color: inherit;
+}
+
+#plan-banner a:hover,
+#plan-banner a:focus-visible {
+  color: var(--g-ink);
+  background: var(--g-paper);
+}
+
+.header {
+  position: relative;
+  z-index: 901;
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--g-paper);
+  background: var(--g-accent-surface);
+  border: 1px solid var(--g-rule);
+}
+
+.header a {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-decoration: none;
+}
+
+.header a:hover,
+.header a:focus-visible {
+  color: var(--g-paper);
+  background: var(--g-teal-dark);
+}
+
+.midHeader img {
+  border: 0;
+}
+
+.headerTitle {
+  margin: 0 0 0 0.5em;
+  padding: 0.5em;
+  font-family: var(--g-font-menu);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.headerSubtitle {
+  margin-left: 1em;
+  color: var(--g-paper);
+  font-size: 0.6em;
+  font-style: normal;
+  font-weight: 400;
+}
+
+#side-bar {
+  width: var(--sidebar-w);
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
+  float: left;
+  clear: left;
+  margin: 0;
+  padding: 0;
+  color: var(--g-foreground);
+  background: var(--g-paper);
+  border-right: 0;
+}
+
+#side-bar div {
+  border-bottom: 1px solid var(--g-rule);
+}
+
+.sideBarTitle {
+  margin: 0 0 0.5em 2mm;
+  padding: 1em 0 0;
+  font-family: var(--g-font-menu);
+  font-style: italic;
+  font-weight: 700;
+}
+
+#side-bar ul {
+  margin: 0;
+  padding: 0 0 0.3em;
+  list-style: none outside;
+}
+
+li ul {
+  padding-left: 0.6em !important;
+}
+
+#side-bar li {
+  margin: 0;
+  padding: 0.1ex 0;
+}
+
+#side-bar a {
+  display: block;
+  margin: 0;
+  padding: 0.25em 1ex 0.25em 2mm;
+  color: var(--g-foreground);
+  background: transparent;
+  border-left: 0.2em solid var(--g-paper);
+  font-weight: 700 !important;
+  font-size: 102%;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+#side-bar a:hover,
+#side-bar a:focus-visible {
+  padding-left: 5mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
+}
+
+#side-bar a.thisPage,
+#side-bar li.thisPage > a {
+  padding-left: 5mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
+}
+
+#side-bar li.thisPage {
+  background: var(--g-selection);
+}
+
+#main {
+  max-width: 70em;
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
+  margin: 0 0 0 var(--sidebar-w);
+  padding: 0.5em 1.5em 2em 1em;
+  color: var(--g-foreground);
+  background: var(--g-surface);
+  border-left: 0;
+  line-height: 1.5em;
+  text-align: justify;
+}
+
+#main a {
+  color: var(--g-accent);
+}
+
+#main a:hover,
+#main a:focus-visible {
+  color: var(--g-selection-foreground);
+}
+
+#main h1,
+#main h2 {
+  padding-bottom: 0.5ex;
+  color: var(--g-foreground);
+  border-bottom: 1px solid var(--g-rule);
+  font-family: var(--g-font-menu);
+}
+
+#main h1 {
+  font-style: italic;
+}
+
+#main ul {
+  list-style-type: square;
+}
+
+#main img,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Decorative Don Quixote watermark: keep it out of the reading column. */
+#bg-watermark,
+body > img[src$="images/bg.png"] {
+  position: fixed !important;
+  z-index: 0 !important;
+  right: 10px !important;
+  bottom: calc(var(--plan-banner-h) + 18px) !important;
+  width: clamp(190px, 18vw, 320px) !important;
+  max-width: calc(100vw - var(--sidebar-w) - 32px) !important;
+  height: auto !important;
+  opacity: 0.3 !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+#footer {
+  clear: both;
+  padding: 2em;
+  color: var(--g-foreground);
+  background: var(--g-teal-light);
+  border-top: 1px solid var(--g-rule);
+  font-size: 91%;
+}
+
+#footer .left {
+  float: left;
+  clear: left;
+  text-align: left;
+}
+
+#footer .right {
+  text-align: right;
+}
+
+#footer a {
+  color: var(--g-foreground);
+  text-decoration: none;
+}
+
+abbr,
+acronym {
+  border-bottom: 1px dotted var(--g-rule);
+  cursor: help;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 1em;
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-rule);
+  border-left: 8px solid var(--g-teal);
+  font-style: italic;
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid var(--g-rule);
+}
+
+code,
+pre {
+  font-family: var(--g-font-fixed);
+  font-size: 1.05em;
+}
+
+code {
+  padding: 0 0.2em;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border-bottom: 1px dotted var(--g-mid);
+}
+
+pre {
+  padding: 1em;
+  overflow-x: auto;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border: 1px solid var(--g-rule);
+  border-left: 8px solid var(--g-teal);
+  border-radius: 0;
+  box-shadow: var(--g-shadow);
+}
+
+pre > code {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: 1em;
+}
+
+pre::selection,
+pre *::selection {
+  color: var(--g-ink);
+  background: var(--g-paper);
+}
+
+.spoiler {
+  padding: 0 3px;
+  color: var(--g-ink);
+  background: var(--g-ink);
+  border-radius: 0;
+}
+
+.spoiler:hover,
+.spoiler:focus-visible {
+  color: var(--g-paper);
+}
+
+table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5em;
+  border: 1px solid var(--g-rule);
+  text-align: left;
+}
+
+thead {
+  color: var(--g-paper);
+  background: var(--g-ink);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--g-paper-soft);
+}
+
+li.task-list-item {
+  margin-left: -20px;
+  list-style-type: none;
+}
+
+li.task-list-item input[type="checkbox"] {
+  margin-right: 5px;
+  accent-color: var(--g-teal-dark);
+  vertical-align: middle;
+}
+
+.footnotes {
+  color: var(--g-secondary);
+  border-top: 1px solid var(--g-rule);
+  font-size: 0.9em;
+}
+
+.footnotes ol {
+  padding-left: 20px;
+}
+
+.footnotes li {
+  margin-bottom: 0.5em;
+}
+
+.footnotes a {
+  text-decoration: none;
+}
+
+:disabled,
+[aria-disabled="true"] {
+  color: var(--g-disabled);
+}
+
+.pres-entry {
+  position: relative;
+  z-index: 1;
+  margin: 2.5em 0 3em;
+  scroll-margin-top: 1em;
+  background: var(--g-surface);
+  text-align: left;
+}
+
+.pres-entry__slide {
+  margin: 0;
+}
+
+.pres-entry__slide > a {
+  display: block;
+}
+
+#main .pres-entry__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: white;
+  border: 1px solid var(--g-teal);
+}
+
+.pres-entry__slide figcaption {
+  padding: 0.65em 0;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-teal-light);
+  font-family: var(--g-font-menu);
+}
+
+.pres-entry__transcript {
+  max-width: 75ch;
+  margin: 1.2em 0 0;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.pres-entry__transcript > :first-child {
+  margin-top: 0;
+}
+
+.read-entry {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.5em;
+  align-items: start;
+  margin: 2em 0;
+}
+
+#main .read-entry__media {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  background: transparent;
+}
+
+#main .read-entry__media img {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border: 1px solid var(--g-teal);
+}
+
+#main .read-entry__media--link {
+  display: flex;
+  min-height: 160px;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-teal);
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#main .read-entry__media--link:hover,
+#main .read-entry__media--link:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+.read-entry__link-mark {
+  margin-left: 0.45em;
+}
+
+.read-entry__body > :first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-w: 12em;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 0;
+    --plan-banner-h: 32px;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  body {
+    background: var(--g-canvas);
+  }
+
+  #bg-watermark,
+  body > img[src$="images/bg.png"] {
+    right: 10px !important;
+    bottom: calc(var(--plan-banner-h) + 10px) !important;
+    width: min(42vw, 180px) !important;
+    max-width: calc(100vw - 20px) !important;
+    opacity: 0.22 !important;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .headerTitle {
+    padding: 0.5em 0.5em 0.25em;
+    font-size: 1.3em;
+  }
+
+  .headerSubtitle {
+    font-size: 0.7em;
+  }
+
+  #side-bar {
+    width: 100%;
+    min-height: 0;
+    float: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--g-rule);
+  }
+
+  #side-bar a {
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    border-left: 0;
+  }
+
+  #main {
+    margin: 0;
+    padding: 1em;
+    border-left: 0;
+    text-align: left;
+  }
+
+  #footer .left,
+  #footer .right {
+    float: none;
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .read-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --g-accent: var(--g-ink);
+    --g-accent-surface: var(--g-teal-dark);
+    --g-teal-light: var(--g-paper);
+  }
+}
+
+.embed-entry {
+  position: relative;
+  z-index: 1;
+  margin: 1.5em 0 2em;
+  text-align: left;
+}
+
+.embed-entry__frame {
+  width: 100%;
+  /* Keep the whole frame on screen: cap the width by the viewport height. */
+  max-width: calc((100vh - var(--header-h) - var(--plan-banner-h) - 6em) * (var(--embed-ratio)));
+  aspect-ratio: var(--embed-ratio);
+  background: var(--g-ink);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+.embed-entry__frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-entry figcaption {
+  padding: 0.65em 0;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-teal-light);
+  font-family: var(--g-font-menu);
+}
+</style>
+</head>
+<body>
+<img id="bg-watermark" src="../../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; z-index: 1000; opacity: 0.5;"/>
+<div id="plan-banner"><a href="../../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
+<div class="header">
+  <h1 class="headerTitle">
+    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Out of sight, out of mind.</em></span>
+  </h1>
+</div>
+<div id="side-bar">
+<ul>
+<li><a href="../index.html">&rsaquo; ..</a></li>
+</ul>
+</div>
+<div id="main">
+<h1 id="noesis01-but-it-is-in-wasm.">NOeSIS01, but it is in wasm.</h1>
+<p><em>NOeSIS01 -诉说谎言的记忆之物语- | 15th anniversary</em></p>
+<figure class="embed-entry">
+<div class="embed-entry__frame" style="--embed-ratio: 4 / 3">
+<iframe src="../../noesis/index.html" title="NOeSIS01 (Simplified Chinese)" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe>
+</div>
+<figcaption>NOeSIS01 (Simplified Chinese) · <a href="../../noesis/index.html" target="_blank" rel="noopener">open in a new tab ↗</a></figcaption>
+</figure>
+<p>NOeSIS is a Japanese visual novel series created by cutlass of Classic Chocolat, first released in 2011 as a free indie game for Android. This is the free Simplified Chinese release running entirely in the browser.</p>
+<h2 id="controls">Controls</h2>
+<ul>
+<li>Left click / Enter: advance. Right click / Esc: system menu. Mouse wheel: backlog.</li>
+<li>Move the mouse over the game to show the toolbar: system menu, fullscreen, and save import / export.</li>
+<li>Saves stay in this browser (IndexedDB). Steam saves can be imported from the <code>save/</code> folder of the game.</li>
+</ul>
+</div>
+</body>
+</html>
