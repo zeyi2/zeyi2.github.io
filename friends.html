@@ -19,15 +19,16 @@
   /* OpenGenera source palette. */
   --g-paper: #ffffff;
   --g-paper-soft: #f9f9f6;
+  --g-paper-warm: #efede4;
   --g-ink: #050505;
-  --g-mid: #767676;
+  --g-mid: #6b6b6b;
   --g-muted: #b9b9b9;
   --g-teal: #629a9b;
   --g-teal-light: #b3c1be;
   --g-teal-dark: #1f4d4e;
 
   /* Semantic aliases used by the blog. */
-  --g-canvas: var(--g-paper-soft);
+  --g-canvas: var(--g-paper-warm);
   --g-surface: var(--g-paper);
   --g-foreground: var(--g-ink);
   --g-secondary: var(--g-mid);
@@ -64,18 +65,23 @@ body {
   padding: 0 0 var(--plan-banner-h);
   color: var(--g-foreground);
   background-color: var(--g-canvas);
-  background-image: linear-gradient(
-    to right,
-    var(--g-surface) 0,
-    var(--g-surface) var(--sidebar-w),
-    var(--g-canvas) var(--sidebar-w),
-    var(--g-canvas) 100%
-  );
-  background-repeat: no-repeat;
+  /* White sidebar column over a faint 1-bit dither desktop. */
+  background-image:
+    linear-gradient(
+      to right,
+      var(--g-surface) 0,
+      var(--g-surface) var(--sidebar-w),
+      transparent var(--sidebar-w)
+    ),
+    radial-gradient(rgba(5, 5, 5, 0.13) 0.6px, transparent 0.9px);
+  background-size: 100% 100%, 4px 4px;
+  background-repeat: no-repeat, repeat;
+  background-attachment: fixed, fixed;
   font-family: var(--g-font-fixed);
-  font-size: 80%;
+  font-size: 82%;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
@@ -110,6 +116,11 @@ a:focus-visible {
   text-decoration: none;
 }
 
+a:focus-visible {
+  outline: 1px dashed var(--g-ink);
+  outline-offset: 1px;
+}
+
 #plan-banner {
   position: fixed;
   z-index: 1100;
@@ -117,11 +128,13 @@ a:focus-visible {
   bottom: 0;
   left: 0;
   height: var(--plan-banner-h);
-  padding: 0 12px;
+  padding: 0 14px;
   color: var(--g-paper);
   background: var(--g-ink);
   border-top: 1px solid var(--g-ink);
+  box-shadow: inset 0 1px 0 var(--g-teal-dark);
   font-weight: 700;
+  letter-spacing: 0.04em;
   line-height: var(--plan-banner-h);
   text-align: right;
 }
@@ -130,12 +143,21 @@ a:focus-visible {
   color: inherit;
 }
 
+/* The RSS link reads as a small boxed key on the status line. */
+#plan-banner > a:first-child {
+  margin: 7px 0 0 !important;
+  padding: 0 0.55em;
+  border: 1px solid var(--g-paper);
+  line-height: calc(var(--plan-banner-h) - 16px);
+}
+
 #plan-banner a:hover,
 #plan-banner a:focus-visible {
-  color: var(--g-ink);
+  color: var(--g-ink) !important;
   background: var(--g-paper);
 }
 
+/* Title bar: teal pinstripes with the title knocked out on a solid plate. */
 .header {
   position: relative;
   z-index: 901;
@@ -144,8 +166,18 @@ a:focus-visible {
   align-items: center;
   justify-content: space-between;
   color: var(--g-paper);
-  background: var(--g-accent-surface);
+  background-color: var(--g-accent-surface);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.22) 2px,
+    rgba(255, 255, 255, 0.22) 3px
+  );
+  background-clip: padding-box;
   border: 1px solid var(--g-rule);
+  border-bottom-width: 2px;
+  box-shadow: inset 0 0 0 3px var(--g-accent-surface), inset 0 0 0 4px rgba(255, 255, 255, 0.35);
 }
 
 .header a {
@@ -166,23 +198,38 @@ a:focus-visible {
 }
 
 .headerTitle {
-  margin: 0 0 0 0.5em;
-  padding: 0.5em;
+  margin: 0 0 0 0.75em;
+  padding: 0.35em 0;
   font-family: var(--g-font-menu);
   font-size: 1.6em;
   font-style: italic;
   font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.headerTitle > a,
+.headerSubtitle {
+  padding: 0.05em 0.45em 0.1em;
+  background: var(--g-accent-surface);
+}
+
+.headerTitle > a {
+  text-shadow: 1px 1px 0 var(--g-teal-dark);
 }
 
 .headerSubtitle {
-  margin-left: 1em;
+  display: inline-block;
+  margin-left: 0.6em;
   color: var(--g-paper);
   font-size: 0.6em;
   font-style: normal;
   font-weight: 400;
+  letter-spacing: 0.03em;
+  vertical-align: 0.15em;
 }
 
 #side-bar {
+  position: relative;
   width: var(--sidebar-w);
   min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
   float: left;
@@ -192,6 +239,20 @@ a:focus-visible {
   color: var(--g-foreground);
   background: var(--g-paper);
   border-right: 0;
+}
+
+/* Genera-style pane label above the command list. */
+#side-bar::before {
+  display: block;
+  margin: 0 0 0.35em;
+  padding: 0.55em 2mm 0.45em;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-rule);
+  font-family: var(--g-font-menu);
+  font-size: 0.85em;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  content: "Commands";
 }
 
 #side-bar div {
@@ -218,33 +279,35 @@ li ul {
 
 #side-bar li {
   margin: 0;
-  padding: 0.1ex 0;
+  padding: 0;
 }
 
 #side-bar a {
   display: block;
   margin: 0;
-  padding: 0.25em 1ex 0.25em 2mm;
+  padding: 0.3em 1ex 0.3em 2mm;
   color: var(--g-foreground);
   background: transparent;
-  border-left: 0.2em solid var(--g-paper);
+  border-left: 0.25em solid transparent;
   font-weight: 700 !important;
   font-size: 102%;
   text-decoration: none;
   text-transform: capitalize;
+  transition: padding-left 80ms steps(2);
 }
 
 #side-bar a:hover,
 #side-bar a:focus-visible {
-  padding-left: 5mm;
+  padding-left: 4mm;
   color: var(--g-selection-foreground);
   background: var(--g-selection);
   border-left-color: var(--g-teal);
+  outline: 0;
 }
 
 #side-bar a.thisPage,
 #side-bar li.thisPage > a {
-  padding-left: 5mm;
+  padding-left: 4mm;
   color: var(--g-selection-foreground);
   background: var(--g-selection);
   border-left-color: var(--g-teal);
@@ -254,16 +317,29 @@ li ul {
   background: var(--g-selection);
 }
 
+/* The reading pane is a window sheet resting on the dithered desktop. */
 #main {
-  max-width: 70em;
-  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
-  margin: 0 0 0 var(--sidebar-w);
-  padding: 0.5em 1.5em 2em 1em;
+  position: relative;
+  z-index: 1;
+  max-width: 64em;
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h) - 3.5em);
+  margin: 1.5em 2em 2em calc(var(--sidebar-w) + 2em);
+  padding: 1em 2.5em 2.5em;
   color: var(--g-foreground);
   background: var(--g-surface);
-  border-left: 0;
-  line-height: 1.5em;
-  text-align: justify;
+  border: 1px solid var(--g-rule);
+  box-shadow: var(--g-shadow);
+  line-height: 1.65;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+#main > p,
+#main > ul,
+#main > ol,
+#main > blockquote,
+#main > dl {
+  max-width: 80ch;
 }
 
 #main a {
@@ -276,19 +352,58 @@ li ul {
 }
 
 #main h1,
-#main h2 {
-  padding-bottom: 0.5ex;
+#main h2,
+#main h3,
+#main h4 {
   color: var(--g-foreground);
-  border-bottom: 1px solid var(--g-rule);
   font-family: var(--g-font-menu);
+  line-height: 1.25;
 }
 
 #main h1 {
+  margin: 0.6em 0 1em;
+  padding-bottom: 0.35em;
+  border-bottom: 3px double var(--g-rule);
+  font-size: 2em;
   font-style: italic;
 }
 
+#main h2 {
+  margin: 2em 0 0.8em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--g-rule);
+  font-size: 1.45em;
+}
+
+#main h1 + h2 {
+  margin-top: 1em;
+}
+
+#main h3 {
+  margin: 1.8em 0 0.6em;
+  color: var(--g-teal-dark);
+  font-size: 1.15em;
+}
+
+#main h3::before {
+  margin-right: 0.4em;
+  color: var(--g-teal);
+  content: "\25A0";
+  font-size: 0.7em;
+  vertical-align: 0.15em;
+}
+
 #main ul {
+  padding-left: 1.6em;
   list-style-type: square;
+}
+
+#main li {
+  margin: 0.2em 0;
+}
+
+#main li::marker {
+  color: var(--g-teal-dark);
 }
 
 #main img,
@@ -297,7 +412,7 @@ img {
   height: auto;
 }
 
-/* Decorative Don Quixote watermark: keep it out of the reading column. */
+/* Decorative Don Quixote watermark: rests on the desktop behind the sheet. */
 #bg-watermark,
 body > img[src$="images/bg.png"] {
   position: fixed !important;
@@ -307,7 +422,8 @@ body > img[src$="images/bg.png"] {
   width: clamp(190px, 18vw, 320px) !important;
   max-width: calc(100vw - var(--sidebar-w) - 32px) !important;
   height: auto !important;
-  opacity: 0.3 !important;
+  opacity: 0.45 !important;
+  mix-blend-mode: multiply;
   pointer-events: none;
   user-select: none;
 }
@@ -343,17 +459,43 @@ acronym {
 }
 
 blockquote {
-  margin-left: 0;
-  padding: 1em;
+  margin: 1.5em 0;
+  padding: 0.85em 1.2em;
+  color: #2a2a2a;
   background: var(--g-paper-soft);
   border: 1px solid var(--g-rule);
-  border-left: 8px solid var(--g-teal);
+  border-left: 6px solid var(--g-teal);
+  box-shadow: 2px 2px 0 var(--g-teal-light);
   font-style: italic;
 }
 
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* A centred ornament instead of a bare rule. */
 hr {
+  overflow: visible;
+  height: 0;
+  margin: 2.5em auto;
   border: 0;
-  border-bottom: 1px solid var(--g-rule);
+  border-top: 1px solid var(--g-rule);
+  text-align: center;
+}
+
+hr::after {
+  position: relative;
+  top: -0.8em;
+  padding: 0 0.8em;
+  color: var(--g-teal-dark);
+  background: var(--g-surface);
+  content: "\25C6 \25C6 \25C6";
+  font-size: 0.85em;
+  letter-spacing: 0.4em;
 }
 
 code,
@@ -363,21 +505,23 @@ pre {
 }
 
 code {
-  padding: 0 0.2em;
+  padding: 0.05em 0.3em;
   color: var(--g-foreground);
   background: var(--g-paper-soft);
-  border-bottom: 1px dotted var(--g-mid);
+  border: 1px solid #dcdcd4;
 }
 
 pre {
+  margin: 1.5em 0;
   padding: 1em;
   overflow-x: auto;
-  color: var(--g-paper);
+  color: #f2f2ea;
   background: var(--g-ink);
   border: 1px solid var(--g-rule);
-  border-left: 8px solid var(--g-teal);
+  border-left: 6px solid var(--g-teal);
   border-radius: 0;
   box-shadow: var(--g-shadow);
+  line-height: 1.5;
 }
 
 pre > code {
@@ -410,11 +554,12 @@ table {
   width: 100%;
   margin: 1.5em 0;
   border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
 }
 
 th,
 td {
-  padding: 0.5em;
+  padding: 0.45em 0.6em;
   border: 1px solid var(--g-rule);
   text-align: left;
 }
@@ -422,6 +567,12 @@ td {
 thead {
   color: var(--g-paper);
   background: var(--g-ink);
+}
+
+thead th {
+  border-color: #3a3a3a;
+  font-family: var(--g-font-menu);
+  letter-spacing: 0.03em;
 }
 
 tbody tr:nth-child(even) {
@@ -532,14 +683,14 @@ li.task-list-item input[type="checkbox"] {
 }
 
 #main .read-entry__media--link {
-  display: flex;
+  display: block;
   min-height: 160px;
   padding: 1.5em;
-  align-items: center;
-  justify-content: center;
+  align-content: center;
   color: var(--g-foreground);
   background: var(--g-paper-soft);
   border: 1px solid var(--g-teal);
+  box-shadow: 3px 3px 0 var(--g-teal-light);
   overflow-wrap: anywhere;
   text-align: center;
 }
@@ -562,6 +713,12 @@ li.task-list-item input[type="checkbox"] {
   :root {
     --sidebar-w: 12em;
   }
+
+  #main {
+    margin-right: 1.25em;
+    margin-left: calc(var(--sidebar-w) + 1.25em);
+    padding: 0.75em 1.5em 2em;
+  }
 }
 
 @media (max-width: 768px) {
@@ -575,7 +732,13 @@ li.task-list-item input[type="checkbox"] {
   }
 
   body {
-    background: var(--g-canvas);
+    background-image: radial-gradient(rgba(5, 5, 5, 0.13) 0.6px, transparent 0.9px);
+    background-size: 4px 4px;
+    background-repeat: repeat;
+  }
+
+  #side-bar::before {
+    display: none;
   }
 
   #bg-watermark,
@@ -615,10 +778,14 @@ li.task-list-item input[type="checkbox"] {
   }
 
   #main {
-    margin: 0;
-    padding: 1em;
-    border-left: 0;
-    text-align: left;
+    min-height: 0;
+    margin: 0.9em 0.9em 1.5em;
+    padding: 0.5em 1.1em 1.5em;
+    box-shadow: 3px 3px 0 var(--g-ink);
+  }
+
+  #main h1 {
+    font-size: 1.6em;
   }
 
   #footer .left,
@@ -766,7 +933,7 @@ li.task-list-item input[type="checkbox"] {
 <div id="plan-banner"><a href="rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
 <div class="header">
   <h1 class="headerTitle">
-    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Singularity is here</em></span>
+    <a href="index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>the front fell off</em></span>
   </h1>
 </div>
 <div id="side-bar">
