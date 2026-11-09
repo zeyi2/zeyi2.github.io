@@ -1,0 +1,1269 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitchell's Homepage</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style type="text/css">
+/*
+ * OpenGenera palette for the existing werc-style blog markup.
+ *
+ * This is an additive alternative to style.css. It intentionally keeps the
+ * current document structure intact and does not load or replace font files.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* OpenGenera source palette. */
+  --g-paper: #ffffff;
+  --g-paper-soft: #f9f9f6;
+  --g-paper-warm: #efede4;
+  --g-ink: #050505;
+  --g-mid: #6b6b6b;
+  --g-muted: #b9b9b9;
+  --g-teal: #629a9b;
+  --g-teal-light: #b3c1be;
+  --g-teal-dark: #1f4d4e;
+
+  /* Semantic aliases used by the blog. */
+  --g-canvas: var(--g-paper-warm);
+  --g-surface: var(--g-paper);
+  --g-foreground: var(--g-ink);
+  --g-secondary: var(--g-mid);
+  --g-rule: var(--g-ink);
+  --g-accent: var(--g-teal-dark);
+  --g-accent-surface: var(--g-teal);
+  --g-selection: var(--g-ink);
+  --g-selection-foreground: var(--g-paper);
+  --g-disabled: var(--g-muted);
+  --g-shadow: 4px 4px 0 var(--g-ink);
+
+  --plan-banner-h: 40px;
+  --sidebar-w: 16em;
+  --header-h: 56px;
+  --divider-width: 2px;
+  --divider-color: var(--g-rule);
+
+  --g-font-fixed: "CPTFONT Modern", "CPTFONT", Monaco, "Lucida Console", "Courier New", monospace;
+  --g-font-menu: "JESS14 Modern", "JESS14", Geneva, "Trebuchet MS", Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--g-canvas);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 0 var(--plan-banner-h);
+  color: var(--g-foreground);
+  background-color: var(--g-canvas);
+  /* White sidebar column over a faint 1-bit dither desktop. */
+  background-image:
+    linear-gradient(
+      to right,
+      var(--g-surface) 0,
+      var(--g-surface) var(--sidebar-w),
+      transparent var(--sidebar-w)
+    ),
+    radial-gradient(rgba(5, 5, 5, 0.13) 0.6px, transparent 0.9px);
+  background-size: 100% 100%, 4px 4px;
+  background-repeat: no-repeat, repeat;
+  background-attachment: fixed, fixed;
+  font-family: var(--g-font-fixed);
+  font-size: 82%;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+/* Keep the sidebar rule on one fixed layer so scrolling cannot change its width or reach. */
+body::before {
+  position: fixed;
+  z-index: 900;
+  top: 0;
+  bottom: var(--plan-banner-h);
+  left: calc(var(--sidebar-w) - 1px);
+  width: var(--divider-width);
+  background: var(--divider-color);
+  content: "";
+  pointer-events: none;
+}
+
+a {
+  color: var(--g-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  outline: 0;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 1px dashed var(--g-ink);
+  outline-offset: 1px;
+}
+
+#plan-banner {
+  position: fixed;
+  z-index: 1100;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--plan-banner-h);
+  padding: 0 14px;
+  color: var(--g-paper);
+  background: var(--g-ink);
+  border-top: 1px solid var(--g-ink);
+  box-shadow: inset 0 1px 0 var(--g-teal-dark);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: var(--plan-banner-h);
+  text-align: right;
+}
+
+#plan-banner a {
+  color: inherit;
+}
+
+/* The RSS link reads as a small boxed key on the status line. */
+#plan-banner > a:first-child {
+  margin: 7px 0 0 !important;
+  padding: 0 0.55em;
+  border: 1px solid var(--g-paper);
+  line-height: calc(var(--plan-banner-h) - 16px);
+}
+
+#plan-banner a:hover,
+#plan-banner a:focus-visible {
+  color: var(--g-ink) !important;
+  background: var(--g-paper);
+}
+
+/* Title bar: teal pinstripes with the title knocked out on a solid plate. */
+.header {
+  position: relative;
+  z-index: 901;
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--g-paper);
+  background-color: var(--g-accent-surface);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.22) 2px,
+    rgba(255, 255, 255, 0.22) 3px
+  );
+  background-clip: padding-box;
+  border: 1px solid var(--g-rule);
+  border-bottom-width: 2px;
+  box-shadow: inset 0 0 0 3px var(--g-accent-surface), inset 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+.header a {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-decoration: none;
+}
+
+.header a:hover,
+.header a:focus-visible {
+  color: var(--g-paper);
+  background: var(--g-teal-dark);
+}
+
+.midHeader img {
+  border: 0;
+}
+
+.headerTitle {
+  margin: 0 0 0 0.75em;
+  padding: 0.35em 0;
+  font-family: var(--g-font-menu);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.headerTitle > a,
+.headerSubtitle {
+  padding: 0.05em 0.45em 0.1em;
+  background: var(--g-accent-surface);
+}
+
+.headerTitle > a {
+  text-shadow: 1px 1px 0 var(--g-teal-dark);
+}
+
+.headerSubtitle {
+  display: inline-block;
+  margin-left: 0.6em;
+  color: var(--g-paper);
+  font-size: 0.6em;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  vertical-align: 0.15em;
+}
+
+#side-bar {
+  position: relative;
+  width: var(--sidebar-w);
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h));
+  float: left;
+  clear: left;
+  margin: 0;
+  padding: 0;
+  color: var(--g-foreground);
+  background: var(--g-paper);
+  border-right: 0;
+}
+
+/* Genera-style pane label above the command list. */
+#side-bar::before {
+  display: block;
+  margin: 0 0 0.35em;
+  padding: 0.55em 2mm 0.45em;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-rule);
+  font-family: var(--g-font-menu);
+  font-size: 0.85em;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  content: "Commands";
+}
+
+#side-bar div {
+  border-bottom: 1px solid var(--g-rule);
+}
+
+.sideBarTitle {
+  margin: 0 0 0.5em 2mm;
+  padding: 1em 0 0;
+  font-family: var(--g-font-menu);
+  font-style: italic;
+  font-weight: 700;
+}
+
+#side-bar ul {
+  margin: 0;
+  padding: 0 0 0.3em;
+  list-style: none outside;
+}
+
+li ul {
+  padding-left: 0.6em !important;
+}
+
+#side-bar li {
+  margin: 0;
+  padding: 0;
+}
+
+#side-bar a {
+  display: block;
+  margin: 0;
+  padding: 0.3em 1ex 0.3em 2mm;
+  color: var(--g-foreground);
+  background: transparent;
+  border-left: 0.25em solid transparent;
+  font-weight: 700 !important;
+  font-size: 102%;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: padding-left 80ms steps(2);
+}
+
+#side-bar a:hover,
+#side-bar a:focus-visible {
+  padding-left: 4mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
+  outline: 0;
+}
+
+#side-bar a.thisPage,
+#side-bar li.thisPage > a {
+  padding-left: 4mm;
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+  border-left-color: var(--g-teal);
+}
+
+#side-bar li.thisPage {
+  background: var(--g-selection);
+}
+
+/* The reading pane is a window sheet resting on the dithered desktop. */
+#main {
+  position: relative;
+  z-index: 1;
+  max-width: 64em;
+  min-height: calc(100vh - var(--header-h) - var(--plan-banner-h) - 3.5em);
+  margin: 1.5em 2em 2em calc(var(--sidebar-w) + 2em);
+  padding: 1em 2.5em 2.5em;
+  color: var(--g-foreground);
+  background: var(--g-surface);
+  border: 1px solid var(--g-rule);
+  box-shadow: var(--g-shadow);
+  line-height: 1.65;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+#main > p,
+#main > ul,
+#main > ol,
+#main > blockquote,
+#main > dl {
+  max-width: 80ch;
+}
+
+#main a {
+  color: var(--g-accent);
+}
+
+#main a:hover,
+#main a:focus-visible {
+  color: var(--g-selection-foreground);
+}
+
+#main h1,
+#main h2,
+#main h3,
+#main h4 {
+  color: var(--g-foreground);
+  font-family: var(--g-font-menu);
+  line-height: 1.25;
+}
+
+#main h1 {
+  margin: 0.6em 0 1em;
+  padding-bottom: 0.35em;
+  border-bottom: 3px double var(--g-rule);
+  font-size: 2em;
+  font-style: italic;
+}
+
+#main h2 {
+  margin: 2em 0 0.8em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--g-rule);
+  font-size: 1.45em;
+}
+
+#main h1 + h2 {
+  margin-top: 1em;
+}
+
+#main h3 {
+  margin: 1.8em 0 0.6em;
+  color: var(--g-teal-dark);
+  font-size: 1.15em;
+}
+
+#main h3::before {
+  margin-right: 0.4em;
+  color: var(--g-teal);
+  content: "\25A0";
+  font-size: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#main ul {
+  padding-left: 1.6em;
+  list-style-type: square;
+}
+
+#main li {
+  margin: 0.2em 0;
+}
+
+#main li::marker {
+  color: var(--g-teal-dark);
+}
+
+#main img,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Decorative Don Quixote watermark: rests on the desktop behind the sheet. */
+#bg-watermark,
+body > img[src$="images/bg.png"] {
+  position: fixed !important;
+  z-index: 0 !important;
+  right: 10px !important;
+  bottom: calc(var(--plan-banner-h) + 18px) !important;
+  width: clamp(190px, 18vw, 320px) !important;
+  max-width: calc(100vw - var(--sidebar-w) - 32px) !important;
+  height: auto !important;
+  opacity: 0.45 !important;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+}
+
+#footer {
+  clear: both;
+  padding: 2em;
+  color: var(--g-foreground);
+  background: var(--g-teal-light);
+  border-top: 1px solid var(--g-rule);
+  font-size: 91%;
+}
+
+#footer .left {
+  float: left;
+  clear: left;
+  text-align: left;
+}
+
+#footer .right {
+  text-align: right;
+}
+
+#footer a {
+  color: var(--g-foreground);
+  text-decoration: none;
+}
+
+abbr,
+acronym {
+  border-bottom: 1px dotted var(--g-rule);
+  cursor: help;
+}
+
+blockquote {
+  margin: 1.5em 0;
+  padding: 0.85em 1.2em;
+  color: #2a2a2a;
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-rule);
+  border-left: 6px solid var(--g-teal);
+  box-shadow: 2px 2px 0 var(--g-teal-light);
+  font-style: italic;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* A centred ornament instead of a bare rule. */
+hr {
+  overflow: visible;
+  height: 0;
+  margin: 2.5em auto;
+  border: 0;
+  border-top: 1px solid var(--g-rule);
+  text-align: center;
+}
+
+hr::after {
+  position: relative;
+  top: -0.8em;
+  padding: 0 0.8em;
+  color: var(--g-teal-dark);
+  background: var(--g-surface);
+  content: "\25C6 \25C6 \25C6";
+  font-size: 0.85em;
+  letter-spacing: 0.4em;
+}
+
+code,
+pre {
+  font-family: var(--g-font-fixed);
+  font-size: 1.05em;
+}
+
+code {
+  padding: 0.05em 0.3em;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border: 1px solid #dcdcd4;
+}
+
+pre {
+  margin: 1.5em 0;
+  padding: 1em;
+  overflow-x: auto;
+  color: #f2f2ea;
+  background: var(--g-ink);
+  border: 1px solid var(--g-rule);
+  border-left: 6px solid var(--g-teal);
+  border-radius: 0;
+  box-shadow: var(--g-shadow);
+  line-height: 1.5;
+}
+
+pre > code {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: 1em;
+}
+
+pre::selection,
+pre *::selection {
+  color: var(--g-ink);
+  background: var(--g-paper);
+}
+
+.spoiler {
+  padding: 0 3px;
+  color: var(--g-ink);
+  background: var(--g-ink);
+  border-radius: 0;
+}
+
+.spoiler:hover,
+.spoiler:focus-visible {
+  color: var(--g-paper);
+}
+
+table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  padding: 0.45em 0.6em;
+  border: 1px solid var(--g-rule);
+  text-align: left;
+}
+
+thead {
+  color: var(--g-paper);
+  background: var(--g-ink);
+}
+
+thead th {
+  border-color: #3a3a3a;
+  font-family: var(--g-font-menu);
+  letter-spacing: 0.03em;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--g-paper-soft);
+}
+
+li.task-list-item {
+  margin-left: -20px;
+  list-style-type: none;
+}
+
+li.task-list-item input[type="checkbox"] {
+  margin-right: 5px;
+  accent-color: var(--g-teal-dark);
+  vertical-align: middle;
+}
+
+.footnotes {
+  color: var(--g-secondary);
+  border-top: 1px solid var(--g-rule);
+  font-size: 0.9em;
+}
+
+.footnotes ol {
+  padding-left: 20px;
+}
+
+.footnotes li {
+  margin-bottom: 0.5em;
+}
+
+.footnotes a {
+  text-decoration: none;
+}
+
+:disabled,
+[aria-disabled="true"] {
+  color: var(--g-disabled);
+}
+
+.pres-entry {
+  position: relative;
+  z-index: 1;
+  margin: 2.5em 0 3em;
+  scroll-margin-top: 1em;
+  background: var(--g-surface);
+  text-align: left;
+}
+
+.pres-entry__slide {
+  margin: 0;
+}
+
+.pres-entry__slide > a {
+  display: block;
+}
+
+#main .pres-entry__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: white;
+  border: 1px solid var(--g-teal);
+}
+
+.pres-entry__slide figcaption {
+  padding: 0.65em 0;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-teal-light);
+  font-family: var(--g-font-menu);
+}
+
+.pres-entry__transcript {
+  max-width: 75ch;
+  margin: 1.2em 0 0;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.pres-entry__transcript > :first-child {
+  margin-top: 0;
+}
+
+.read-entry {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.5em;
+  align-items: start;
+  margin: 2em 0;
+}
+
+#main .read-entry__media {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  background: transparent;
+}
+
+#main .read-entry__media img {
+  display: block;
+  width: 290px;
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border: 1px solid var(--g-teal);
+}
+
+#main .read-entry__media--link {
+  display: block;
+  min-height: 160px;
+  padding: 1.5em;
+  align-content: center;
+  color: var(--g-foreground);
+  background: var(--g-paper-soft);
+  border: 1px solid var(--g-teal);
+  box-shadow: 3px 3px 0 var(--g-teal-light);
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#main .read-entry__media--link:hover,
+#main .read-entry__media--link:focus-visible {
+  color: var(--g-selection-foreground);
+  background: var(--g-selection);
+}
+
+.read-entry__link-mark {
+  margin-left: 0.45em;
+}
+
+.read-entry__body > :first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-w: 12em;
+  }
+
+  #main {
+    margin-right: 1.25em;
+    margin-left: calc(var(--sidebar-w) + 1.25em);
+    padding: 0.75em 1.5em 2em;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 0;
+    --plan-banner-h: 32px;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  body {
+    background-image: radial-gradient(rgba(5, 5, 5, 0.13) 0.6px, transparent 0.9px);
+    background-size: 4px 4px;
+    background-repeat: repeat;
+  }
+
+  #side-bar::before {
+    display: none;
+  }
+
+  #bg-watermark,
+  body > img[src$="images/bg.png"] {
+    right: 10px !important;
+    bottom: calc(var(--plan-banner-h) + 10px) !important;
+    width: min(42vw, 180px) !important;
+    max-width: calc(100vw - 20px) !important;
+    opacity: 0.22 !important;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .headerTitle {
+    padding: 0.5em 0.5em 0.25em;
+    font-size: 1.3em;
+  }
+
+  .headerSubtitle {
+    font-size: 0.7em;
+  }
+
+  #side-bar {
+    width: 100%;
+    min-height: 0;
+    float: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--g-rule);
+  }
+
+  #side-bar a {
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    border-left: 0;
+  }
+
+  #main {
+    min-height: 0;
+    margin: 0.9em 0.9em 1.5em;
+    padding: 0.5em 1.1em 1.5em;
+    box-shadow: 3px 3px 0 var(--g-ink);
+  }
+
+  #main h1 {
+    font-size: 1.6em;
+  }
+
+  #footer .left,
+  #footer .right {
+    float: none;
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .read-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --g-accent: var(--g-ink);
+    --g-accent-surface: var(--g-teal-dark);
+    --g-teal-light: var(--g-paper);
+  }
+}
+
+.embed-entry {
+  position: relative;
+  z-index: 1;
+  margin: 1.5em 0 2em;
+  text-align: left;
+}
+
+.embed-entry__frame {
+  width: 100%;
+  /* Keep the whole frame on screen: cap the width by the viewport height. */
+  max-width: calc((100vh - var(--header-h) - var(--plan-banner-h) - 6em) * (var(--embed-ratio)));
+  aspect-ratio: var(--embed-ratio);
+  background: var(--g-ink);
+  border: 1px solid var(--g-ink);
+  box-shadow: var(--g-shadow);
+}
+
+.embed-entry__frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-entry figcaption {
+  padding: 0.65em 0;
+  color: var(--g-secondary);
+  border-bottom: 1px solid var(--g-teal-light);
+  font-family: var(--g-font-menu);
+}
+
+.uops {
+  margin: 1.5em 0 2em;
+}
+
+.uops__legend span {
+  display: inline-block;
+  margin-right: 0.5em;
+  padding: 0.1em 0.6em;
+  border: 1px solid var(--g-rule);
+  font-family: var(--g-font-menu);
+}
+
+.uops__scroll {
+  overflow-x: auto;
+}
+
+#main .uops__table {
+  margin: 0;
+  font-family: var(--g-font-fixed);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.uops__table th,
+.uops__table td {
+  padding: 0.2em 0.6em;
+}
+
+.uops__table thead th {
+  text-align: center;
+}
+
+.uops__table td.uops--ok,
+.uops__table td.uops--bad,
+.uops__table td.uops--todo,
+.uops__table td.uops--na {
+  min-width: 4em;
+  text-align: right;
+}
+
+.uops--ok {
+  background: #c9e7c4;
+}
+
+.uops--bad {
+  background: #f8e58c;
+}
+
+.uops--todo {
+  background: #f2aaa2;
+}
+
+.uops--na {
+  background: var(--g-paper-soft);
+  color: var(--g-secondary);
+}
+
+.rvv__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 0.8em;
+}
+
+.rvv__tabs button {
+  padding: 0.2em 0.7em;
+  color: var(--g-ink);
+  background: var(--g-paper);
+  border: 1px solid var(--g-rule);
+  font-family: var(--g-font-fixed);
+  cursor: pointer;
+}
+
+.rvv__tabs button[aria-pressed="true"] {
+  color: var(--g-paper);
+  background: var(--g-ink);
+}
+
+.rvv__table td + td {
+  min-width: 3.5em;
+  text-align: right;
+}
+
+.rvv__table td + td:not(:empty) {
+  background: #c9e7c4;
+}
+</style>
+</head>
+<body>
+<img id="bg-watermark" src="../../images/bg.png" style="position: fixed; bottom: 40px; right: 20px; z-index: 1000; opacity: 0.5;"/>
+<div id="plan-banner"><a href="../../rss.xml" style="float:left;margin-left:8px;color:inherit;text-decoration:none">RSS</a>The plan fell off.</div>
+<div class="header">
+  <h1 class="headerTitle">
+    <a href="../../index.html">Mitchell's Homepage</a> <span class="headerSubtitle"><em>Out of sight, out of mind.</em></span>
+  </h1>
+</div>
+<div id="side-bar">
+<ul>
+<li><a href="index.html">&rsaquo; .</a></li>
+<li><a href="../index.html">&rsaquo; ..</a></li>
+<li><a href="ACLIC.html" class="thisPage">&raquo;<i> ACLIC</i></a></li>
+<li><a href="CTIT.html">&rsaquo; CTIT</a></li>
+<li><a href="coding-standard.html">&rsaquo; coding-standard</a></li>
+<li><a href="k3-uops.html">&rsaquo; k3-uops</a></li>
+<li><a href="llvm-roadmap-1.html">&rsaquo; llvm-roadmap-1</a></li>
+<li><a href="llvm-roadmap.html">&rsaquo; llvm-roadmap</a></li>
+</ul>
+</div>
+<div id="main">
+<h1 id="aclic-support-for-llvm">ACLIC Support for LLVM</h1>
+<style>
+/* Pandoc's table-header class must not inherit the site's navigation-bar layout. */
+.pres-entry thead tr.header { all: revert; }
+</style>
+<p>Zeyi Xu @ ISCAS</p>
+<p><a href="../../files/aclic/ACLIC-Support-for-LLVM.pdf">幻灯片（PDF）</a> · <a href="https://github.com/riscv/riscv-fast-interrupt">RISC-V fast interrupt 规范仓库</a></p>
+<p>This is an internal presentation given at ISRC @ ISCAS.</p>
+<p>原始转写被我弄丢了，所以底下是 Opus 5.5 基于相关材料复原的版本（</p>
+<p>页面：<a href="#slide-1">1</a> · <a href="#slide-2">2</a> · <a href="#slide-3">3</a> · <a href="#slide-4">4</a> · <a href="#slide-5">5</a> · <a href="#slide-6">6</a> · <a href="#slide-7">7</a> · <a href="#slide-8">8</a> · <a href="#slide-9">9</a> · <a href="#slide-10">10</a> · <a href="#slide-11">11</a> · <a href="#slide-12">12</a> · <a href="#slide-13">13</a> · <a href="#slide-14">14</a> · <a href="#slide-15">15</a> · <a href="#slide-16">16</a> · <a href="#slide-17">17</a> · <a href="#slide-18">18</a></p>
+<article class="pres-entry" id="slide-1">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-01.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-01.png" alt="ACLIC Support for LLVM" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-1">Page 1</a> · ACLIC Support for LLVM</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>大家好，今天我想聊一聊 LLVM 对 ACLIC 的支持。ACLIC 是 RISC-V fast interrupt 规范里面向微控制器的快速中断方案，目标是让中断响应更快、嵌套更方便、上下文保存更省事。</p>
+<p>这次分享大概分三部分。第一部分先“考古”，看看 ACLIC 想解决什么问题，它的前身 SiFive CLIC 又是怎么来的。第二部分看 LLVM 上游对 SiFive CLIC 的支持历程，以及当时合并的版本里有哪些问题。第三部分讲新的 ACLIC 支持做到了哪一步，以及目前正在 review 的 frame pointer 支持。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-2">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-02.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-02.png" alt="考古" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-2">Page 2</a> · 考古</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>我们先考古。要理解 ACLIC 为什么这样设计，最好先回到它最初想解决的问题。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-3">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-03.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-03.png" alt="The Original Motivation" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-3">Page 3</a> · The Original Motivation</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>最初的动机其实很朴素。MCU 对两件事同时非常敏感：一是实现面积，芯片要小、要便宜；二是中断响应延迟，中断来了以后要尽快进入真正的处理代码。这两件事经常互相拉扯，加功能就要加面积，省面积就可能让延迟变长。</p>
+<p>基础的 RISC-V 中断模型足够通用，也足够简单，但它没有专门面向低延迟 MCU 的快速中断机制。对应用处理器来说这没什么问题，对 MCU 来说就成了短板。ACLIC 以及它的前身，基本都是在补这部分的支持。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-4">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-04.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-04.png" alt="Examples" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-4">Page 4</a> · Examples</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>这一页举了两个例子。上面截取的是 ACLIC 规范文档里的一段说明，原文可以看<a href="https://github.com/riscv/riscv-fast-interrupt/blob/22acaa001c779ba72ccabeb6cc3fc23b7072b6cd/src/aclic.adoc?plain=1#L214-L232">这里</a>。</p>
+<p>下面是 SiFive 在 2018 年对 E2 系列的宣传：借助 CLIC 的向量化，从中断发生到 C 处理函数的第一条指令，最少只需要 6 个周期。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-5">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-05.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-05.png" alt="What was missing from the basic RISC-V interrupt model?" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-5">Page 5</a> · What was missing from the basic RISC-V interrupt model?</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>那么，基础 RISC-V 中断模型到底缺了什么？我把它们归成三类：</p>
+<p>第一是抢占。基础模型在同一特权级内没有原生的按优先级嵌套机制（<a href="https://github.com/riscv/riscv-fast-interrupt/blob/62092fc6360fe22e9b3940b13310ef8658d9faff/src/clic.adoc?plain=1#L335-L348">原文</a>）。进入 M 态 trap 时，<code>mstatus.MIE</code> 会被清零。处理函数如果想被更高优先级的中断打断，就得自己先保存 <code>mepc</code>、<code>mcause</code> 这类会被覆盖的状态，再手动把中断打开。</p>
+<p>第二是派发和向量化。本地中断的优先级是固定的；标准的向量模式下，向量表的槽位里放的是跳转指令，进入处理函数还要多跳一次（<a href="https://github.com/riscv/riscv-fast-interrupt/blob/62092fc6360fe22e9b3940b13310ef8658d9faff/src/clic.adoc?plain=1#L373-L375">原文</a>）。</p>
+<p>第三是上下文处理，寄存器的保存和恢复仍然完全是软件的工作（<a href="https://github.com/riscv/riscv-fast-interrupt/blob/62092fc6360fe22e9b3940b13310ef8658d9faff/src/clic.adoc?plain=1#L937-L946">原文</a>）。</p>
+<p>就是在这样的背景下，ACLIC 的前身 SiFive CLIC 诞生了。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-6">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-06.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-06.png" alt="SiFive CLIC VS ACLIC" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-6">Page 6</a> · SiFive CLIC VS ACLIC</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>这张表对比了 SiFive CLIC 和 ACLIC。最根本的区别在架构基础：SiFive CLIC 是一套独立的中断模型；ACLIC 则建立在 <a href="https://github.com/riscv/riscv-aia">AIA</a>，也就是 RISC-V 高级中断架构之上。</p>
+<p>优先级和嵌套方面，SiFive CLIC 有自己独立的 level 和 priority。ACLIC 复用 AIA 的 IPRIO：高位决定能不能抢占，低位只负责同一组内部的排序。向量化方面，SiFive CLIC 提供可以按中断选择的硬件向量化，ACLIC 则用 Smijt、Ssijt 定义的中断跳转表。</p>
+<p>栈和上下文方面差别最大。SiFive CLIC 主要依赖软件和编译器，Clang 里的 <code>SiFive-CLIC-preemptible</code> 和 <code>SiFive-CLIC-stack-swap</code> 属性做的就是这件事。ACLIC 则提供可选的硬件辅助，包括栈指针交换和 push/pop 式的上下文保存。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-7">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-07.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-07.png" alt="ACLIC SPEC" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-7">Page 7</a> · ACLIC SPEC</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>ACLIC 规范一共包含 12 个扩展。命名上，<code>Sm</code> 开头的是机器态版本，<code>Ss</code> 开头的是监督态版本，所以基本都是成对出现的。</p>
+<p>其中 4 个是基础扩展：Smidctrl 和 Ssidctrl 负责中断域控制，Smnip 和 Ssnip 负责嵌套中断抢占。另外 8 个是面向微控制器的快速中断扩展：Smijt、Ssijt、Smehv、Ssehv 负责硬件向量化，Smcsps 和 Sscsps 负责栈指针交换，Smip 和 Ssip 负责上下文处理。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-8">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-08.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-08.png" alt="LLVM Upstream" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-8">Page 8</a> · LLVM Upstream</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>背景就讲到这里。接下来看看 LLVM 上游这边的情况。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-9">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-09.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-09.png" alt="LLVM 上最早的 SiFive CLIC 支持尝试 (2020)" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-9">Page 9</a> · LLVM 上最早的 SiFive CLIC 支持尝试 (2020)</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>LLVM 上最早尝试支持 SiFive CLIC 是在 2020 年，当时还在 Phabricator 上做代码评审。有两个补丁：<a href="https://reviews.llvm.org/D79509">D79509</a> 为 CSR 指令加上 CLIC 中断模式的命名操作数；<a href="https://reviews.llvm.org/D79521">D79521</a> 加入 SiFive 的中断模式，也就是 <code>SiFive-CLIC-preemptible</code> 和 <code>SiFive-CLIC-stack-swap</code>。这两个补丁最后都停在 Needs Review，没有合并。</p>
+<p>没合并的原因是：当时上游还没有接受过任何厂商扩展，也还没有关于上游支持厂商扩展的政策。现在情况已经不同了，LLVM RISC-V 后端里已经有了 SiFive 的 XSf 系列、高通的 QCI 等厂商扩展，后面几页都会遇到。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-10">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-10.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-10.png" alt="现在的 CLIC Upstream 支持 (2025)" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-10">Page 10</a> · 现在的 CLIC Upstream 支持 (2025)</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>现在上游的 CLIC 支持来自 <a href="https://github.com/llvm/llvm-project/pull/132481">#132481</a>，作者是 lenary，2025 年 4 月合并。它在 Clang 里加入了两个 SiFive 厂商中断属性：<code>SiFive-CLIC-preemptible</code> 和 <code>SiFive-CLIC-stack-swap</code>。它们可以一起用，也可以和 <code>machine</code> 组合，但不能和其他中断类型组合。同时它还加了两个只包含 CSR 定义的实验性扩展：XSfmclic 对应机器态 CSR，XSfsclic 对应监督态 CSR，中断支持依赖前者。</p>
+<p>后端的实现主要在 <code>RISCVFrameLowering</code> 里。stack-swap 的做法是在函数入口和出口用 <code>sf.mscratchcsw</code> 交换 <code>sp</code>，这个 CSR 里存着 trap 栈指针。preemptible 的做法是在用 <code>mstatus</code> 重新打开中断之前，先保存 <code>mcause</code> 和 <code>mepc</code>，因为嵌套中断会覆盖它们。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-11">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-11.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-11.png" alt="当时合并版本的一些问题：Miscompilation" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-11">Page 11</a> · 当时合并版本的一些问题：Miscompilation</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>当时合并的版本有几个问题，我们一个一个看。第一个是错误编译，例子在<a href="https://godbolt.org/z/439TaTx6f">这里</a>。</p>
+<p>看截图里的汇编：<code>tp</code> 为零时跳到 <code>.LBB0_2</code>，那里才分配栈、保存 <code>s0</code>、<code>s1</code>、读 <code>mcause</code> 和 <code>mepc</code>，再用 <code>csrsi mstatus, 8</code> 打开中断；而另一条正常路径只做了一次 <code>sw zero, 0(tp)</code> 就直接 <code>mret</code> 了。也就是说，正常路径从头到尾都没有打开中断抢占。</p>
+<p>这是 shrink wrapping 造成的。shrink wrapping 会把 prologue 和 epilogue 挪到真正需要它们的路径上，对普通函数这是很好的优化。但对 preemptible 处理函数来说，prologue 本身就带有语义：它负责打开抢占。把它从某条路径上拿掉，这条路径就不再满足可被抢占的约定。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-12">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-12.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-12.png" alt="当时合并版本的一些问题：Sema Attribute Inconsistency" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-12">Page 12</a> · 当时合并版本的一些问题：Sema Attribute Inconsistency</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>第二个问题在 Clang 的语义检查，例子在<a href="https://godbolt.org/z/xG7Yc4vbh">这里</a>。按照设计，这几个值可以互相组合，也可以和 <code>machine</code> 组合。所以 <code>machine</code> 加 stack-swap、<code>machine</code> 加 preemptible、stack-swap 加 preemptible 都能通过。可是三个一起写就被拒绝了。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-13">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-13.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-13.png" alt="当时合并版本的一些问题：Crash" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-13">Page 13</a> · 当时合并版本的一些问题：Crash</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>第三个问题是崩溃，例子在<a href="https://godbolt.org/z/c6W4GYzh5">这里</a>。前面说过，preemptible 处理函数用 <code>s0</code> 保存 <code>mcause</code>，而 <code>s0</code> 同时也是 RISC-V 的帧指针，所以这类函数不能带帧指针生成。问题是 Clang 在 <code>-O0</code> 下默认开启帧指针，后端碰到这种情况直接 fatal error，用户看到的就是一份后端崩溃报告。</p>
+<p>SiFive 的 Interrupt Cookbook 其实写了：使用 <code>SiFive-CLIC-preemptible</code> 属性时，需要加上 <code>-fomit-frame-pointer</code>。但让用户在调试构建里先遇到一次编译器崩溃，才去翻文档找这个选项，体验显然不好。</p>
+<p>比较合理的第一步，是把崩溃变成一个带源码位置的普通错误，并提示用户考虑 <code>-fomit-frame-pointer</code>。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-14">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-14.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-14.png" alt="当时合并版本的一些问题：Wrong Debug Info 与 Frame Pointer" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-14">Page 14</a> · 当时合并版本的一些问题：Wrong Debug Info 与 Frame Pointer</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>第四个问题是调试信息。截图里的代码在用 <code>sf.mscratchcsw</code> 交换栈指针的地方，留着一个 FIXME，说这次交换还没有对应的 CFI 信息。CFI 描述的是每一条指令处怎样找到调用者的栈帧、寄存器存在哪里。就算很少有人需要栈展开穿过中断处理函数，调试器做回溯时也要依赖它，所以错了还是会实际影响调试。另一个相关的问题是，epilogue 里的恢复指令被错误地标成了 <code>FrameSetup</code>。</p>
+<p>最后一项是不支持帧指针。截图里对比了 GCC 的行为：GCC 遇到带帧指针的 SiFive CLIC preemptible 中断函数会直接报错拒绝。Clang 这边的情况前面也看到了，问题的根源都一样：现有实现借用了 <code>s0</code> 存 <code>mcause</code>，而 <code>s0</code> 就是帧指针。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-15">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-15.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-15.png" alt="Adding new ACLIC Support" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-15">Page 15</a> · Adding new ACLIC Support</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>问题讲完了，接下来进入新的 ACLIC 支持，以及为后续工作做的铺垫。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-16">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-16.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-16.png" alt="MC Support Progress" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-16">Page 16</a> · MC Support Progress</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>先看 MC 层的进展：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 59%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr>
+<th>Extensions</th>
+<th>Upstream PR</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smcsps, Sscsps</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/211712">#211712</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Smijt, Ssijt, Smehv, Ssehv</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/213431">#213431</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Smip, Ssip</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/215095">#215095</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Smidctrl, Ssidctrl, Smnip, Ssnip</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/218108">#218108</a></td>
+<td>In Review</td>
+</tr>
+</tbody>
+</table>
+<p>所谓 MC 支持，是汇编器、反汇编器以及 <code>-march</code> 能识别这些扩展和它们定义的 CSR 等内容。编译器自动生成中断处理代码的那部分工作，也就是下一页和最后一页讲的内容，针对的仍然是 SiFive CLIC 属性。</p>
+<p>这些扩展在 LLVM 里都是 experimental 扩展。#211712 和 #213431 按 v0.19 实现；#215095 在加入 Smip、Ssip 的同时，把已有的 ACLIC 扩展版本升到了 v0.20。最后四个基础扩展在 #218108 里，还在评审中，它合入后 ACLIC v0.20 的扩展在 MC 层就齐了。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-17">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-17.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-17.png" alt="Paving the way" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-17">Page 17</a> · Paving the way</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>这一页是为后续工作铺路，把前面列出的 SiFive CLIC 问题逐个修掉：</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 47%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Upstream PR</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix Sema Inconsistency<br>Follow up: interrupt type 去重</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/216159">#216159</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Fix Crash</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/217949">#217949</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Fix Miscompilation</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/218347">#218347</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td>Fix Debug Info (Pt.1)</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/218338">#218338</a></td>
+<td>Merged</td>
+</tr>
+<tr>
+<td></td>
+<td>Ongoing</td>
+<td>Ongoing</td>
+</tr>
+<tr>
+<td>Add Frame Pointer Support</td>
+<td><a href="https://github.com/llvm/llvm-project/pull/221318">#221318</a></td>
+<td>In review</td>
+</tr>
+</tbody>
+</table>
+<p>语义检查不一致由 #216159 修复：<code>interrupt</code> 属性现在允许三个参数，也就是 <code>machine</code>、<code>SiFive-CLIC-preemptible</code>、<code>SiFive-CLIC-stack-swap</code> 同时出现；同一行还列了一个后续工作，对重复写出的中断类型去重。崩溃由 #217949 修复：它改用 <code>DiagnosticInfoUnsupported</code>，给出带源码位置的错误并建议 <code>-fomit-frame-pointer</code>。它只改进了诊断，不改变代码生成上的限制，帧指针依然不支持。错误编译由 #218347 修复：它对 SiFive CLIC 和 QCI 的中断处理函数禁用了 shrink wrapping，这样打开抢占的 prologue 不会再被挪到个别路径上。</p>
+<p>调试信息这一行要特别说明。#218338 做的只是把 epilogue 里的恢复序列和最后一次栈交换从 <code>FrameSetup</code> 改标为 <code>FrameDestroy</code>，所以写的是 Pt.1，它不是完整的 CFI 修复。栈交换的 CFI，以及 <code>mcause</code>、<code>mepc</code> 相关的 CFI 都还没有解决，下面那行 Ongoing 指的就是调试信息剩下的工作。</p>
+<p>最后一行是帧指针支持 #221318，目前还在评审中，下一页细讲。</p>
+</div>
+</article>
+<article class="pres-entry" id="slide-18">
+<figure class="pres-entry__slide">
+<a href="../../files/aclic/slide-18.png" target="_blank" rel="noopener">
+<img src="../../files/aclic/slide-18.png" alt="Frame Pointer Support for CLIC" loading="lazy" decoding="async">
+</a>
+<figcaption><a href="#slide-18">Page 18</a> · Frame Pointer Support for CLIC</figcaption>
+</figure>
+<div class="pres-entry__transcript">
+<p>最后讲帧指针支持，也就是还在评审中的 #221318。先看图中的 (a)，这是现有的做法：<code>mcause</code> 和 <code>mepc</code> 放在 <code>s0</code>、<code>s1</code> 里，图上标注这两个寄存器在那一段“不可用”。这说的是那个窗口里它们装着 CSR 的值；就像第 10 页说的，函数体如果要用它们，会被再存一次，所以它们并不是在整个函数里被全局保留。真正的冲突在于 <code>s0</code> 同时是帧指针：帧指针要在 prologue 里指向当前栈帧，并在整个函数体里保持不变，它不能同时充当 <code>mcause</code> 的搬运寄存器。</p>
+<p>图中 (b) 是新的方案。思路是不再借用 <code>s0</code>、<code>s1</code>，而是只用 <code>t0</code> 作为临时寄存器，把 <code>mcause</code> 和 <code>mepc</code> 存进专门的栈槽。不管有没有帧指针，都走同一套做法。这样 <code>s0</code> 就可以放心地当帧指针用。示意图主要是用来说明这个思路，图上的指令和栈偏移是讲解用的简化写法。</p>
+<p>这套序列有几个绕不开的约束。第一，<code>t0</code> 本身也属于被打断的代码，用它之前必须先存起来，最后再恢复。第二，<code>mcause</code> 和 <code>mepc</code> 必须在重新打开中断之前读出来，因为嵌套中断会覆盖它们。第三，出口要先关中断，再把两个 CSR 写回去，否则写回之后、<code>mret</code> 之前来了中断，又会把它们覆盖掉。另外，这两个栈槽在帧指针建立之前就会被访问，所以不能依赖帧指针来寻址。</p>
+<p>我就讲到这里，谢谢大家，欢迎提问。</p>
+</div>
+</article>
+</div>
+</body>
+</html>
